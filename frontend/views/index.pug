@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  .topics
+    each topic in topics
+      a(href="/topic/" + topic.slug).topicBlock
+        div.topic= topic.name

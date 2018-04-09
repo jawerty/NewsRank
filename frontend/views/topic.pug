@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  .topicView
+    a(href="/").back < Back
+    .left
+      table.topicLinks
+        each article in topic.articles
+          tr
+            th
+              label= article.publication
+            th
+              a(href=article.origin)= article.title
+
+    .right
+      h1= topic._id.name
+      - var image = topic._id.headlineImage
+      if image
+        img(src = image).topic-image
+      p!= topic._id.summary
