@@ -1,3 +1,4 @@
+const url = require('url')
 const fs = require('fs');
 const request = require('request');
 const async = require('async');
@@ -21,12 +22,24 @@ db.connection.on("open",function(err) {
       lib.getWebpage(articleURL, (err, body) => {
         if (!err) {
           let headlineImage = null;
+          let icon = null;
           try {
             const $ = cheerio.load(body);
             if ($("meta[property='og:type']").attr('content') != "article") {
               console.log("NOT AN ARTICLE: "+articleURL);
               return resolve(false);
             }
+
+            const icons = $("link[rel='apple-touch-icon']");
+            icon = $(icons[icons.length-1]).attr('href'); // get largest size
+            if (!icon) {
+              icon = $("link[rel='shortcut icon']").attr('href');
+            }
+            if (icon && icon.indexOf("//") == 0) {
+              icon = `http:${icon}`;
+            } else if (icon && icon.indexOf("/") == 0) {
+              icon = `http://${url.parse(articleURL).hostname}${icon}`;
+            }  
 
             headlineImage = $("meta[property='og:image']").attr('content');
             if (!headlineImage) {
@@ -59,6 +72,8 @@ db.connection.on("open",function(err) {
                 
                 bulkCache.push(pubSlug); 
                 console.log("->Inserting "+articleURL, "("+urlIndex + " / " + urlCount+")");
+                const previewCheerio = cheerio.load(article.content);
+                const articlePreview = previewCheerio.html().split(' ').slice(0,50);
 
                 bulk.insert({
                   title: article.title,
@@ -68,7 +83,9 @@ db.connection.on("open",function(err) {
                   publicationSlug: pubSlug,
                   headlineImage,
                   date_scrapped: parseInt(process.argv[3]),
-                  trained: false
+                  trained: false,
+                  icon,
+                  articlePreview
                 });  
                 article.close(); 
                 resolve(true);      

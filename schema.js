@@ -22,28 +22,53 @@ const articleSchema = new Schema({
   thumbnail: {type: String},
   publicationSlug: {type: String},
   tokens: [{type: String}],
-  trained: {type: Boolean}
-  // slug: {type: String}, - later for web
-
+  trained: {type: Boolean},
+  icon: {type: String},
+  articlePreview: {type: String}
 });
 
 const topicSchema = new Schema({
   id: ObjectId,
+  date_added: {type: Date, default: Date.now},
   name: {type: String, required: true},
   articles: [ObjectId],
   summary: {type: String}, // summary of greatest
-  slug: {type: String}
-  // slug: {type: String}, - later for web
+  slug: {type: String},
+  headlineImage: {type: String} // first headline image in articles
 });
 
-const topicTreeSchema = new Schema({
+const topicStackSchema = new Schema({
   id: ObjectId,
   topics: [ObjectId] // should be in chronological order
 });
 
+const categorySchema = new Schema({
+  id: ObjectId,
+  topics: [ObjectId], // should be in chronological order
+  name: {type: String}
+});
+
+const reviewSchema = new Schema({
+  id: ObjectId,
+  date_added: {type: Date, default: Date.now},
+  article: ObjectId,
+  reviewer: ObjectId,
+  rating: {type: Number},
+});
+
+const userSchema = new Schema({
+  id: ObjectId,
+  article: ObjectId,
+  username: {type: String},
+  password: {type: String},
+  reviews: [ObjectId]
+});
+
 mongoose.model('article', articleSchema, 'article');
 mongoose.model('topic', topicSchema, 'topic');
-mongoose.model('topicTree', topicTreeSchema, 'topicTree');
+mongoose.model('topicStack', topicStackSchema, 'topicStack');
+mongoose.model('review', reviewSchema, 'review');
+mongoose.model('user', userSchema, 'user');
 
 articleSchema.index({publicationSlug: 1, origin: 1});
 module.exports = mongoose;

@@ -4,7 +4,7 @@ const hclust = require("ml-hclust");
 const db = require("./schema");
 const topicModel = db.model('topic');
 const articleModel = db.model('article');
-const topicTreeModel = db.model('topicTree');
+const topicStackModel = db.model('topicStack');
 
 const topicCursor = topicModel.find({}).cursor();
 
@@ -47,7 +47,7 @@ topicCursor.on('end', () => {
 					delete tokenOccurrences[tokenName];
 				}
 			});
-			tokenOccurrencesMap[topic.name] = tokenOccurrences;
+			tokenOccurrencesMap[topic._id] = tokenOccurrences;
 			condensedTokenVector.push(Object.keys(tokenOccurrences));
 			callback();
 		});
@@ -75,24 +75,36 @@ topicCursor.on('end', () => {
 		const clusters = agnes.cut(50).filter((cluster) => {
 			return cluster.children.length > 0;
 		});
-		const groupClusters = (callback) => {
-			const clusterGroup = [];
-			async.each(clusters, (cluster, clusterCallback) => {
-				const clusterIndexes = [];
-				cluster.traverse((data) => {
-					console.log(data)
-					clusterIndexes.push(data.index)
-					if (data.children.length == 0) {
-						clusterGroup.push(clusterIndexes);
-						return clusterCallback();
-					}
-				});
-			}, (err) => {
-				console.log(clusterGroup);
-			});	
-		} 
-		groupClusters(() => {
 
+		const groupClusters = (clusters, callback) => {
+			const clusterGroup = clusters.map((cluster) => {
+				let clusterIndexes = []
+				for (let i = 0; i < cluster.index.length; i++) {
+					clusterIndexes.push(cluster.index[i].index);
+				}
+				return clusterIndexes;
+			});
+			callback(
+				clusterGroup.map((groupling) => {
+					return groupling.filter((item, pos, self) => {
+					    return self.indexOf(item) == pos;
+					}).map((groupIndex) => {
+						return Object.keys(tokenOccurrencesMap)[groupIndex];
+					});
+				})
+			)
+		} 
+
+		groupClusters(clusters, (clusterGroup) => {
+			console.log(clusterGroup);
+			topicStackModel.remove({}, () => {
+				clusterGroup.forEach((cluster) => {
+					topicStackModel({
+						topics: cluster
+					}).save();
+				});	
+			})
+			
 		})
 	   	// console.log("VECTORS", vectors.length);
 	});

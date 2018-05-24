@@ -45,6 +45,7 @@ const generateTopics = (articleGroupings) => {
 	
 	const generation = (callback) => {
 		const articleGroupingMap = {}; 
+
 		for (let i = 0; i < articleGroupings.length; i++) {
 			const articleGroup = articleGroupings[i];
 			if (articleGroup.length == 0) continue;
@@ -57,13 +58,46 @@ const generateTopics = (articleGroupings) => {
 		}
 
 		const primaryArticles = Object.keys(articleGroupingMap);
-		async.each(primaryArticles, (primaryArticle, articleCallback) => {
-			// get grouping with greatest length
-			const largestGroup = articleGroupingMap[primaryArticle].reduce((a, c) => {
+		const dedupedArticleGroupings = {}
+		// WARNING: Very SUBOPTIMAL FUNCTION 
+		// dedup articleGroupingMap (combine topics including separate articles)
+		primaryArticles.forEach((primaryArticle) => {
+			articleGroupingMap[primaryArticle] = articleGroupingMap[primaryArticle].reduce((a, c) => {
 				return (c.length > a.length) ? c : a 
 			});
+		});
+
+		Object.entries(articleGroupingMap).forEach((grouping) => {
+			console.log(articleGroupingMap);
+			let primaryArticle = grouping[0];
+			let groupingArticles = grouping[1];
+			for (let i = 0; i < groupingArticles.length; i++) {
+				console.log(groupingArticles[i])
+				let currentArticle = JSON.parse(groupingArticles[i].label).pubSlug;
+				let tempArticleGroupingsMap = JSON.parse(JSON.stringify(articleGroupingMap));
+				delete tempArticleGroupingsMap[primaryArticle];
+				Object.entries(tempArticleGroupingsMap).forEach((groupingToCheck) => {
+					for (let x = 0; x < groupingToCheck[1].length; x++) {
+						let articleToCheck = groupingToCheck[1][x];
+						if (currentArticle == JSON.parse(articleToCheck.label).pubSlug) {
+							groupingToCheck[1].splice(x, 1);
+							dedupedArticleGroupings[primaryArticle] = groupingToCheck[1].concat(groupingArticles);
+							delete articleGroupingMap[groupingToCheck[0]];
+						}
+					}
+				});
+
+			};
+		})
+
+
+		const finalArticleGroupingMap = Object.assign(articleGroupingMap, dedupedArticleGroupings);
+		const finalPrimaryArticles = Object.keys(finalArticleGroupingMap);
+
+		async.each(finalPrimaryArticles, (primaryArticle, articleCallback) => {
+			const group = finalArticleGroupingMap[primaryArticle];
 			const allTitles = [];
-			const articles = largestGroup.map((article) => {
+			const articles = group.map((article) => {
 				const articleLabel = JSON.parse(article.label);
 				allTitles.push(articleLabel.title);
 				return db.Types.ObjectId(articleLabel.id);
@@ -78,15 +112,24 @@ const generateTopics = (articleGroupings) => {
 
 					if (!strippedName 
 						|| (strippedName && strippedName.length == 0)) {
-						strippedName = JSON.parse(largestGroup[0].label).title
+						strippedName = JSON.parse(group[0].label).title
 					}
 
 					summarizeArticles(articles, (summary) => {
+			    		const articleImages = articles.filter((article) => {
+			    			return ('headlineImage' in article);
+			    		}).map((filteredArticle) => {
+			    			return filteredArticle.headlineImage;
+			    		});
+			    		const topicHeadlineImage = (articleImages.length > 0) ?
+			    			 	articleImages[0] : null;
+
 						bulk.insert({
 							articles,
 							name: strippedName,
 							summary,
-							slug: slug(JSON.parse(largestGroup[0].label).pubSlug).toLowerCase()
+							headlineImage: topicHeadlineImage,
+							slug: slug(JSON.parse(group[0].label).pubSlug).toLowerCase()
 						});
 						articleCallback();
 					});
@@ -201,9 +244,7 @@ const classifyAritcles = () => {
 			}
 		});
 
-		topicModel.remove({}, (err) => {
-			generateTopics(articleGroupings);
-		});
+		generateTopics(articleGroupings);
 	});
 		
 

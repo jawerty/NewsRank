@@ -1,7 +1,32 @@
 extends layout
 
 block content
+  .topTopics
+    h2 Trending
+    each topic in topTopics
+      a(href="/topic/" + topic.slug).topicBlock
+        div.topic= topic.name
   .topics
+    .section-header 
+      ul
+        li 
+          h2 All Topics
+        li 
+          a(href="/?filter=recent") Recent
+        //-
+          li
+            label Has Publication 
+            select(onchange='publicationChange(this)')#publicationFilter
+              option(value='default') All
+              each publication in publicationList
+                - selected = false
+                if currentPublication == publication
+                  - selected = true
+                option(value=publication, selected=selected)= publication
+        li 
+          input(type=text, placeholder="Search...", id="searchTextBox", onkeyup="searchForTopics(this)")
+
     each topic in topics
       a(href="/topic/" + topic.slug).topicBlock
         div.topic= topic.name
+  div.loadingGif

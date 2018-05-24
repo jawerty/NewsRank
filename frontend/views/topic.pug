@@ -2,19 +2,34 @@ extends layout
 
 block content
   .topicView
-    a(href="/").back < Back
+    -// a(href="/").back < Back
     .left
       table.topicLinks
         each article in topic.articles
-          tr
+          tr.articleRow
             th
-              label= article.publication
+              label.publication= article.publication
             th
-              a(href=article.origin)= article.title
-
+              a.title(href=article.origin)= article.title
     .right
-      h1= topic._id.name
-      - var image = topic._id.headlineImage
-      if image
-        img(src = image).topic-image
-      p!= topic._id.summary
+      label#review-pabel-label Review Article
+      h1#chosenArticleTitle= topic.articles[0].title
+      label#chosenArticlePub= " - " + topic.articles[0].publication
+      br
+      form(action="/submit-review")
+        h2 Rate article
+        div#slider
+          div(id="custom-handle").ui-slider-handle
+          div.slider-handle-text
+        h2 Review article
+        textarea(placeholder="Review the quality of this article. Is it credible? Is it well sourced?")#reviewBox
+        h2 or Link to pre-written review
+        input(type="text", placeholder="URL")#review-link
+    .reviewList
+      
+        //-
+          h1= topic._id.name
+          - var image = topic._id.headlineImage
+          if image
+            img(src = image).topic-image
+          p!= topic._id.summary
