@@ -1,4 +1,5 @@
 # NewsRank MVP
+In Development, check google doc for feature list
 
 # Setup
 ## Mongodb
