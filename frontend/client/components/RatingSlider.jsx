@@ -14,9 +14,7 @@ import { redGreenScale } from '../../lib/redGreenScale';
 class RatingSlider extends Component {
   constructor(props) {
   	super(props);
-  	this.state = {
-  		rating: 80
-  	}
+
   }
 
   addPercentage(value) {
@@ -24,23 +22,24 @@ class RatingSlider extends Component {
   }
 
   handleRatingChange(value) {
-    this.setState({
-      rating: value
-    })
+    this.props.updateRating(value);
   }
 
+
+
   componentDidMount() {
-	 document.getElementsByClassName('rangeslider__fill')[0].style.backgroundColor = redGreenScale(this.state.rating);
+  	// Slider component doesnt have a style property for the filling
+  	document.getElementsByClassName('rangeslider__fill')[0].style.backgroundColor = redGreenScale(this.props.rating);	 
   }
   
   componentDidUpdate() {
-	 document.getElementsByClassName('rangeslider__fill')[0].style.backgroundColor = redGreenScale(this.state.rating);
+  	document.getElementsByClassName('rangeslider__fill')[0].style.backgroundColor = redGreenScale(this.props.rating);
   }
 
   render() {
     return  (
 	    <Slider
-          value={this.state.rating}
+          value={this.props.rating}
           format={this.addPercentage}
           onChange={this.handleRatingChange.bind(this)}
          />
@@ -49,7 +48,8 @@ class RatingSlider extends Component {
 }
 
 RatingSlider.propTypes = {
-
+	rating: Proptypes.number,
+	updateRating: Proptypes.func
 }
 
 export default RatingSlider;

@@ -52,8 +52,11 @@ const categorySchema = new Schema({
 const reviewSchema = new Schema({
   id: ObjectId,
   date_added: {type: Date, default: Date.now},
-  article: ObjectId,
-  reviewer: ObjectId,
+  articleSlug: {type: String}, // deciding whether to only use slug or objectid for reference
+  topicSlug: {type: String},
+  publication: {type: String},
+  reviewer: {type: String},
+  reviewContent: {type: String},
   rating: {type: Number},
 });
 

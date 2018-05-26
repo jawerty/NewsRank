@@ -8,6 +8,7 @@ import {
 
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const toolbar = {
@@ -30,26 +31,18 @@ class ReviewEditor extends Component {
   constructor(props) {
   	super(props);
   	this.state = {
-  		rating: 80,
   		editorState: EditorState.createEmpty()
   	};
   }
 
-  addPercentage(value) {
-    return value+"%";
-  }
-
-  handleRatingChange(value) {
-    this.setState({
-      rating: value
-    });
-  }
-
   onEditorStateChange(editorState) {
+    const currentContent = this.state.editorState.getCurrentContent();
+  	//send up to parent state 
+    this.props.updateReviewContent(stateToHTML(currentContent));
     this.setState({
       editorState
     });
-  }
+  };
 
   render() {
     return  (
@@ -66,7 +59,8 @@ class ReviewEditor extends Component {
 }
 
 ReviewEditor.propTypes = {
-
+	reviewContent: Proptypes.string,
+	updateReviewContent: Proptypes.func
 }
 
 export default ReviewEditor;

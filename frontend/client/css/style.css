@@ -10,7 +10,7 @@ a {
   color: #00B7FF;
 }
 
-a:hover {
+a:hover, a:focus {
 	color: #00B7FF;
 	text-decoration: none;
 }
@@ -187,7 +187,7 @@ header p.subtitle {
 	height: 650px;
 }
 
-.right img {
+.right img {`
 	max-width: 600px;
 }
 
@@ -200,6 +200,11 @@ header p.subtitle {
 .topicLinks tr {
 	overflow: hidden;
 	box-sizing: border-box;
+}
+
+.topicLinks tr:hover {
+	background-color: rgb(245,245,245);
+	cursor: pointer !important;
 }
 
 .topicLinks th {
@@ -275,13 +280,13 @@ header p.subtitle {
 }
 
 #chosenArticleTitle {
-	font-size: 24px;
+	font-size: 1.5em;
 	display: inline;
 	font-weight: bold;
 }
 #chosenArticlePub {
-	font-size: 24px;
-	color: rgb(150,150,150);
+	font-size: 1.5em;
+	color: rgb(175,175,175);
 }
 
 .right h2 {
@@ -401,4 +406,17 @@ header p.subtitle {
 }
 .DraftEditor-root {
 	margin-top: -22px;
+}
+
+.reviewSubmit {
+	background-color: rgb(100,140,180);
+    padding: 8px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    opacity: .8;
+    float: right;
+    margin-top: -39px;
+    color: rgb(255,255,255);
 }

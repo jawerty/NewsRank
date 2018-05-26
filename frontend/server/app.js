@@ -6,7 +6,7 @@ const logger = require('morgan');
 const db = require(path.resolve('./../db/schema'));
 const topicModel = db.model('topic');
 
-const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -133,7 +133,7 @@ app.get('*', (req, res) => {
 	`);
 });
 
-app.use('/api', indexRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

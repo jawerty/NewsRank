@@ -40,23 +40,24 @@ class App extends Component {
 
 
   render() {
-  	if (this.state.topics) {
-
-  	}
-	const getHomePage = (this.state.topics) ? <HomePage topics={this.state.topics}/> : function(){};
 	return (
   		<Router>
 	    	<div>
 		    	<header>
 					<ul> 
 						<li>
-							<h1 className="title">NewsRank</h1>
+							<Link to={{
+								pathname: "/",
+								state: { topics: this.state.topics }
+							}}><h1 className="title">NewsRank</h1></Link>
 							<p className="subtitle">"Review top stories in the news"</p>
 						</li>
 					</ul>
 				</header>
 				<div>
-					<Route exact path="/" render={(props) => getHomePage}/>	
+					<Route exact path="/" render={(props) => (
+						(this.state.topics) ? <HomePage topics={this.state.topics || props.location.state.topics}/> : function(){}
+					)}/>	
 					<Route path="/topic/:topicName" render={(props) => (
 						<TopicPage topic={this.props.topic || props.location.state.topic}/>
 					)}/>
