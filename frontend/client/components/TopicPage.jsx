@@ -4,10 +4,13 @@ import {
   Link
 } from 'react-router-dom';
 	  
+import RatingSlider from "./RatingSlider.jsx";
+//"Review the quality of this article. Is it credible? Is it well sourced?"
+import ReviewEditor from "./ReviewEditor.jsx";
+
 class TopicPage extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
     this.state = {
     	selectedArticle: this.props.topic.articles[0]
     };
@@ -46,12 +49,9 @@ class TopicPage extends Component {
 		    <label id="chosenArticlePub">- {this.state.selectedArticle.publication}</label><br/>
 		    <form action="/submit-review">
 		      <h2>Rate article</h2>
-		      <div id="slider">
-		        <div class="ui-slider-handle" id="custom-handle"></div>
-		        <div class="slider-handle-text"></div>
-		      </div>
+		      <RatingSlider />
 		      <h2>Review article</h2>
-		      <textarea placeholder="Review the quality of this article. Is it credible? Is it well sourced?" id="reviewBox"></textarea>
+		      <ReviewEditor />
 		      <h2>or Link to pre-written review</h2>
 		      <input type="text" placeholder="URL" id="review-link"/>
 		    </form>
