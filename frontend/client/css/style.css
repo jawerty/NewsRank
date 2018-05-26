@@ -166,7 +166,7 @@ header p.subtitle {
 }
 
 .left {
-	width: 600px;
+	width: 650px;
 	margin-right: 30px;
 	height: 600px;
 	max-height: 600px;
@@ -177,13 +177,14 @@ header p.subtitle {
 }
 
 .right {
-	width: calc(100% - 630px);
+	width: calc(100% - 680px);
 	background-color: rgb(255,255,255,.9);
 	border: 1px solid rgb(200,200,200);
 	border-radius: 3px;
 	padding: 10px 15px 25px 15px;
-	max-width: 600px;
+	max-width: 680px;
 	max-height: 600px;
+	height: 650px;
 }
 
 .right img {

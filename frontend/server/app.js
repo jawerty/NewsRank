@@ -57,12 +57,12 @@ const topicsPipeline = [
 ]
 
 app.get('/', (req, res, next) => {
+	const fetch = req.query.fetch;
 	topicModel.aggregate(topicsPipeline).sort({date_added: -1})
 		.skip(0)
 		.limit(16)
 		.exec((err, topicsFetched) => {
 		if (err) console.log(err);
-		console.log(topicsFetched);
 		topicsFetched = topicsFetched.map((topic) => {
 			return {
 				name: topic["_id"].name,
@@ -74,8 +74,12 @@ app.get('/', (req, res, next) => {
 				articles: topic.articles
 			}
 		})
-		res.locals.topicsData = topicsFetched
-		next(); 
+		if (fetch) {
+			res.send(topicsFetched);
+		} else {	
+			res.locals.topicsData = topicsFetched
+			next(); 
+		}
 	});
 });
 
