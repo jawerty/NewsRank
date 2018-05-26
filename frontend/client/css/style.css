@@ -1,0 +1,352 @@
+body {
+  padding: 25px 50px;
+  font: 14px "sans-serif", Helvetica, Arial, sans-serif;
+  text-align: center;
+  background-color: rgb(223, 229, 235);
+  min-width: 1200px;
+}
+
+a {
+  color: #00B7FF;
+}
+
+a:hover {
+	color: #00B7FF;
+	text-decoration: none;
+}
+
+h2 {
+	font-size: 1em;
+	font-family: Helvetica;
+	color: rgb(100,100,100);
+	display: inline-block;
+}
+
+header {
+	min-height: 50px;
+	background-color: rgb(247,247,247);
+}
+
+header ul {
+	padding: 0;
+	list-style-type: none;
+	display: inline-block;
+}
+
+header ul li {
+	display: inline;
+	margin-right: 15px;
+	font-family: sans-serif;
+}
+
+header ul li h1.title {
+	font-size: 2em;
+	font-family: helvetica;
+	padding: 5px;
+	margin: 5px;
+	color: rgb(100,100,100);
+}
+
+header p.subtitle {
+	font-size: 1em;	
+	font-family: sans-serif;
+	color: rgb(150,150,150);
+	font-style: italic;
+}
+
+
+.topics, .topTopics {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.topics ul,
+.topTopics ul {
+	padding: 0;
+	list-style-type: none;
+	display: inline-block;
+}
+
+.topics ul li,
+.topTopics ul li {
+	display: inline;
+	margin-right: 15px;
+	font-family: sans-serif;
+}
+
+.topTopics h2 {
+	display: block;
+}
+
+.topTopics {
+	padding-top: 10px;
+	border-bottom: 1px solid rgb(240,240,240);
+	padding-bottom: 25px;
+}
+
+.topTopics .topicBlock {
+	background-color: rgb(255,100,100);
+}
+
+.topicBlock {
+	width: 350px;
+	height: 285px;
+	background-color: rgb(255,255,255);
+	display: inline-block;
+	text-decoration: none;
+	margin: 10px;
+	vertical-align: top;
+	border-radius: 3px;
+	box-sizing: border-box;
+	text-align: left;
+}
+
+.topicBlockContent {
+	padding: 15px;
+}
+.topicBlock h3 {
+	font-size: 1.3em;
+	font-weight: 600;
+	color: rgb(0,0,0,.84);
+	display: inline-block;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2; /* number of lines to show */
+	line-height: 24px;        /* fallback */
+	max-height: 48;       /* fallback */
+}
+
+.topicBlock .topicBlockImage {
+	height: 150px;
+	background-position: top;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.topicBlock .coveredBy {
+	color: rgb(100,100,100,.84);
+	display: block;
+	font-weight: lighter;
+	font-size: .9em;
+	line-height: 
+}
+
+.topicBlock .timestamp {
+	color: rgb(200,200,200,.7);
+	display: block;
+	font-weight: lighter;
+	font-size: .9em;
+}
+
+.topicView {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 25px;
+	text-align: left;
+}
+
+#review-pabel-label {
+	color: rgb(155, 160, 165);
+	padding: 8px 0px;
+	text-transform: uppercase;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 2px solid rgb(223, 229, 235);
+	margin-bottom: 10px;
+}
+.left, .right {
+	vertical-align: top;
+	display: inline-block;
+}
+
+.left {
+	width: 600px;
+	margin-right: 30px;
+	height: 600px;
+	max-height: 600px;
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(200,200,200);
+	border-radius: 3px;
+	overflow-y: scroll;
+}
+
+.right {
+	width: calc(100% - 630px);
+	background-color: rgb(255,255,255,.9);
+	border: 1px solid rgb(200,200,200);
+	border-radius: 3px;
+	padding: 10px 15px 25px 15px;
+	max-width: 600px;
+	max-height: 600px;
+}
+
+.right img {
+	max-width: 600px;
+}
+
+.topicLinks {
+	background-color: rgb(255,255,255, .9);
+	text-align: left;
+	border-collapse: collapse;
+}
+
+.topicLinks tr {
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.topicLinks th {
+	padding: 7.5px;
+	box-sizing: border-box;
+	border: 1px solid rgb(223, 229, 235);
+}
+
+.topicLinks tr:first-child th {
+  border-top: 0;
+}
+.topicLinks tr:last-child td {
+  border-bottom: 0;
+}
+.topicLinks tr td:first-child,
+.topicLinks tr th:first-child {
+  border-left: 0;
+}
+.topicLinks tr td:last-child,
+.topicLinks tr th:last-child {
+  border-right: 0;
+}
+.topicLinks th label {
+	color: rgb(120,120,120);
+}
+
+.back {
+	text-decoration: none;
+	font-size: 24px;
+	color: rgb(100,100,100);
+	display: block;
+	text-align: left;
+}
+
+.loadingGif {
+	background: url(/images/loading-spinner.gif);
+	margin: 0 auto;
+	width: 200px;
+	height: 200px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	opacity: .7;
+	display: none;
+}
+
+#slider {
+	margin-bottom: 15px;
+}
+
+#slider .ui-slider-handle {
+	border-radius: 10px;
+	width: 1.4em;
+	height: 1.4em;
+	top: -.4em;
+	outline: none;
+}
+
+#slider .ui-slider-handle:hover {
+	cursor: pointer;
+	background-color: #e6e6e6;
+	border: 1px solid #e6e6e6;
+}
+
+#slider .ui-slider-handle:focus {
+	background-color: #e6e6e6;
+	border: 1px solid #e6e6e6;
+}
+
+#slider .slider-handle-text {
+	position: relative;
+	margin-top: 20px;
+    margin-left: -10px;
+}
+
+#chosenArticleTitle {
+	font-size: 24px;
+	display: inline;
+	font-weight: bold;
+}
+#chosenArticlePub {
+	font-size: 24px;
+	color: rgb(150,150,150);
+}
+
+.right h2 {
+	font-size: 16px;
+	color: rgb(50,50,50);
+}
+.right form {
+}
+
+.note-editor.note-frame.panel .note-editing-area .note-codeable {
+	display: none;
+}
+.note-editor.note-frame.panel .note-editing-area .note-editable {
+	background-color: #fff;
+	box-sizing: border-box;
+	display: block;
+	resize: vertical;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	padding: 10px;
+	width: 100%;
+	font-size: 14px;
+	max-height: 250px;
+	min-height: 125px;
+	height: 125px;
+	border-top: 1px solid rgb(200,200,200);
+	border-left: 1px solid rgb(200,200,200);
+	border-right: 1px solid rgb(200,200,200);
+}
+
+.note-editor.note-frame.panel .note-editing-area .note-editable:focus {   
+    border: 1px solid rgb(100,100,100);
+    outline: 0 none;
+}
+
+.right .note-editor {
+	border-width: 0px;
+	display: flex;
+    flex-direction: column-reverse;
+}
+.right .note-statusbar {
+	display: none;
+}
+.right .note-editor.note-frame.panel .note-toolbar-wrapper.panel-default {
+	height: auto !important;
+	background-color: rgb(240,240,240);
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom: 1px solid rgb(200,200,200) !important;
+	border-left: 1px solid rgb(200,200,200);
+	border-right: 1px solid rgb(200,200,200);
+}
+
+.note-toolbar.panel-heading {
+	border: none;
+}
+
+.right #review-link {
+	display: block;
+	padding: 10px;
+	font-size: 14px;
+	border-radius: 3px;
+	border: 1px solid rgb(200,200,200);
+}
+
+.right #review-link:focus {   
+    border: 1px solid rgb(100,100,100);
+    outline: 0 none;
+}
