@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.resolve('build')));
 app.use(express.static(path.resolve('server/public')));
 
-const topicsPipeline = [
+let topicsPipeline = [
 	{ "$project": { 
 		"articles": 1,
 		"name": 1,
@@ -63,6 +63,7 @@ app.get('/', (req, res, next) => {
 		.limit(16)
 		.exec((err, topicsFetched) => {
 		if (err) console.log(err);
+		console.log(topicsFetched.length);
 		topicsFetched = topicsFetched.map((topic) => {
 			return {
 				name: topic["_id"].name,
@@ -84,7 +85,13 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/topic/:slug', (req, res, next) => {
-	topicModel.aggregate(topicsPipeline).exec((err, topicFetched) => {
+	const topicPipeline = [{
+		"$match": {
+			"slug": req.params.slug
+		}
+	}, ...topicsPipeline];
+
+	topicModel.aggregate(topicPipeline).exec((err, topicFetched) => {
 		if (err) console.log(err);
 		const topicToRender = (topicFetched) ? topicFetched[0] : null; 
 		if (topicToRender) {
@@ -115,7 +122,7 @@ app.get('*', (req, res) => {
 	  	<html>
 			<head>
 				<meta charset="UTF-8">
-				<title>NewsRank</title>
+				<title>newsrank.</title>
 				<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
 				<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
 				<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>

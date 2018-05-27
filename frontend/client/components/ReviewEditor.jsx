@@ -4,56 +4,32 @@ import {
   BrowserRouter as Router,
   Route,
   Link
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
-import { stateToHTML } from 'draft-js-export-html';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
-const toolbar = {
-  options: ['inline', 'fontSize', 'fontFamily', 'list', 'textAlign'],
-  inline: {
-    inDropdown: false,
-    options: ['bold', 'italic', 'underline', 'strikethrough']
-  },
-  list: {
-    inDropdown: true,
-    options: ['unordered', 'ordered', 'indent', 'outdent']
-  },
-  textAlign: {
-    inDropdown: true,
-    options: ['left', 'center', 'right', 'justify']
-  },
-};
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 class ReviewEditor extends Component {
   constructor(props) {
   	super(props);
-  	this.state = {
-  		editorState: EditorState.createEmpty()
-  	};
   }
 
-  onEditorStateChange(editorState) {
-    const currentContent = this.state.editorState.getCurrentContent();
-  	//send up to parent state 
-    this.props.updateReviewContent(stateToHTML(currentContent));
-    this.setState({
-      editorState
-    });
+  handleEditorChange(content) {
+  	this.props.updateReviewContent(content);
   };
-
   render() {
     return  (
-	    <Editor
-		  editorState={this.state.editorState}
-		  toolbarClassName="review-editor-toolbar"
-		  wrapperClassName="review-editor-wrapper"
-		  editorClassName="review-editor"
-		  onEditorStateChange={this.onEditorStateChange.bind(this)}
-		  toolbar={toolbar}
-		/>
+	    <ReactQuill value={this.props.reviewContent}
+                  onChange={this.handleEditorChange.bind(this)} 
+                  modules={{
+				    toolbar: [
+				      [{ 'size': ['small', false, 'large', 'huge'] }],
+				      ['bold', 'italic', 'underline','strike', 'blockquote'],
+				      [{'list': 'ordered'}, {'list': 'bullet'}],
+				      ['link', 'image'],
+				      ['clean']
+				    ],
+				  }}/>
   	);
   }
 }

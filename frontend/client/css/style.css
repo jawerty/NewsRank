@@ -2,8 +2,8 @@ body {
   padding: 25px 50px;
   font: 14px "sans-serif", Helvetica, Arial, sans-serif;
   text-align: center;
-  background-color: rgb(223, 229, 235);
-  min-width: 1200px;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
 }
 
 a {
@@ -22,9 +22,16 @@ h2 {
 	display: inline-block;
 }
 
+#wrapper {
+	margin: 0 auto;
+	max-width: 1100px;
+    min-width: 1100px;
+}
+
 header {
-	min-height: 50px;
-	background-color: rgb(247,247,247);
+	margin-bottom: 10px;
+	min-height: 75px;
+	background-color: rgb(240,240,240, .5);
 }
 
 header ul {
@@ -43,8 +50,10 @@ header ul li h1.title {
 	font-size: 2em;
 	font-family: helvetica;
 	padding: 5px;
-	margin: 5px;
+	margin-top: 25px;
+	margin-bottom: 15px;
 	color: rgb(100,100,100);
+	letter-spacing: 1px;
 }
 
 header p.subtitle {
@@ -99,6 +108,7 @@ header p.subtitle {
 	border-radius: 3px;
 	box-sizing: border-box;
 	text-align: left;
+	border: 1px solid rgb(220,220,220, .75);
 }
 
 .topicBlockContent {
@@ -125,6 +135,8 @@ header p.subtitle {
 	background-position: top;
 	background-repeat: no-repeat;
 	background-size: 100%;
+	border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
 
 .topicBlock .coveredBy {
@@ -166,9 +178,9 @@ header p.subtitle {
 }
 
 .left {
-	width: 650px;
+	width: 550px;
 	margin-right: 30px;
-	height: 600px;
+	height: 750px;
 	max-height: 600px;
 	background-color: rgb(255,255,255);
 	border: 1px solid rgb(200,200,200);
@@ -177,14 +189,14 @@ header p.subtitle {
 }
 
 .right {
-	width: calc(100% - 680px);
+	width: calc(100% - 580px);
 	background-color: rgb(255,255,255,.9);
 	border: 1px solid rgb(200,200,200);
 	border-radius: 3px;
 	padding: 10px 15px 25px 15px;
 	max-width: 680px;
-	max-height: 600px;
-	height: 650px;
+	height: auto;
+	box-sizing: border-box;
 }
 
 .right img {`
@@ -284,9 +296,18 @@ header p.subtitle {
 	display: inline;
 	font-weight: bold;
 }
+
 #chosenArticlePub {
 	font-size: 1.5em;
 	color: rgb(175,175,175);
+}
+
+#chosenArticleImage {
+	height: 200px;
+	background-position: top;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	margin-bottom: 15px;
 }
 
 .right h2 {
@@ -294,54 +315,6 @@ header p.subtitle {
 	color: rgb(50,50,50);
 }
 .right form {
-}
-
-.note-editor.note-frame.panel .note-editing-area .note-codeable {
-	display: none;
-}
-.note-editor.note-frame.panel .note-editing-area .note-editable {
-	background-color: #fff;
-	box-sizing: border-box;
-	display: block;
-	resize: vertical;
-	border-top-left-radius: 3px;
-	border-top-right-radius: 3px;
-	padding: 10px;
-	width: 100%;
-	font-size: 14px;
-	max-height: 250px;
-	min-height: 125px;
-	height: 125px;
-	border-top: 1px solid rgb(200,200,200);
-	border-left: 1px solid rgb(200,200,200);
-	border-right: 1px solid rgb(200,200,200);
-}
-
-.note-editor.note-frame.panel .note-editing-area .note-editable:focus {   
-    border: 1px solid rgb(100,100,100);
-    outline: 0 none;
-}
-
-.right .note-editor {
-	border-width: 0px;
-	display: flex;
-    flex-direction: column-reverse;
-}
-.right .note-statusbar {
-	display: none;
-}
-.right .note-editor.note-frame.panel .note-toolbar-wrapper.panel-default {
-	height: auto !important;
-	background-color: rgb(240,240,240);
-	border-bottom-left-radius: 3px;
-	border-bottom-right-radius: 3px;
-	border-bottom: 1px solid rgb(200,200,200) !important;
-	border-left: 1px solid rgb(200,200,200);
-	border-right: 1px solid rgb(200,200,200);
-}
-
-.note-toolbar.panel-heading {
-	border: none;
 }
 
 .right #review-link {
@@ -358,7 +331,7 @@ header p.subtitle {
 }
 
 .rangeslider {
-  margin: 10px 0px 10px 0px !important;
+  margin: 0px 0px 10px 0px !important;
 }
 
 .rangeslider .rangeslider__handle {
@@ -394,22 +367,16 @@ header p.subtitle {
     bottom: -8px;
     transform: none;
 }
-.review-editor {
-	padding: 10px 10px;
-	height: 150px;
-}
-.review-editor-wrapper {
-	border: 1px solid rgb(220,220,220);
-}
-.review-editor-toolbar {
-	border-bottom: 1px solid #F1F1F1;
-}
-.DraftEditor-root {
-	margin-top: -22px;
-}
 
+.ql-container {
+	height: 150px;
+	font-size: 14px;
+}
+.ql-editor {
+	font-size: 16px;
+}
 .reviewSubmit {
-	background-color: rgb(100,140,180);
+	background-color: rgb(100,140,200);
     padding: 8px 10px;
     font-size: 16px;
     font-weight: bold;

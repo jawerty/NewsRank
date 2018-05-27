@@ -7,6 +7,7 @@ import {
 import RatingSlider from "./RatingSlider.jsx";
 //"Review the quality of this article. Is it credible? Is it well sourced?"
 import ReviewEditor from "./ReviewEditor.jsx";
+import ReviewList from "./ReviewList.jsx";
 
 class TopicPage extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class TopicPage extends Component {
     	selectedArticle: this.props.topic.articles[0],
     	rating: 80,
     	editorState: "Write a review",
-    	reviewContent: null
+    	reviewContent: null,
+    	reviews: this.props.reviews, // attach to state to update the reviews in page
     };
   }
 
@@ -68,6 +70,10 @@ class TopicPage extends Component {
 		);
 	};
 
+	const chosenArticleImageStyle = {
+		backgroundImage: `url(${this.state.selectedArticle.headlineImage})`
+	};
+
     return  (
     	<div class="topicView">
 		  <div class="left">
@@ -77,7 +83,12 @@ class TopicPage extends Component {
 		  </div>
 		  <div class="right">
 		    <label id="review-pabel-label">Review Article</label>
-		    <h2 id="chosenArticleTitle">{this.state.selectedArticle.title}</h2>
+		    <a href={this.state.selectedArticle.origin}>
+		    	<div id="chosenArticleImage" style={chosenArticleImageStyle}></div>
+		    </a>
+		    <a href={this.state.selectedArticle.origin}>
+		    	<h2 id="chosenArticleTitle">{this.state.selectedArticle.title}</h2>
+		    </a>
 		    <label id="chosenArticlePub">- {this.state.selectedArticle.publication}</label><br/>
 		    <div id="reviewForm">
 		      <h2>Rate article</h2>
@@ -95,14 +106,15 @@ class TopicPage extends Component {
 		      </button>
 		    </div>
 		  </div>
-		  <div class="reviewList"></div>
+		  <ReviewList reviews={this.state.reviews}/>
 		</div>
   	);
   }
 }
 
 TopicPage.proptypes = {
-	topic: PropTypes.object
+	topic: PropTypes.object,
+	reviews: PropTypes.array
 };
 
 export default TopicPage;

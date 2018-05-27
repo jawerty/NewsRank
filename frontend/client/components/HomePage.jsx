@@ -16,7 +16,7 @@ class HomePage extends Component {
     	<div>
 			<div class="topics">
 			  <div class="section-header"> 
-			    <ul>
+			    {/*<ul>
 			      <li> 
 			        <h2>All Topics</h2>
 			      </li>
@@ -24,7 +24,7 @@ class HomePage extends Component {
 			      <li> 
 			        <input placeholder="Search..." id="searchTextBox" onkeyup="searchForTopics(this)"/>
 			      </li>
-			    </ul>
+			    </ul>*/}
 			  </div>
 			  {topicBlocks}
 			</div>

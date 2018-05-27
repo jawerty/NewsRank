@@ -30,8 +30,9 @@ class App extends Component {
 
   componentDidMount() {
   	const self = this;
-  	if (!self.state.topics) {
-  		console.log("ok")
+
+  	if (!self.state.topics) { // check only if hitting / route
+  		console.log("fetching all topics")
 		self.fetchTopics((topics) => {
 			self.setState({ topics })
 		});
@@ -42,15 +43,15 @@ class App extends Component {
   render() {
 	return (
   		<Router>
-	    	<div>
+	    	<div id="wrapper">
 		    	<header>
 					<ul> 
 						<li>
 							<Link to={{
 								pathname: "/",
 								state: { topics: this.state.topics }
-							}}><h1 className="title">NewsRank</h1></Link>
-							<p className="subtitle">"Review top stories in the news"</p>
+							}}><h1 className="title">newsrank.</h1></Link>
+							{/*	<p className="subtitle">"Review top stories in the news"</p> */}
 						</li>
 					</ul>
 				</header>

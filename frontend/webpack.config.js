@@ -1,6 +1,7 @@
-
 var webpack = require('webpack');
 var path = require('path');
+
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var BUILD_DIR = path.resolve(__dirname, './build');
 var APP_DIR = path.resolve(__dirname, './client');
@@ -9,7 +10,7 @@ const config = {
   mode: 'production',
   target: 'web',
    entry: {
-     main: APP_DIR + '/index.js'
+     main: APP_DIR + '/index.jsx'
    },
    output: {
      filename: 'bundle.js',
@@ -35,7 +36,8 @@ const config = {
        },
      },
      {
-       test: /\.(jsx|js)?$/,
+       test: /\.(jsx)?$/,
+       exclude: /node_modules/,
        use: [{
          loader: "babel-loader",
          options: {
@@ -46,7 +48,10 @@ const config = {
      }
     ],
 
-  }
+  },
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ]
 };
 
 module.exports = config;
