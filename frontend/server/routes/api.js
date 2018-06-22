@@ -59,7 +59,6 @@ router.get('/topic', (req, res, next) => {
 	  		  .exec((err, topics) => {
 		if (err) console.log(err);
 		if (isFetch) {
-			console.log(topics);
 			res.send({ topics });
 		} else {
 			const query = [ 
@@ -114,6 +113,15 @@ router.post('/save-review', (req, res, next) => {
 	});
 
 	newReview.save();
+});
+
+/* Get Reviews */
+router.get('/reviews', (req, res, next) => {
+	const articleSlug = req.query.articleSlug;
+	reviewModel.find({ articleSlug }, (err, foundReviews) => {
+    	if (err) console.log(err);
+		res.send(foundReviews);
+    });
 });
 
 module.exports = router;

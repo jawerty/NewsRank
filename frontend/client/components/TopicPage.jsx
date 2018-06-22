@@ -17,15 +17,18 @@ class TopicPage extends Component {
     	rating: 80,
     	editorState: "Write a review",
     	reviewContent: null,
-    	reviews: this.props.reviews, // attach to state to update the reviews in page
+    	reviews: this.props.renderedReviews || []
     };
   }
 
   articleRowClick(e, selectedArticle) {
+  	const self = this;
 	if (e.target.tagName == "A") {
     	return
     }
-    this.setState({selectedArticle});
+    self.props.fetchReviews(selectedArticle.publicationSlug, (reviews) => {
+    	self.setState({selectedArticle, reviews});
+    });
   }
 
   updateRating(rating) {
@@ -37,7 +40,6 @@ class TopicPage extends Component {
   }
 
   submitReviewForm() {
-  	console.log(this.state.selectedArticle);
 	$.ajax({
 		type: 'POST',
 		url: '/api/save-review',
@@ -51,7 +53,7 @@ class TopicPage extends Component {
 			"reviewContent": this.state.reviewContent 
 		}),
 		success: () => {
-			console.log("Review has been saved.");
+			alert("Review saved");
 		}
 	});
   }
@@ -114,7 +116,8 @@ class TopicPage extends Component {
 
 TopicPage.proptypes = {
 	topic: PropTypes.object,
-	reviews: PropTypes.array
+	renderedReviews: PropTypes.array,
+	fetchReviews: PropTypes.func
 };
 
 export default TopicPage;

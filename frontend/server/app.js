@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const db = require(path.resolve('./../db/schema'));
 const topicModel = db.model('topic');
+const reviewModel = db.model('review');
 
 const apiRouter = require('./routes/api');
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.resolve('build')));
 app.use(express.static(path.resolve('server/public')));
+app.use('/api', apiRouter);
 
 let topicsPipeline = [
 	{ "$project": { 
@@ -85,6 +87,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/topic/:slug', (req, res, next) => {
+	console.log("hit");
 	const topicPipeline = [{
 		"$match": {
 			"slug": req.params.slug
@@ -95,17 +98,21 @@ app.get('/topic/:slug', (req, res, next) => {
 		if (err) console.log(err);
 		const topicToRender = (topicFetched) ? topicFetched[0] : null; 
 		if (topicToRender) {
-			res.locals.topicData = {
-				name: topicToRender["_id"].name,
-				summary: topicToRender["_id"].summary,
-				headlineImage: topicToRender["_id"].headlineImage,
-				date_added: topicToRender["_id"].date_added,
-				articles: topicToRender.articles
-			};
-			next();
+			reviewModel.find({ articleSlug: topicToRender.articles[0].publicationSlug }, (err, reviewsFetched) => {
+				res.locals.topicData = {
+					name: topicToRender["_id"].name,
+					summary: topicToRender["_id"].summary,
+					headlineImage: topicToRender["_id"].headlineImage,
+					date_added: topicToRender["_id"].date_added,
+					articles: topicToRender.articles,
+					reviews: reviewsFetched
+				};
+				next();
+			});
 		} else {
 			next(createError(404));
 		};
+		
 	});
 });
 
@@ -117,7 +124,10 @@ app.get('*', (req, res) => {
     if (res.locals.topicData) {
     	dataDefinition += `window.topic = ${JSON.stringify(res.locals.topicData)};\n`;
     };
-
+    if (res.locals.topicData && res.locals.topicData.reviews) {
+    	dataDefinition += `window.reviews = ${JSON.stringify(res.locals.topicData.reviews)};\n`;    	
+    	console.log(`window.reviews = ${JSON.stringify(res.locals.topicData.reviews)};\n`);
+    };
 	res.send(`
 	  	<html>
 			<head>
@@ -139,8 +149,6 @@ app.get('*', (req, res) => {
 		</html>
 	`);
 });
-
-app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
