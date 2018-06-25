@@ -10,7 +10,7 @@ import { redGreenScale } from "../../lib/redGreenScale";
 
 class ReviewList extends Component {
   constructor(props) {
-  	super(props)
+  	super(props);
   }
 
   render() {
@@ -20,15 +20,16 @@ class ReviewList extends Component {
   		};
 
   		return (
-  			<div className="reviewBlock">
-  				<div className="reviewPub">
-  					{review.publication} : <label style={ratingLabelStyle}>
-  						{review.rating + "%"}
-  					</label>
-  				</div>
-  				<div className="reviewContent" dangerouslySetInnerHTML={{__html: review.reviewContent}}>
-  				</div>
-  			</div>			
+  			<div class="reviewBlockWrapper">
+	  			<tr className="reviewBlock">
+	  				<td className="reviewPub">
+	  					{review.publication}: <span style={ratingLabelStyle}>{review.rating + "%"}</span>
+	  				</td>
+	  				<td className="reviewContent" dangerouslySetInnerHTML={{__html: review.reviewContent}}>
+	  				</td>
+	  			</tr>
+	  			<tr class="reviewBlockSpacing"></tr>	
+  			</div>		
   		);
   	});
 
@@ -36,8 +37,11 @@ class ReviewList extends Component {
   	if (reviewBlocks.length > 0) {
   		reviewListContent = (
   			<div>
-	  			<h2>Reviews</h2>
-	  			{reviewBlocks}
+	  			<h2>Reviews for <label>{this.props.articleTitle}</label></h2>
+	  			<table>
+	  				<tr class="reviewBlockSpacing"></tr>
+	  				{reviewBlocks}
+	  			</table>
   			</div>
   		);
   	} else {
@@ -48,7 +52,7 @@ class ReviewList extends Component {
   		)
   	}
 	return (
-		<div>
+		<div id="reviewList">
   			{reviewListContent}
   		</div>
 	);
@@ -56,6 +60,7 @@ class ReviewList extends Component {
 }
 
 ReviewList.propTypes = {
-	reviews: Proptypes.array
+	reviews: Proptypes.array,
+	articleTitle: Proptypes.string
 }
 export default ReviewList;

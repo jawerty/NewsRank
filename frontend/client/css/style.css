@@ -98,7 +98,7 @@ header p.subtitle {
 }
 
 .topicBlock {
-	width: 350px;
+	width: 300px;
 	height: 285px;
 	background-color: rgb(255,255,255);
 	display: inline-block;
@@ -386,4 +386,54 @@ header p.subtitle {
     float: right;
     margin-top: -39px;
     color: rgb(255,255,255);
+}
+#reviewList {
+	margin-top: 20px;
+	border-top: 1px solid rgb(200,200,200);
+}
+
+#reviewList table {
+	border-collapse: separate;
+	border-spacing: 0px 10px;
+	width: 100%;
+}
+
+#reviewList .reviewBlockWrapper {
+	width: 100%;
+}
+
+#reviewList h2 {
+	font-size: 2em;
+}
+
+#reviewList h2 label {
+	display: inline;
+}
+#reviewList table tr {
+	border-top: 1px solid rgb(245,245,245);
+	margin-bottom: 10px;
+}
+
+#reviewList table tr td.reviewPub {
+	white-space: nowrap;
+	font-weight: bold;
+	font-size: 1.5em;
+	border-right: 2px solid rgb(245,245,245);
+}
+#reviewList table tr td.reviewContent {
+	padding-left: 10px;
+	width: 100%;
+}
+#reviewList table tr td.reviewContent p {
+	margin: 0;
+}
+#reviewList table tr.reviewBlockSpacing {
+	margin-top: 10px;
+	height: 2px;
+	background-color: rgb(245,245,245);
+	display: block;
+}
+#reviewList table tr td {
+	vertical-align: middle;
+	padding: 10px;
 }

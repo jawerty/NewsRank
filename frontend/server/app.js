@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const db = require(path.resolve('./../db/schema'));
 const topicModel = db.model('topic');
-const reviewModel = db.model('review');
 
 const apiRouter = require('./routes/api');
 
@@ -87,7 +86,6 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/topic/:slug', (req, res, next) => {
-	console.log("hit");
 	const topicPipeline = [{
 		"$match": {
 			"slug": req.params.slug
@@ -97,18 +95,17 @@ app.get('/topic/:slug', (req, res, next) => {
 	topicModel.aggregate(topicPipeline).exec((err, topicFetched) => {
 		if (err) console.log(err);
 		const topicToRender = (topicFetched) ? topicFetched[0] : null; 
+		console.log(topicFetched, topicToRender);
 		if (topicToRender) {
-			reviewModel.find({ articleSlug: topicToRender.articles[0].publicationSlug }, (err, reviewsFetched) => {
-				res.locals.topicData = {
-					name: topicToRender["_id"].name,
-					summary: topicToRender["_id"].summary,
-					headlineImage: topicToRender["_id"].headlineImage,
-					date_added: topicToRender["_id"].date_added,
-					articles: topicToRender.articles,
-					reviews: reviewsFetched
-				};
-				next();
-			});
+			res.locals.topicData = {
+				name: topicToRender["_id"].name,
+				summary: topicToRender["_id"].summary,
+				headlineImage: topicToRender["_id"].headlineImage,
+				date_added: topicToRender["_id"].date_added,
+				articles: topicToRender.articles,
+				slug: req.params.slug
+			};
+			next();
 		} else {
 			next(createError(404));
 		};
@@ -124,10 +121,7 @@ app.get('*', (req, res) => {
     if (res.locals.topicData) {
     	dataDefinition += `window.topic = ${JSON.stringify(res.locals.topicData)};\n`;
     };
-    if (res.locals.topicData && res.locals.topicData.reviews) {
-    	dataDefinition += `window.reviews = ${JSON.stringify(res.locals.topicData.reviews)};\n`;    	
-    	console.log(`window.reviews = ${JSON.stringify(res.locals.topicData.reviews)};\n`);
-    };
+    
 	res.send(`
 	  	<html>
 			<head>

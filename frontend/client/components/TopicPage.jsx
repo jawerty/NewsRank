@@ -12,12 +12,21 @@ import ReviewList from "./ReviewList.jsx";
 class TopicPage extends Component {
   constructor(props) {
     super(props);
+    let selectedArticle = {};
+    if (this.props.topic) {
+		selectedArticle = this.props.topic.articles[0];
+    }
+    let topic = this.props.topic;
+    if (topic && topic.slug != this.props.match.params.topicName) {
+    	topic = null;
+    }
     this.state = {
-    	selectedArticle: this.props.topic.articles[0],
+    	topic,
+    	selectedArticle,
     	rating: 80,
     	editorState: "Write a review",
     	reviewContent: null,
-    	reviews: this.props.renderedReviews || []
+    	reviews: []
     };
   }
 
@@ -37,6 +46,25 @@ class TopicPage extends Component {
 
   updateReviewContent(reviewContent) {
   	this.setState({reviewContent});
+  }
+
+  componentWillMount() {
+  	const self = this;
+  	const param = this.props.match.params.topicName;
+  	console.log(param);
+  	if (param && (!this.state.topic || 
+  		this.state.topic.slug != param)) {
+  		this.props.fetchTopic(this.props.match.params.topicName, (topic) => {
+  			self.props.fetchReviews(topic.articles[0].publicationSlug, (reviews) => {
+		    	self.setState({topic, selectedArticle: topic.articles[0], reviews});
+		    });
+  		});
+  	} else {
+  		console.log(this.state.selectedArticle);
+  		this.props.fetchReviews(this.state.selectedArticle.publicationSlug, (reviews) => {
+	    	self.setState({reviews});
+	    });
+  	}
   }
 
   submitReviewForm() {
@@ -59,7 +87,11 @@ class TopicPage extends Component {
   }
 
   render() {
-  	const articles = this.props.topic.articles;
+  	let articles = [];
+  	if (this.state.topic) {
+  		articles = this.state.topic.articles;
+  	}
+
 	const articlesRows = []; // make a component
 	for (let i = 0; i < articles.length; i++) {
 		articlesRows.push(
@@ -108,7 +140,7 @@ class TopicPage extends Component {
 		      </button>
 		    </div>
 		  </div>
-		  <ReviewList reviews={this.state.reviews}/>
+		  <ReviewList reviews={this.state.reviews} articleTitle={this.state.selectedArticle.title}/>
 		</div>
   	);
   }
@@ -117,7 +149,9 @@ class TopicPage extends Component {
 TopicPage.proptypes = {
 	topic: PropTypes.object,
 	renderedReviews: PropTypes.array,
-	fetchReviews: PropTypes.func
+	fetchReviews: PropTypes.func,
+	fetchTopic: PropTypes.func,
+	location: PropTypes.object
 };
 
 export default TopicPage;

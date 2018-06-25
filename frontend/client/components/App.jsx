@@ -15,15 +15,26 @@ class App extends Component {
 
   	this.state = {
   		topics: this.props.topics,
-  		reviews: this.props.reviews || []
+  		topic: this.props.topic || {}
   	};
   }
+
   // fetch if another page has been cached
   // needs to be worked on more
   fetchTopics(callback) { 
-  	console.log("Fetching all topics")
+  	console.log("Fetching all topics");
   	$.ajax({
 	  url: '/?fetch=true',
+	  success: (data) => {
+	  	callback(data);
+	  },
+	});
+  }
+
+  fetchTopic(topicSlug, callback) { 
+  	console.log(`Fetching topic ${topicSlug}`);
+  	$.ajax({
+	  url: `/api/topic/${topicSlug}`,
 	  success: (data) => {
 	  	callback(data);
 	  },
@@ -66,13 +77,15 @@ class App extends Component {
 				</header>
 				<div>
 					<Route exact path="/" render={(props) => (
-						(this.state.topics) ? <HomePage topics={this.state.topics || props.location.state.topics}/> : function(){}
+						(this.state.topics) ? <HomePage {...props} topics={this.state.topics || props.location.state.topics}/> : function(){}
 					)}/>	
 					<Route path="/topic/:topicName" render={(props) => (
 						<TopicPage 
-							topic={this.props.topic || props.location.state.topic}
+							{...props}
+							topic={this.props.topic || null}
 							renderedReviews={this.props.reviews}
-							fetchReviews={this.fetchReviews}/>
+							fetchReviews={this.fetchReviews}
+							fetchTopic={this.fetchTopic}/>
 					)}/>
 				</div>
 			</div>
@@ -83,7 +96,6 @@ class App extends Component {
 
 App.propTypes = {
 	topics: Proptypes.array,
-	topic: Proptypes.object,
-	reviews: Proptypes.array
+	topic: Proptypes.object
 }
 export default App;

@@ -14,6 +14,41 @@ const publications = publicationURLs.map((publicationURL) => {
 	return (publicationDomain);
 });
 
+let topicsPipeline = [
+	{ "$project": { 
+		"articles": 1,
+		"name": 1,
+		"summary": 1,
+		"headlineImage": 1,
+		"coveredBy": 1,
+		"date_added": 1,
+		"slug": 1
+	}},
+	// Unwind the source
+	{ "$unwind": "$articles" },
+	// Do the lookup matching
+	{ "$lookup": {
+	   "from": "article",
+	   "localField": "articles",
+	   "foreignField": "_id",
+	   "as": "articleObjects"
+	}},
+	// Unwind the result arrays ( likely one or none )
+	{ "$unwind": "$articleObjects" },
+	 // Group back to arrays
+    { "$group": {
+        "_id": {
+        	"name": "$name", 
+        	"summary": "$summary",
+        	"coveredBy": "$coveredBy",
+        	"headlineImage": "$headlineImage",
+        	"slug": "$slug",
+        	"date_added": "$date_added"
+        },
+        "articles": { "$push": "$articleObjects" }
+    }}
+]
+
 /* Topic Search */
 router.get('/topic', (req, res, next) => {
 	const limit = 16;
@@ -97,6 +132,25 @@ router.get('/topic', (req, res, next) => {
 		    });
 		}
   	});
+});
+
+
+router.get('/topic/:slug', (req, res, next) => {
+	const topicPipeline = [{
+		"$match": {
+			"slug": req.params.slug
+		}
+	}, ...topicsPipeline];
+
+	topicModel.aggregate(topicPipeline).exec((err, topicFetched) => {
+		if (err) console.log(err);
+		const topicToRender = (topicFetched) ? topicFetched[0] : null; 
+		if (topicToRender) {
+			res.send(topicToRender);
+		} else {
+			res.send({error: true})
+		}
+	})
 });
 
 /* Save Review */
