@@ -63,7 +63,26 @@ header p.subtitle {
 	font-style: italic;
 }
 
-
+.pubPanel {
+	width: 100%;
+	overflow-x: scroll;
+	height: 220px;
+	text-align: center;
+	margin: 0 auto;
+	border-bottom: 2px solid rgb(240,240,240);
+	white-space: nowrap;
+}
+.pubPanelBlock {
+	width: 250px;
+	height: 200px;
+	display: inline-block;
+	margin: 10px;
+}
+.pubPanelBlock img {
+	height: 100px;
+	vertical-align: top;
+	margin-top: 50px;
+}
 .topics, .topTopics {
 	margin: 0 auto;
 	text-align: center;

@@ -40,7 +40,7 @@ const Tokenizer = () => {
 	let articleTokens = {};
 	let iterator = 0;
 
-	const articleCursor = articleModel.find({}).cursor();
+	const articleCursor = articleModel.find({tokens: {$exists: false}}).cursor();
 	articleCursor.on("data", (article) => {
 		articleCursor.pause() // run events as they are added to call stack
 		const $ = cheerio.load(article.content);
@@ -90,6 +90,9 @@ const Tokenizer = () => {
 				let weightedTokens = genWeightedTokens(tokenWeights);
 				weightedTokens = weightedTokens.map((token) => token.toLowerCase());
 				articleTokens[index].article.tokens = weightedTokens;
+				if (articleTokens[index].article.origin.indexOf("nytimes.com/2018/07/01/world/americas/mexico-election-andres-manuel-lopez-obrador.html") > -1) {
+					console.log(weightedTokens)
+				}
 				articleTokens[index].article.markModified("tokens");
 				articleTokens[index].article.save();
 

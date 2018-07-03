@@ -75,7 +75,7 @@ class TopicPage extends Component {
 		data: JSON.stringify({ 
 			"rating": this.state.rating,
 			"articleSlug": this.state.selectedArticle.publicationSlug,
-			"topicSlug": this.props.topic.slug,
+			"topicSlug": this.state.topic.slug,
 			"publication": this.state.selectedArticle.publication,
 			"reviewer": "guest",
 			"reviewContent": this.state.reviewContent 

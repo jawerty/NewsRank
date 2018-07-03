@@ -15,6 +15,7 @@ class App extends Component {
 
   	this.state = {
   		topics: this.props.topics,
+  		pubPanelData: this.props.pubPanelData,
   		topic: this.props.topic || {}
   	};
   }
@@ -24,7 +25,7 @@ class App extends Component {
   fetchTopics(callback) { 
   	console.log("Fetching all topics");
   	$.ajax({
-	  url: '/?fetch=true',
+	  url: '/?fetch=true&ppData=true',
 	  success: (data) => {
 	  	callback(data);
 	  },
@@ -54,8 +55,11 @@ class App extends Component {
   componentDidMount() {
   	const self = this;
   	if (!self.state.topics) { // check only if hitting / route
-		self.fetchTopics((topics) => {
-			self.setState({ topics })
+		self.fetchTopics((data) => {
+			self.setState({ 
+				topics: data.topics,
+				pubPanelData: data.pubPanelData
+			})
 		});
   	}
   }
@@ -77,7 +81,9 @@ class App extends Component {
 				</header>
 				<div>
 					<Route exact path="/" render={(props) => (
-						(this.state.topics) ? <HomePage {...props} topics={this.state.topics || props.location.state.topics}/> : function(){}
+						(this.state.topics) ? <HomePage {...props} 
+												topics={this.state.topics || props.location.state.topics}
+												pubPanelData={this.state.pubPanelData}/> : function(){}
 					)}/>	
 					<Route path="/topic/:topicName" render={(props) => (
 						<TopicPage 
@@ -96,6 +102,7 @@ class App extends Component {
 
 App.propTypes = {
 	topics: Proptypes.array,
-	topic: Proptypes.object
+	topic: Proptypes.object,
+	pubPanelData: Proptypes.array
 }
 export default App;

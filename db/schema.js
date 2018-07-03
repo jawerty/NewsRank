@@ -12,7 +12,7 @@ conn.on('connected', () => {
 
 const articleSchema = new Schema({
 	id: ObjectId,
-	date_scrapped: {type: Date, required: true},
+	date_scrapped: {type: Number, required: true},
 	title: {type: String, required: true},
   byline: {type: String},
 	content: {type: String, required: true},
@@ -24,7 +24,9 @@ const articleSchema = new Schema({
   tokens: [{type: String}],
   trained: {type: Boolean},
   icon: {type: String},
-  articlePreview: {type: String}
+  articlePreview: {type: String},
+  credibility: {type: Object},
+  publicationName: {type: String}
 });
 
 const topicSchema = new Schema({
@@ -68,11 +70,18 @@ const userSchema = new Schema({
   reviews: [ObjectId]
 });
 
+trackerInfoSchema = new Schema({
+  id: ObjectId,
+  publication: {type: String},
+  trackerList: [{type: String}]
+});
+
 mongoose.model('article', articleSchema, 'article');
 mongoose.model('topic', topicSchema, 'topic');
 mongoose.model('topicStack', topicStackSchema, 'topicStack');
 mongoose.model('review', reviewSchema, 'review');
 mongoose.model('user', userSchema, 'user');
+mongoose.model('trackerInfo', trackerInfoSchema, 'trackerInfo');
 
 articleSchema.index({publicationSlug: 1, origin: 1});
 module.exports = mongoose;

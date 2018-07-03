@@ -9,6 +9,6 @@ render(
   <App 
   	topics={window.topics || null}
   	topic={window.topic || null}
-  	reviews={window.reviews || null} />,
+  	pubPanelData={window.pubPanel || null} />,
   document.getElementById('root')
 );

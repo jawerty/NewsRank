@@ -6,14 +6,29 @@ import {
 
 import TopicBlock from "./TopicBlock.jsx";
 
+import { redGreenScale } from '../../lib/redGreenScale';
+
 class HomePage extends Component {
   render() {
   	const topicBlocks = this.props.topics.map((topic) => {
   		return <TopicBlock topic={topic} />;
   	});
   	
+  	const pubPanelBlocks = this.props.pubPanelData.map((pubWithRating) => {
+  		const pubPanelBlockStyle = {
+  			backgrowundColor: redGreenScale(pubWithRating.avgRating)
+  		}
+  		return (
+  			<div class="pubPanelBlock" style={pubPanelBlockStyle}>
+  				<img src={`//logo.clearbit.com/${pubWithRating._id.publication}`}></img>
+  			</div>
+  		);
+  	});
     return  (
     	<div>
+    		<div class="pubPanel">
+    			{pubPanelBlocks}
+    		</div>
 			<div class="topics">
 			  <div class="section-header"> 
 			    {/*<ul>
@@ -35,7 +50,8 @@ class HomePage extends Component {
 }
 
 HomePage.propTypes = {
-	topics: PropTypes.array
+	topics: PropTypes.array,
+	pubPanelData: PropTypes.array
 }
 
 export default HomePage;

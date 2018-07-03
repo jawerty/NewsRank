@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const db = require(path.resolve('./../db/schema'));
 const topicModel = db.model('topic');
+const reviewModel = db.model('review');
 
 const apiRouter = require('./routes/api');
 
@@ -59,12 +60,21 @@ let topicsPipeline = [
 
 app.get('/', (req, res, next) => {
 	const fetch = req.query.fetch;
+	const ppData = req.query.ppData;
+	const pubPanelPipeline = [
+		{
+			$group: {
+			   _id: { publication: "$publication" },
+			   avgRating: { $avg: "$rating" }
+			}
+		}
+    ]
+	
 	topicModel.aggregate(topicsPipeline).sort({date_added: -1})
 		.skip(0)
 		.limit(16)
 		.exec((err, topicsFetched) => {
 		if (err) console.log(err);
-		console.log(topicsFetched.length);
 		topicsFetched = topicsFetched.map((topic) => {
 			return {
 				name: topic["_id"].name,
@@ -77,10 +87,27 @@ app.get('/', (req, res, next) => {
 			}
 		})
 		if (fetch) {
-			res.send(topicsFetched);
+			if (ppData) {
+				reviewModel.aggregate(
+			   		pubPanelPipeline
+				).exec((err, publicationRatings) => {
+					res.send({
+						topics: topicsFetched,
+						pubPanelData: publicationRatings
+					})
+				});
+			} else {
+				res.send(topicsFetched);				
+			}
 		} else {	
-			res.locals.topicsData = topicsFetched
-			next(); 
+			reviewModel.aggregate(
+			   pubPanelPipeline
+			).exec((err, publicationRatings) => {
+				res.locals.topicsData = topicsFetched;
+				res.locals.pubPanelData = publicationRatings;
+				next();
+			});
+			 
 		}
 	});
 });
@@ -95,7 +122,6 @@ app.get('/topic/:slug', (req, res, next) => {
 	topicModel.aggregate(topicPipeline).exec((err, topicFetched) => {
 		if (err) console.log(err);
 		const topicToRender = (topicFetched) ? topicFetched[0] : null; 
-		console.log(topicFetched, topicToRender);
 		if (topicToRender) {
 			res.locals.topicData = {
 				name: topicToRender["_id"].name,
@@ -115,11 +141,14 @@ app.get('/topic/:slug', (req, res, next) => {
 
 app.get('*', (req, res) => {
 	let dataDefinition = '';
-	if (res.locals.topicsData) {
+    if (res.locals.topicsData) {
     	dataDefinition += `window.topics = ${JSON.stringify(res.locals.topicsData)};\n`;
     };
     if (res.locals.topicData) {
     	dataDefinition += `window.topic = ${JSON.stringify(res.locals.topicData)};\n`;
+    };
+    if (res.locals.topicsData && res.locals.pubPanelData) {
+    	dataDefinition += `window.pubPanel = ${JSON.stringify(res.locals.pubPanelData)};\n`;
     };
     
 	res.send(`

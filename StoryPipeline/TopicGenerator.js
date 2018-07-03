@@ -1,14 +1,13 @@
-// run with --max-old-space-size=4096
+// process more than about 1000 articles it breaks!
+// run with --max-old-space-size=4096 if processing  more than ~1000 articles
 const natural = require('natural');
 const async = require('async');
 const slug = require('slug');
 const cheerio = require('cheerio');
-const SummaryTool = require('node-summary');
-
+const SummaryTool = require('./node-summary'); // had to transpile summary tool with webpack
 const db = require('../db/schema');
 const articleModel = db.model('article');
 const topicModel = db.model('topic');
-
 const scrape_time = Date.now();
 // Returns a list of topics corresponding to each article grouping and saves to database
 const summarizeArticles = (articleIds, callback) => {
@@ -41,7 +40,7 @@ const summarizeArticles = (articleIds, callback) => {
 	)
 }
 
-const generateTopics = (articleGroupings) => {
+const generateTopics = (articleGroupings, date_grouping, parentCallback) => {
 	const bulk = topicModel.collection.initializeOrderedBulkOp();
 	
 	const generation = (callback) => {
@@ -69,11 +68,9 @@ const generateTopics = (articleGroupings) => {
 		});
 
 		Object.entries(articleGroupingMap).forEach((grouping) => {
-			// console.log(articleGroupingMap);
 			let primaryArticle = grouping[0];
 			let groupingArticles = grouping[1];
 			for (let i = 0; i < groupingArticles.length; i++) {
-				console.log(groupingArticles[i])
 				let currentArticle = JSON.parse(groupingArticles[i].label).pubSlug;
 				let tempArticleGroupingsMap = JSON.parse(JSON.stringify(articleGroupingMap));
 				delete tempArticleGroupingsMap[primaryArticle];
@@ -127,7 +124,7 @@ const generateTopics = (articleGroupings) => {
 			    		});
 			    		const topicHeadlineImage = (articleImages.length > 0) ?
 			    			 	articleImages[0] : null;
-
+			    	    console.log("Inserting", strippedName);
 						bulk.insert({
 							coveredBy,
 							date_added: scrape_time,
@@ -151,24 +148,38 @@ const generateTopics = (articleGroupings) => {
 	}
 
 	generation(() => {
-		bulk.execute((err, result) => {
-			if (err) console.log(err);
-			console.log("TOPICS INSERTED:", result.nInserted);
-			setTimeout(() => {
-		      // in case any more mongodb commands are running
-		     articleModel.updateMany(
-		      	{trained: false}, 
-		      	{ 
-		      		$set: { 
-		      			trained: true 
-		      		}
-		      	},
-		      	(err) => {
-			      console.log("DONE");
-			      process.exit(1)
-		      	});
-		    }, 1000);
-		});	
+		if(bulk && bulk.s && bulk.s.currentBatch 
+	      && bulk.s.currentBatch.operations 
+	      && bulk.s.currentBatch.operations.length > 0){
+			bulk.execute((err, result) => {
+				if (err) console.log(err);
+				if (result) {
+					setTimeout(() => {
+				      // in case any more mongodb commands are running
+				     articleModel.updateMany(
+				      	{
+				      		trained: false,
+				      		date_scrapped: { $in: date_grouping }
+				      	}, 
+				      	{ 
+				      		$set: { 
+				      			trained: true 
+				      		}
+				      	},
+				      	(err) => {
+					      console.log("TOPICS INSERTED:", result.nInserted);
+						  console.log("DONE");
+
+					      parentCallback();
+				      	});
+				    }, 1000);
+				}
+				
+			});	
+		} else {
+			console.log("No operations in batch");
+			parentCallback();
+		}
 	})
 	
 }
@@ -191,67 +202,90 @@ const classifyAritcles = () => {
 		return classifications;
 	}
 	// get current classification?
-	const classifier = new natural.BayesClassifier();
-
-	const articleCursor = articleModel.find({ trained: true }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
-
-	const allArticles = []
-	articleCursor.on('data', (article) => {
-		console.log("Adding document for "+article.title);
-		classifier.addDocument(article.tokens.concat(article.title.split(" ")).join(' '), JSON.stringify({
-			id: article._id,
-			pubSlug: article.publicationSlug,
-			title: article.title
-		}));
-		allArticles.push(article);
-	});
-
-	articleCursor.on('end', () => {
-		console.log("Training...");
-		classifier.train();
-
-		const articleGroupings = allArticles.map((article) => {
-			let classifications = classifier.getClassifications(article.title);
-			// console.log(classifications.slice(0,10));
-			if (classifications[1].value < 0.001) {
-				return [];
+	
+	articleModel.distinct("date_scrapped", (err, dates) => {
+		// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
+		const date_groupings = [];
+		let date_range = 0;
+		for (let i = 0; i < dates.length; i++) {
+			if (dates[i] > date_range) {
+				date_range = dates[i] + (12*60*60*1000);
+				date_groupings.push([dates[i]]);
+			} else if (dates[i] < date_range) {
+				date_groupings[date_groupings.length-1].push(dates[i]);
 			}
-			const uniqueValues = classifications.map((classification) => {
-				return classification.value;
-			}).filter(function(item, pos, self) {
-			    return self.indexOf(item) == pos;
-			});
-			if (uniqueValues.length < 5) return []; // sauce
-			classifications = normalizeValues(classifications);
+		}
 
-			if (classifications[1].normalValue < 3) return []; // sauce
-			const filtered = classifications.filter((classification) => {
-				if (classification.normalValue > 1) {
-					return true;
-				}
-				return false;
-			}).filter(function(item, pos, self) {
-				let foundItems = 0;
-			    for (let i = 0; i < self.length; i++) {
-			    	if (JSON.parse(self[i].label).pubSlug == JSON.parse(item.label).pubSlug) {
-			    		if (foundItems == 1) {
-			    			return false;
-			    		}
-			    		foundItems++;
-			    	}
-			    };
-			    return true;
+		async.each(date_groupings, (date_grouping, callback) => {
+			const classifier = new natural.BayesClassifier();
+			classifier.events.on('trainedWithDocument', function (obj) {
+				console.log(`trained object #${obj.index+1} out of ${obj.total}`)
+		    });
+
+			let articleCursor = articleModel.find({date_scrapped: { $in: date_grouping } }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
+
+			let allArticles = [];
+			articleCursor.on('data', (article) => {
+				// console.log("Adding document for "+article.title);
+				classifier.addDocument(article.tokens.concat(article.title.split(" ")).join(' '), JSON.stringify({
+					id: article._id,
+					pubSlug: article.publicationSlug,
+					title: article.title
+				}));
+				allArticles.push(article);
 			});
 
-			if (filtered.length > 1) {
-				return filtered;
-			} else {
-				return [];
-			}
-		});
+			articleCursor.on('end', () => {
+				console.log("Training Date Group: "+date_grouping);
+				classifier.train();
 
-		generateTopics(articleGroupings);
-	});
+				let articleGroupings = allArticles.map((article) => {
+					let classifications = classifier.getClassifications(article.title);
+					// console.log(classifications.slice(0,10));
+					if (classifications[1].value < 0.001) {
+						return [];
+					}
+					let uniqueValues = classifications.map((classification) => {
+						return classification.value;
+					}).filter(function(item, pos, self) {
+					    return self.indexOf(item) == pos;
+					});
+					if (uniqueValues.length < 5) return []; // sauce
+					classifications = normalizeValues(classifications);
+
+					if (classifications[1].normalValue < 3) return []; // sauce
+					let filtered = classifications.filter((classification) => {
+						if (classification.normalValue > 1) {
+							return true;
+						}
+						return false;
+					}).filter(function(item, pos, self) {
+						let foundItems = 0;
+					    for (let i = 0; i < self.length; i++) {
+					    	if (JSON.parse(self[i].label).pubSlug == JSON.parse(item.label).pubSlug) {
+					    		if (foundItems == 1) {
+					    			return false;
+					    		}
+					    		foundItems++;
+					    	}
+					    };
+					    return true;
+					});
+
+					if (filtered.length > 1) {
+						return filtered;
+					} else {
+						return [];
+					}
+				});
+				generateTopics(articleGroupings, date_grouping, callback);
+			});
+
+		}, () => {
+			console.log("DONE ALL");
+			process.exit(1);
+		}); 
+	})
 		
 
 }

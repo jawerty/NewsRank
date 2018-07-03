@@ -35,3 +35,7 @@ https://www.aljazeera.com/topics/regions/us-canada.html
 http://www.nydailynews.com/
 #https://www.axios.com/
 https://www.cnbc.com/
+https://breitbart.com
+https://www.infowars.com/
+http://bipartisanreport.com/
+https://www.theblaze.com/

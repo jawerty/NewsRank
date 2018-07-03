@@ -15,7 +15,7 @@ const readFileToArray = (fileLocation, callback) => {
 
 const getWebpage = (source, callback) => {
   readFileToArray('user-agents.txt', (userAgents) => {
-    let randUserAgent = "SB article fetcher";
+    let randUserAgent = "NG article fetcher";
     randUserAgent = userAgents[Math.floor(Math.random()*userAgents.length)];      
     const requestObj = {
       url: source,
