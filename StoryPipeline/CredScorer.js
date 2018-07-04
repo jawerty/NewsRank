@@ -46,40 +46,46 @@ function CredScorer(articleMap, trackerList) {
 	this.softReferences = 5 // 1 + 10 * log(1 + soft_references / articleWordLength)
 
 	this.updateNormalizedValues = () => {
-		const normalizeValues = (articlesWithCred, parentCallback) => {
+		const normalizeValues = (articlesWithCred) => {
 			const credScores = articlesWithCred.map((article) => {
-				return article.credibility.score;
+				if (!article.credibility.score) {
+					return null;
+				} else {
+					return article.credibility.score;
+				}
 			});
 			const min = Math.min.apply(Math, credScores);
 			const max = Math.max.apply(Math, credScores);
 
-			async.each(articlesWithCred, (score, callback) => {
-				const scoreIndex = credScores.indexOf()
+			for (let i = 0; i < credScores.length; i++) {
+				if (!credScores[i]) {
+					continue;
+				}
 				const normalRange = 100;
 				let normalizedValue = normalRange*(credScores[i]-min)/(max-min);
-				articlesWithCred.normalizedScore = normalizedValue;
-				articleModel.updateOne({_id: article}, { 
-					$set: {
-					} 
-				});
-			}, () => {
-
-
-			});
+				articleModel.update({_id: articlesWithCred[i]['_id']}, {
+					'credibility.normalScore': normalizedValue
+				}, (err) => {
+					if (err) console.log(err);
+					if (i == credScores.length-1) {
+						console.log("Finished Normalizing Scores");
+						process.exit(1);
+					}
+				})
+			}
 
 		}
 		const articleCursor = articleModel.find({credibility: {$exists: true}}, { credibility: 1, _id: 1}).cursor();
 		let articlesWithCred = [];
 		articleCursor.on("data", (article) => {
-			articleCursor.pause();
 			articlesWithCred.push(article);
-			articleCursor.resume(); 
 		});
 
 		articleCursor.on('end', () => { 
-			articlesWithCred = normalizeValues(articlesWithCred);
+			normalizeValues(articlesWithCred);
 		});
 	} 
+
 	this.fetchTrackersForPubs = (forceRun, parentCallback) => {
 		const foundTrackerMap = {};
 		trackerInfoModel.find({}, (err, trackerLists) => {
@@ -288,7 +294,7 @@ function CredScorer(articleMap, trackerList) {
 			})
 		}, () => {
 			console.log(`Scored a total of ${scoredArticleCount} articles`);
-			process.exit(1);
+			self.updateNormalizedValues();
 		});
 
 	}
@@ -448,12 +454,8 @@ articleModel.aggregate(
 		 scorer.pubScorer((pubBiasFactData) => {
 	   	   scorer.articleScorer(pubBiasFactData);
 	   	 });	
-	   })
+	   });
    	   
 	 });
-   	 // 1st run name fetcher
-   	 // 2nd run pub scorer
-   	 	// - gets tracker data/media bias and fact data
-   	 // 3rd run article scorer, calculate and save to db
    }
 );

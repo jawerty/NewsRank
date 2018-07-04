@@ -173,6 +173,9 @@ const generateTopics = (articleGroupings, date_grouping, parentCallback) => {
 					      parentCallback();
 				      	});
 				    }, 1000);
+				} else {
+					console.log("Write failed");
+					parentCallback();
 				}
 				
 			});	
