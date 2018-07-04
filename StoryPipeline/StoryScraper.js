@@ -9,6 +9,7 @@ const lib = require('./lib');
 const db = require('../db/schema');
 const articleModel = db.model('article');
 
+const nodePath = process.env.NODE_PATH || 'path';
 require('events').EventEmitter.defaultMaxListeners = 0
 
 const getUniqueURLs = (urlMap, callback) => {
@@ -41,7 +42,7 @@ const ArticleScraper = (urlMap) => {
   const sources = Object.keys(urlMap);
   const date_scrapped = Date.now();
   async.each(sources, (source, sourceCallback) => {
-    const child = spawn('node', ['--max-old-space-size=8192', '--stack-size=10000000', 'ArticleFetcher.js', source, date_scrapped], {
+    const child = spawn(nodePath, ['--max-old-space-size=8192', '--stack-size=10000000', 'ArticleFetcher.js', source, date_scrapped], {
       detached: true
     });
     let callbackSent = false;
