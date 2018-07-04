@@ -225,7 +225,7 @@ const classifyAritcles = () => {
 				console.log(`trained object #${obj.index+1} out of ${obj.total}`)
 		    });
 			const d = new Date();
- 			d.setDate(d.getDate()-1);
+ 			d.setDate(d.getDate()-2);
  			const yesterday = d.getTime();
 			let articleCursor = articleModel.find({date_scrapped: { $in: date_grouping, $gte: yesterday }, trained: false }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
 
