@@ -108,7 +108,9 @@ db.connection.on("open",function(err) {
   const callbackWait = (articleURL, articleCallback) => {
     async function run(articleURL, articleCallback) {
       const result = await fetchArticle(articleURL);
-      articleCallback()
+      setTimeout(() => {
+        articleCallback();
+      }, 1000)
     }
     run(articleURL, articleCallback);
   }
