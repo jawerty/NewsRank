@@ -98,7 +98,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 					        }
 					    }
 					}
-					xhr.open("GET", "http://localhost:8080/suggestArticle?url="+parsedUrl, false);
+					xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
 					xhr.send();
 
 					const result = xhr.responseText;
