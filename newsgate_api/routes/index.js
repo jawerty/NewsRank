@@ -17,7 +17,7 @@ router.get('/suggestArticle', function(req, res, next) {
 			res.send({suggestions: null});
 		} else {
 			if (foundArticle) {
-				if (articleURL.length/foundArticle.origin.length < .75) {
+				if (articleURL.length/foundArticle.origin.length < .50) {
 					console.log("Article is in origin BUT is not similar enough")
 					return res.send({suggestions: null});
 				}
