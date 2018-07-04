@@ -11,11 +11,7 @@ const db = require('../db/schema');
 const articleModel = db.model('article');
 
 
-// const urlMap = JSON.parse(fs.readFileSync('urlMap.json', 'utf8'));
-const urlMap = {
-  'nytimes.com': ['http://nytimes.com', 'http://nytimes.com'], 
-  'buzzfeed.com': ['http://buzzfeed.com', 'http://buzzfeed.com']
-}
+const urlMap = JSON.parse(fs.readFileSync('urlMap.json', 'utf8'));
 db.connection.on("open",function(err) {
   const urlCount = urlMap[process.argv[2]].length;
   let urlIndex = 0;
