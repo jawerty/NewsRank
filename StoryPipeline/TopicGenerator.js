@@ -225,7 +225,7 @@ const classifyAritcles = () => {
 				console.log(`trained object #${obj.index+1} out of ${obj.total}`)
 		    });
 
-			let articleCursor = articleModel.find({date_scrapped: { $in: date_grouping } }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
+			let articleCursor = articleModel.find({date_scrapped: { $in: date_grouping }, trained: false }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
 
 			let allArticles = [];
 			articleCursor.on('data', (article) => {

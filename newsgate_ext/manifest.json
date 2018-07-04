@@ -15,7 +15,8 @@
     "activeTab",
     "tabs",
     "webRequest",
-    "*://*/"
+    "*://*/",
+    "storage"
   ],
   "content_scripts": [
       {

@@ -79,10 +79,20 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 		    		}
 		    		const xhr = new XMLHttpRequest();
 					xhr.onreadystatechange = function() {
-					    if (xhr.readyState == XMLHttpRequest.DONE) {
-					        const response = JSON.parse(xhr.responseText);
-					        if (response["suggestions"]) {
-						        chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
+					    if (xhr.readyState != XMLHttpRequest.DONE) {
+					        return;
+					    }
+					    const response = JSON.parse(xhr.responseText);
+					    console.log(response);
+				        if (!response["suggestions"]) {
+							return;
+				        }
+				        chrome.storage.sync.get('newsgate_auto', function(data) {
+						    const isAuto = data.newsgate_auto;
+						    if (isAuto == "on") {
+						    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin });
+						    } else {
+							    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
 					    			const interval = setInterval(() => {
 					    				chrome.tabs.sendMessage(tabId, { 
 					    					badArticle: requestedUrl,
@@ -94,9 +104,11 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 											}
 										});
 						    		}, 100);	
-					    		});
-					        }
-					    }
+					    		});	
+						    }
+					        
+						});
+
 					}
 					xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
 					xhr.send();
