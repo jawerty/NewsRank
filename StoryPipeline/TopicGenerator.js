@@ -286,7 +286,7 @@ const classifyAritcles = () => {
 
 		}, () => {
 			console.log("DONE ALL");
-			process.exit(1);
+			process.exit(0);
 		}); 
 	})
 		

@@ -69,7 +69,7 @@ function CredScorer(articleMap, trackerList) {
 					if (err) console.log(err);
 					if (i == credScores.length-1) {
 						console.log("Finished Normalizing Scores");
-						process.exit(1);
+						process.exit(0);
 					}
 				})
 			}

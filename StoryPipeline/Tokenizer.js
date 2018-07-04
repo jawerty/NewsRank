@@ -103,7 +103,7 @@ const Tokenizer = () => {
 			setTimeout(() => {
 		      // in case any more mongodb commands are running
 		      console.log("DONE");
-		      process.exit(1)
+		      process.exit(0)
 		    }, 1000);
 		});
 	});

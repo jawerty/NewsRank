@@ -126,10 +126,10 @@ db.connection.on("open",function(err) {
         if (err) console.log(err);
         if (result) 
           console.log("INSERTED: "+result.nInserted);
-        process.exit(1);
+        process.exit(0);
       });
     } else {
-      process.exit(1);
+      process.exit(0);
     }
     
   });
