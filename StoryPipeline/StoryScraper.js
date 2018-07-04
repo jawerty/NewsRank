@@ -9,7 +9,7 @@ const lib = require('./lib');
 const db = require('../db/schema');
 const articleModel = db.model('article');
 
-const nodePath = process.env.NODE_PATH || 'path';
+const nodePath = process.env.NODE_PATH || 'node';
 require('events').EventEmitter.defaultMaxListeners = 0;
 
 const getUniqueURLs = (urlMap, callback) => {
