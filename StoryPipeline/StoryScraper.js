@@ -10,7 +10,7 @@ const db = require('../db/schema');
 const articleModel = db.model('article');
 
 const nodePath = process.env.NODE_PATH || 'path';
-require('events').EventEmitter.defaultMaxListeners = 0
+require('events').EventEmitter.defaultMaxListeners = 0;
 
 const getUniqueURLs = (urlMap, callback) => {
   const sources = Object.keys(urlMap);
@@ -71,7 +71,7 @@ const ArticleScraper = (urlMap) => {
     setTimeout(() => {
       // in case any more mongodb commands are running
       console.log("DONE");
-      process.exit(1)
+      process.exit(0);
     }, 1000);
   });
 }
