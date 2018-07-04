@@ -41,7 +41,9 @@ const ArticleScraper = (urlMap) => {
   const sources = Object.keys(urlMap);
   const date_scrapped = Date.now();
   async.each(sources, (source, sourceCallback) => {
-    const child = spawn('node', ['--max-old-space-size=4096', '--stack-size=100000', 'ArticleFetcher.js', source, date_scrapped]);
+    const child = spawn('node', ['--max-old-space-size=4096', '--stack-size=10000000', 'ArticleFetcher.js', source, date_scrapped], {
+      detached: true
+    });
     let callbackSent = false;
     child.on('exit', function (code, signal) {
       console.log(source+' process exited with ' +
