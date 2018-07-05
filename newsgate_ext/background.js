@@ -58,67 +58,65 @@ function extractHostname(url) {
     return hostname;
 }
 
+let lastInitiator = null;
+let lastInitiatorIgnore = false;
+
 chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 	if (changeInfo.status === "loading") {
-	    // logic for checking white list, using tab.url
-	    chrome.tabs.query({'active': true, 'lastFocusedWindow': true},  (tabs) => {
-		    // get current active tabs url
-		    if (!tabs[0]) {
-		    	return;
-		    }
-		    const requestedUrl = tabs[0].url;
-		    let hostname = extractHostname(requestedUrl);
-		    if (hostname.indexOf("www.") == 0) {
-		    	hostname = hostname.substring(4);
-		    }
-		    sites_being_scrapped.forEach(function(site) {
-		    	if (site.indexOf(hostname) > -1) {
-		    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
-		    		if (parsedUrl.indexOf("www.") == 0) {
-		    			parsedUrl = parsedUrl.substring(4);
-		    		}
-		    		const xhr = new XMLHttpRequest();
-					xhr.onreadystatechange = function() {
-					    if (xhr.readyState != XMLHttpRequest.DONE) {
-					        return;
+
+		const requestedUrl = tab.url;
+		let hostname = extractHostname(requestedUrl);
+
+	    if (hostname.indexOf("www.") == 0) {
+	    	hostname = hostname.substring(4);
+	    }
+	    sites_being_scrapped.forEach(function(site) {
+	    	if (site.indexOf(hostname) > -1) {
+	    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
+	    		if (parsedUrl.indexOf("www.") == 0) {
+	    			parsedUrl = parsedUrl.substring(4);
+	    		}
+	    		const xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+				    if (xhr.readyState != XMLHttpRequest.DONE) {
+				        return;
+				    }
+				    const response = JSON.parse(xhr.responseText);
+				    console.log(response);
+			        if (!response["suggestions"]) {
+						return;
+			        }
+			        chrome.storage.sync.get('newsgate_auto', function(data) {
+					    const isAuto = data.newsgate_auto;
+					    if (isAuto == "on") {
+					    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin });
+					    } else {
+						    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
+				    			const interval = setInterval(() => {
+				    				chrome.tabs.sendMessage(tabId, { 
+				    					badArticle: requestedUrl,
+				    					goodArticle: response["suggestions"][0]
+				    				}, (response) => {
+										console.log(response);
+										if (typeof response != 'undefined' && response.received) {
+											clearInterval(interval);
+										}
+									});
+					    		}, 100);	
+				    		});	
 					    }
-					    const response = JSON.parse(xhr.responseText);
-					    console.log(response);
-				        if (!response["suggestions"]) {
-							return;
-				        }
-				        chrome.storage.sync.get('newsgate_auto', function(data) {
-						    const isAuto = data.newsgate_auto;
-						    if (isAuto == "on") {
-						    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin });
-						    } else {
-							    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
-					    			const interval = setInterval(() => {
-					    				chrome.tabs.sendMessage(tabId, { 
-					    					badArticle: requestedUrl,
-					    					goodArticle: response["suggestions"][0]
-					    				}, (response) => {
-											console.log(response);
-											if (typeof response != 'undefined' && response.received) {
-												clearInterval(interval);
-											}
-										});
-						    		}, 100);	
-					    		});	
-						    }
-					        
-						});
+				        
+					});
 
-					}
-					xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
-					xhr.send();
+				}
+				xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
+				xhr.send();
 
-					const result = xhr.responseText;
-					
-					
-		    	}
-		    	
-		    });
-		});
+				const result = xhr.responseText;
+				
+				
+	    	}
+	    	
+	    });
 	}
 })

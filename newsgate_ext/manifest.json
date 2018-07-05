@@ -15,6 +15,7 @@
     "activeTab",
     "tabs",
     "webRequest",
+    "webRequestBlocking",
     "*://*/",
     "storage"
   ],
