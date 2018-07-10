@@ -186,9 +186,13 @@ function CredScorer(articleMap, trackerList) {
 		if (bias == 4) {
 			reasons.push("Extreme Bias");
 		}
+		
 		if (factRating < 0) {
-			reasons.push("Poor Factual Reporting")
+			reasons.push("Poor Factual Reporting");
+		} else if (factRating == 0) {
+			reasons.push("Questionable Facutal Reporting");
 		}
+
 		if (trackerCount > 100) {
 			reasons.push("Too Many Trackers")
 		}

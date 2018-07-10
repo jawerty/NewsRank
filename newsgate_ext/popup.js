@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	chrome.storage.sync.get(null, function(items) {
 		console.log(items);
-		const sliders = ['auto', 'banner'];
+		const sliders = ['auto', 'banner', 'disable'];
 		sliders.forEach((sliderName) => {
 			const storageKey = "newsgate_"+sliderName;
 			if (storageKey in items 

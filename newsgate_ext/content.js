@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener(
 		if (request.showBanner == true) {
 			console.log(request.title)
 			const title = (request.title.length > 50) ? request.title.substring(0, 50)+'...' : request.title;
-			const reason = request.topReason ? " because "+request.topReason : '';
+			const reason = request.topReason ? " because <label style='font-weight: bold; color: #fff'>"+request.topReason+"</label>" : '';
 			const container = document.createElement('div');
 			container.style.padding = "15px 25px";
 			container.style.backgroundColor = "rgba(207,70,71,.7)";

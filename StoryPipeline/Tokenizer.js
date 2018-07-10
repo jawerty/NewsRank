@@ -90,9 +90,6 @@ const Tokenizer = () => {
 				let weightedTokens = genWeightedTokens(tokenWeights);
 				weightedTokens = weightedTokens.map((token) => token.toLowerCase());
 				articleTokens[index].article.tokens = weightedTokens;
-				if (articleTokens[index].article.origin.indexOf("nytimes.com/2018/07/01/world/americas/mexico-election-andres-manuel-lopez-obrador.html") > -1) {
-					console.log(weightedTokens)
-				}
 				articleTokens[index].article.markModified("tokens");
 				articleTokens[index].article.save();
 

@@ -61,85 +61,90 @@ function extractHostname(url) {
 let lastInitiator = null;
 let lastInitiatorIgnore = false;
 
-chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
-	if (changeInfo.status === "loading") {
+chrome.storage.sync.get("newsgate_disable", function(date) {
+	const disable = data.newsgate_disable;
+	if (disable != "on") {
+		chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
+			if (changeInfo.status === "loading") {
 
-		const requestedUrl = tab.url;
-		let hostname = extractHostname(requestedUrl);
+				const requestedUrl = tab.url;
+				let hostname = extractHostname(requestedUrl);
 
-	    if (hostname.indexOf("www.") == 0) {
-	    	hostname = hostname.substring(4);
-	    }
-	    sites_being_scrapped.forEach(function(site) {
-	    	if (site.indexOf(hostname) > -1) {
-	    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
-	    		if (parsedUrl.indexOf("www.") == 0) {
-	    			parsedUrl = parsedUrl.substring(4);
-	    		}
-	    		const xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function() {
-				    if (xhr.readyState != XMLHttpRequest.DONE) {
-				        return;
-				    }
-				    const response = JSON.parse(xhr.responseText);
-				    // console.log(response);
-			        if (!response["suggestions"]) {
-						return;
-			        }
-			        chrome.storage.sync.get(null, function(items) {
-					    const isAuto = items["newsgate_auto"] || false;
-					    let showBanner = items["newsgate_banner"] || false;
-					    if (isAuto == "on") {
-					    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin }, () => {
-					    		if (showBanner == "on") {
-					    			showBanner = true;
-					    		}
-					    		let topReason = null;
-					    		if (response["received"].credibility.reasons.length > 0) {
-					    			topReason = response["received"].credibility.reasons[0];
-					    		};
-					    		const interval = setInterval(() => {
-					    			chrome.tabs.sendMessage(tabId, {
-						    			showBanner,
-						    			title: response["received"].title,
-						    			link: response["received"].origin,
-						    			publicationName: response["received"].publicationName,
-						    			topReason,
-						    			hostname: extractHostname(response["suggestions"][0].origin)
-						    		}, (response) => {
-										if (typeof response != 'undefined' && response.received) {
-											clearInterval(interval);
-										}
-									});
-					    		}, 100);
-					    	});
-					    } else {
-						    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
-				    			const interval = setInterval(() => {
-				    				chrome.tabs.sendMessage(tabId, { 
-				    					badArticle: requestedUrl,
-				    					goodArticle: response["suggestions"][0]
-				    				}, (response) => {
-										console.log(response);
-										if (typeof response != 'undefined' && response.received) {
-											clearInterval(interval);
-										}
-									});
-					    		}, 100);	
-				    		});	
-					    }
-				        
-					});
+			    if (hostname.indexOf("www.") == 0) {
+			    	hostname = hostname.substring(4);
+			    }
+			    sites_being_scrapped.forEach(function(site) {
+			    	if (site.indexOf(hostname) > -1) {
+			    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
+			    		if (parsedUrl.indexOf("www.") == 0) {
+			    			parsedUrl = parsedUrl.substring(4);
+			    		}
+			    		const xhr = new XMLHttpRequest();
+						xhr.onreadystatechange = function() {
+						    if (xhr.readyState != XMLHttpRequest.DONE) {
+						        return;
+						    }
+						    const response = JSON.parse(xhr.responseText);
+						    // console.log(response);
+					        if (!response["suggestions"]) {
+								return;
+					        }
+					        chrome.storage.sync.get(null, function(items) {
+							    const isAuto = items["newsgate_auto"] || false;
+							    let showBanner = items["newsgate_banner"] || false;
+							    if (isAuto == "on") {
+							    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin }, () => {
+							    		if (showBanner == "on") {
+							    			showBanner = true;
+							    		}
+							    		let topReason = null;
+							    		if (response["received"].credibility.reasons.length > 0) {
+							    			topReason = response["received"].credibility.reasons[0];
+							    		};
+							    		const interval = setInterval(() => {
+							    			chrome.tabs.sendMessage(tabId, {
+								    			showBanner,
+								    			title: response["received"].title,
+								    			link: response["received"].origin,
+								    			publicationName: response["received"].publicationName,
+								    			topReason,
+								    			hostname: extractHostname(response["suggestions"][0].origin)
+								    		}, (response) => {
+												if (typeof response != 'undefined' && response.received) {
+													clearInterval(interval);
+												}
+											});
+							    		}, 100);
+							    	});
+							    } else {
+								    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
+						    			const interval = setInterval(() => {
+						    				chrome.tabs.sendMessage(tabId, { 
+						    					badArticle: requestedUrl,
+						    					goodArticle: response["suggestions"][0]
+						    				}, (response) => {
+												console.log(response);
+												if (typeof response != 'undefined' && response.received) {
+													clearInterval(interval);
+												}
+											});
+							    		}, 100);	
+						    		});	
+							    }
+						        
+							});
 
-				}
-				xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
-				xhr.send();
+						}
+						xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
+						xhr.send();
 
-				const result = xhr.responseText;
-				
-				
-	    	}
-	    	
-	    });
+						const result = xhr.responseText;
+						
+						
+			    	}
+			    	
+			    });
+			}
+		});
 	}
-})
+});
