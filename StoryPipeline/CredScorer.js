@@ -266,7 +266,6 @@ function CredScorer(articleMap, trackerList) {
 						)
 						
 						let calculatedScore = self.calculateScore(scoreVector);
-						scoreVector[]
 						/*
 							Dangerous (too much memory) but I can't use bulk update since mongo
 							doesnt support unique subdocument key values in
@@ -276,7 +275,7 @@ function CredScorer(articleMap, trackerList) {
 				  			$set: { 
 				  				credibility: {
 				  					score: calculatedScore,
-				  					info: scoreVector
+				  					info: scoreVector,
 				  					reasons: self.getReasons(scoreVector)
 				  				}
 			  				}
