@@ -254,7 +254,7 @@ function CredScorer(articleMap, trackerList) {
 		// alters pub score with soft_reference information about the article
 		let scoredArticleCount = 0;
 		async.each(Object.keys(pubBiasFactData), (publicationDomain, callback) => {
-			articleModel.find({publication: publicationDomain, credibility: { $exists: true }}, {_id: 1, origin: 1, content: 1}, (err, foundArticles) => {
+			articleModel.find({publication: publicationDomain, credibility: { $exists: false }}, {_id: 1, origin: 1, content: 1}, (err, foundArticles) => {
 				if (!err) {
 					if (!foundArticles) return;
 					let pubScoreCount = 0;
