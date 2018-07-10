@@ -17,7 +17,6 @@ function extractHostname(url) {
     return hostname;
 }
 
-console.log("Content script running");
 let shownNGBanner = false;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -34,7 +33,9 @@ chrome.runtime.onMessage.addListener(
 	}
    if (localHostName == request.hostname) {
 		if (request.showBanner == true) {
-			console.log("SHOWING BANNER")
+			console.log(request.title)
+			const title = (request.title.length > 50) ? request.title.substring(0, 50)+'...' : request.title;
+			const reason = request.topReason ? " because "+request.topReason : '';
 			const container = document.createElement('div');
 			container.style.padding = "15px 25px";
 			container.style.backgroundColor = "rgba(207,70,71,.7)";
@@ -42,7 +43,7 @@ chrome.runtime.onMessage.addListener(
 			container.style.fontFamily = "sans-serif";
 			container.style.color = "rgb(255,255,255)";
 			container.style.textAlign = "center";
-			container.innerHTML = "Newsgate redirected you from <a style='color: #fff' href='"+request.link+"'>"+request.title+"'</a> by "+request.publicationName+" because top reason"
+			container.innerHTML = "Newsgate redirected you from '<a style='color: #fff; text-decoration: underline' href='"+request.link+"'>"+title+"'</a> by "+request.publicationName+reason;
 			document.body.appendChild(container);
 			document.body.insertBefore(container, document.body.firstChild);
 			shownNGBanner = true;

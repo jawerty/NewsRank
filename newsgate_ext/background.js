@@ -94,12 +94,17 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 					    		if (showBanner == "on") {
 					    			showBanner = true;
 					    		}
+					    		let topReason = null;
+					    		if (response["received"].credibility.reasons.length > 0) {
+					    			topReason = response["received"].credibility.reasons[0];
+					    		};
 					    		const interval = setInterval(() => {
 					    			chrome.tabs.sendMessage(tabId, {
 						    			showBanner,
 						    			title: response["received"].title,
 						    			link: response["received"].origin,
 						    			publicationName: response["received"].publicationName,
+						    			topReason,
 						    			hostname: extractHostname(response["suggestions"][0].origin)
 						    		}, (response) => {
 										if (typeof response != 'undefined' && response.received) {

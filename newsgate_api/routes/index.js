@@ -10,7 +10,7 @@ const topicModel = db.model('topic');
 router.get('/suggestArticle', function(req, res, next) {
 	const articleURL = req.query.url;
 	console.log(articleURL);
-	articleModel.findOne({origin: {$regex : articleURL}}, {_id: 1, origin: 1, publicationName: 1, title: 1}, (err, foundArticle) => {
+	articleModel.findOne({origin: {$regex : articleURL}}, {_id: 1, origin: 1, publicationName: 1, title: 1, credibility: 1}, (err, foundArticle) => {
 
 		if (err) {
 			console.log(err);

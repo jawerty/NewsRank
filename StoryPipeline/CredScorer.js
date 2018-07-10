@@ -180,6 +180,21 @@ function CredScorer(articleMap, trackerList) {
 		})
 	}
 
+	this.getReasons = (scoreVector) => {
+		const { bias, factRating, trackerCount, softReferences } = scoreVector;
+		let reasons = [];
+		if (bias == 4) {
+			reasons.push("Extreme Bias");
+		}
+		if (factRating < 0) {
+			reasons.push("Poor Factual Reporting")
+		}
+		if (trackerCount > 100) {
+			reasons.push("Too Many Trackers")
+		}
+		return reasons;
+	}
+
 	this.calculateScore = (scoreVector) => {
 		const { bias, factRating, trackerCount, softReferences } = scoreVector;
 		// returns raw Unnormalized score
@@ -251,7 +266,7 @@ function CredScorer(articleMap, trackerList) {
 						)
 						
 						let calculatedScore = self.calculateScore(scoreVector);
-							
+						scoreVector[]
 						/*
 							Dangerous (too much memory) but I can't use bulk update since mongo
 							doesnt support unique subdocument key values in
@@ -262,6 +277,7 @@ function CredScorer(articleMap, trackerList) {
 				  				credibility: {
 				  					score: calculatedScore,
 				  					info: scoreVector
+				  					reasons: self.getReasons(scoreVector)
 				  				}
 			  				}
 			  			}, (err) => {
