@@ -1,20 +1,28 @@
 $(document).ready(function() {
-	chrome.storage.sync.get('newsgate_auto', function(data) {
-		console.log(data)
-		let auto = data.newsgate_auto || null;
-		if (auto == "on") {
-			$('.settingsOption[data-name=auto] input').click()
-		}
-		$('.slider').off().on('click', function (e) {
-			e.stopPropagation();
-			const option = $(this).closest('.settingsOption');
-			if (auto == "on") {
-				chrome.storage.sync.remove('newsgate_auto');
-			} else {
-				chrome.storage.sync.set({"newsgate_auto": "on"});
+	chrome.storage.sync.get(null, function(items) {
+		console.log(items);
+		const sliders = ['auto', 'banner'];
+		sliders.forEach((sliderName) => {
+			const storageKey = "newsgate_"+sliderName;
+			if (storageKey in items 
+				&& items[storageKey] == "on") {
+				$('.settingsOption[data-name='+sliderName+'] input').click()
 			}
-			console.log($(this));
-			option.toggleClass("on");
+			$('.settingsOption[data-name='+sliderName+'] .slider')
+				.off()
+				.on('click', function (e) {
+				e.stopPropagation();
+				const option = $(this).closest('.settingsOption');
+				if (items[storageKey] == "on") {
+					chrome.storage.sync.remove(storageKey);
+				} else {
+					const sliderSet = {};
+					sliderSet[storageKey] = "on";
+					chrome.storage.sync.set(sliderSet);
+				}
+				option.toggleClass("on");
+			});
 		});
+		
 	});
 });

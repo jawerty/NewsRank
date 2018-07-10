@@ -16,15 +16,12 @@
     "tabs",
     "webRequest",
     "webRequestBlocking",
-    "*://*/",
+    "<all_urls>",
     "storage"
   ],
   "content_scripts": [
       {
-      "matches": [
-          "http://*/*",
-          "https://*/*"
-          ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "run_at": "document_start"
       }

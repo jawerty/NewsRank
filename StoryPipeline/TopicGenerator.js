@@ -219,14 +219,17 @@ const classifyAritcles = () => {
 			}
 		}
 
+		const d = new Date();
+		d.setDate(d.getDate()-2); // two days ago
+		const yesterday = d.getTime();
+		// articleModel.remove({date_scrapped: { $lte: yesterday }}, (err, ) => {
+			// // run this to remove articles
+		// })
 		async.each(date_groupings, (date_grouping, callback) => {
 			const classifier = new natural.BayesClassifier();
 			classifier.events.on('trainedWithDocument', function (obj) {
 				console.log(`trained object #${obj.index+1} out of ${obj.total}`)
 		    });
-			const d = new Date();
- 			d.setDate(d.getDate()-2);
- 			const yesterday = d.getTime();
 			let articleCursor = articleModel.find({date_scrapped: { $in: date_grouping, $gte: yesterday } }, { _id: 1, title: 1, tokens: 1, publicationSlug: 1 }).cursor();
 
 			let allArticles = [];

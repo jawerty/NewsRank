@@ -82,14 +82,32 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 				        return;
 				    }
 				    const response = JSON.parse(xhr.responseText);
-				    console.log(response);
+				    // console.log(response);
 			        if (!response["suggestions"]) {
 						return;
 			        }
-			        chrome.storage.sync.get('newsgate_auto', function(data) {
-					    const isAuto = data.newsgate_auto;
+			        chrome.storage.sync.get(null, function(items) {
+					    const isAuto = items["newsgate_auto"] || false;
+					    let showBanner = items["newsgate_banner"] || false;
 					    if (isAuto == "on") {
-					    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin });
+					    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin }, () => {
+					    		if (showBanner == "on") {
+					    			showBanner = true;
+					    		}
+					    		const interval = setInterval(() => {
+					    			chrome.tabs.sendMessage(tabId, {
+						    			showBanner,
+						    			title: response["received"].title,
+						    			link: response["received"].origin,
+						    			publicationName: response["received"].publicationName,
+						    			hostname: extractHostname(response["suggestions"][0].origin)
+						    		}, (response) => {
+										if (typeof response != 'undefined' && response.received) {
+											clearInterval(interval);
+										}
+									});
+					    		}, 100);
+					    	});
 					    } else {
 						    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
 				    			const interval = setInterval(() => {
