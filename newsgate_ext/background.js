@@ -61,7 +61,7 @@ function extractHostname(url) {
 let lastInitiator = null;
 let lastInitiatorIgnore = false;
 
-chrome.storage.sync.get("newsgate_disable", function(date) {
+chrome.storage.sync.get("newsgate_disable", function(data) {
 	const disable = data.newsgate_disable;
 	if (disable != "on") {
 		chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
@@ -75,6 +75,7 @@ chrome.storage.sync.get("newsgate_disable", function(date) {
 			    }
 			    sites_being_scrapped.forEach(function(site) {
 			    	if (site.indexOf(hostname) > -1) {
+
 			    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
 			    		if (parsedUrl.indexOf("www.") == 0) {
 			    			parsedUrl = parsedUrl.substring(4);

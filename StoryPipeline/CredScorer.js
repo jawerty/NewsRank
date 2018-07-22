@@ -236,11 +236,15 @@ function CredScorer(articleMap, trackerList) {
 			async.each(Object.keys(foundTrackerMap), (publicationDomain, callback) => {
 				articleModel.findOne({publication: publicationDomain}, {publicationName: 1}, (err, foundArticle) => {
 					if (!err) {
-						self.fetchMBFCbias(foundArticle["publicationName"], (biasData) => {
-							const trackerCount = foundTrackerMap[publicationDomain].length;
-							pubBiasFactData[publicationDomain] = Object.assign(biasData, { trackerCount });
+						if ("publicationName" in foundArticle) {
+							self.fetchMBFCbias(foundArticle["publicationName"], (biasData) => {
+								const trackerCount = foundTrackerMap[publicationDomain].length;
+								pubBiasFactData[publicationDomain] = Object.assign(biasData, { trackerCount });
+								callback();
+							});
+						} else {
 							callback();
-						});
+						}
 					}
 				});
 				
