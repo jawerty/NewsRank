@@ -190,7 +190,7 @@ function CredScorer(articleMap, trackerList) {
 		if (factRating < 0) {
 			reasons.push("Poor Factual Reporting");
 		} else if (factRating == 0) {
-			reasons.push("Questionable Facutal Reporting");
+			reasons.push("Questionable Factual Reporting");
 		}
 
 		if (trackerCount > 100) {

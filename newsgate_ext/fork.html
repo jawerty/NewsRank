@@ -3,9 +3,36 @@
 	<head>
 		<title>newsgate.</title>
 		<script src="fork.js"></script>
+		<link href="fork.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
-		<h1>newsgate</h1>
-		<p><label id="badArticle"></label> is a bad news site, go to this site instead...<a id="goodArticle"></a></p>
+		<div id="wrapper">
+			<h1>Newsgate Warning</h1>
+			<div class="left">
+				<p>The article you clicked on is <b>not</b> credible</p>
+				<h3>
+					<label id="badArticleTitle"></label>
+					From The <label id="badArticlePub"></label>
+				</h3>
+				<div id="reasonsBlock">
+					<p>Reasons:</p>
+					<ul id="reasons">
+					</ul>
+				</div>
+			</div>
+			<div class="right">
+				<h2>Read This Instead</h2>
+				<div id="goodArticleBlock">
+					<h3><a id="goodArticleLink"><a></h3>
+					<img id="goodArticleImage"></img>
+					<div id="goodArticlePreview">
+					</div>
+					<p id="fromLine">
+						<img id="fromLineIcon"></img>
+						<label id="fromLineText"></label>
+					</p>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

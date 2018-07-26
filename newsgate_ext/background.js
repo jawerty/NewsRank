@@ -66,16 +66,18 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 	if (disable != "on") {
 		chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 			if (changeInfo.status === "loading") {
-
 				const requestedUrl = tab.url;
+				if (requestedUrl.indexOf("ng_force=true") > -1) {
+					return;
+				}
 				let hostname = extractHostname(requestedUrl);
 
 			    if (hostname.indexOf("www.") == 0) {
 			    	hostname = hostname.substring(4);
 			    }
+
 			    sites_being_scrapped.forEach(function(site) {
 			    	if (site.indexOf(hostname) > -1) {
-
 			    		let parsedUrl = requestedUrl.split("?")[0].split("://")[1];
 			    		if (parsedUrl.indexOf("www.") == 0) {
 			    			parsedUrl = parsedUrl.substring(4);
@@ -86,7 +88,7 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 						        return;
 						    }
 						    const response = JSON.parse(xhr.responseText);
-						    // console.log(response);
+						    console.log(response);
 					        if (!response["suggestions"]) {
 								return;
 					        }
@@ -106,7 +108,7 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 							    			chrome.tabs.sendMessage(tabId, {
 								    			showBanner,
 								    			title: response["received"].title,
-								    			link: response["received"].origin,
+								    			link: response["received"].origin + "?ng_force=true",
 								    			publicationName: response["received"].publicationName,
 								    			topReason,
 								    			hostname: extractHostname(response["suggestions"][0].origin)
@@ -121,7 +123,7 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 								    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
 						    			const interval = setInterval(() => {
 						    				chrome.tabs.sendMessage(tabId, { 
-						    					badArticle: requestedUrl,
+						    					badArticle: response["received"],
 						    					goodArticle: response["suggestions"][0]
 						    				}, (response) => {
 												console.log(response);
