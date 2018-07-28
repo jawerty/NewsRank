@@ -1,5 +1,4 @@
 http://nytimes.com
-http://buzzfeed.com/news
 http://huffingtonpost.com
 http://www.washingtonpost.com
 http://thehill.com
@@ -36,6 +35,11 @@ http://www.nydailynews.com/
 #https://www.axios.com/
 https://www.cnbc.com/
 https://breitbart.com
-https://www.infowars.com/
+https://www.infowars.com/category/us-news/
 http://bipartisanreport.com/
 https://www.theblaze.com/
+https://www.thenation.com/
+http://theweek.com/
+https://www.buzzfeednews.com/
+http://thefederalist.com/
+https://www.redstate.com/
