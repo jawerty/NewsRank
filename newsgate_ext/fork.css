@@ -1,0 +1,76 @@
+#wrapper {
+	width: 850px;
+	margin: 0 auto;
+	margin-top: 40px;
+}
+
+#wrapper p, label, span, a {
+	font-size: 16px;
+	font-family: sans-serif;
+	color: rgb(50,50,50);
+}
+
+#wrapper h1 {
+	font-size: 32px;
+	font-family: helvetica;
+	color: rgb(207,70,71);
+}
+
+
+#reasonsBlock {
+	display: none;
+}
+
+.left {
+	float:left;
+	box-sizing: border-box;
+	width: 50%;
+} 
+
+.right {
+	float: right;
+	box-sizing: border-box;
+	width: calc(50% - 40px);
+	margin: 20px 20px; 
+}
+
+.right #goodArticleBlock {
+	border: 1px solid rgb(220,220,220);
+	border-radius: 3px;
+	width: 100%;
+	padding: 10px 20px;
+}
+
+
+.right #goodArticleLink {
+	font-size: 24px;
+	text-decoration: none;
+	font-family: Helvetica;
+
+}
+
+.right #goodArticleImage {
+	width: 100%;
+}
+
+.right #goodArticlePreview {
+	margin-top: 10px;
+	font-size: 16px;
+}
+
+.right #fromLine {
+	line-height: 16px;
+	font-weight: bold;
+	display: inline-block;
+}
+
+.right #fromLineIcon {
+	height: 32px;
+}
+
+.right #fromLineText {
+	font-size: 20px;
+	font-family: helvetica;
+	vertical-align: top;
+	margin-top: 5px;
+}
