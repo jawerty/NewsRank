@@ -235,8 +235,7 @@ function CredScorer(articleMap, trackerList) {
 		this.fetchTrackersForPubs(false, (foundTrackerMap) => {
 			async.each(Object.keys(foundTrackerMap), (publicationDomain, callback) => {
 				articleModel.findOne({publication: publicationDomain}, {publicationName: 1, publication: 1}, (err, foundArticle) => {
-					if (!err && foundArticle && ("publicationName" in foundArticle)) {
-						console.log(foundArticle["publicationName"], foundArticle["publication"])
+					if (!err && foundArticle && typeof foundArticle["publicationName"] != "undefined") {
 						self.fetchMBFCbias(foundArticle["publicationName"], (biasData) => {
 							const trackerCount = foundTrackerMap[publicationDomain].length;
 							pubBiasFactData[publicationDomain] = Object.assign(biasData, { trackerCount });
