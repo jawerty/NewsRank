@@ -71,7 +71,6 @@ router.get('/suggestArticle', function(req, res, next) {
 					if (foundTopics.length > 0) { // should only be one
 						let isBest = false;
 						let suggestions = [];
-						console.log(foundTopics.length)
 						foundTopics.forEach((topic) => {
 							let articles = topic.articles;
 							let highestScore = 0
@@ -89,7 +88,7 @@ router.get('/suggestArticle', function(req, res, next) {
 								suggestions.push(articles[highestScoreIndex]);
 							}
 						});
-						console.log(suggestions)
+
 						if (suggestions.length > 0) {
 							console.log("Sending down article");
 							res.send({suggestions, received: foundArticle});

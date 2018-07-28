@@ -32,10 +32,15 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     	goodArticleLink.innerHTML = data.goodArticle.title;
     	goodArticleLink.setAttribute('href', data.goodArticle.origin);
     	goodArticleImage.src = data.goodArticle.headlineImage;
-    	goodArticlePreview.innerHTML = "\""+data.goodArticle.articlePreview + "\"...";
+        console.log(data.goodArticle.articlePreview);
+        if (data.goodArticle.articlePreview && data.goodArticle.articlePreview.trim().length > 0) {
+            goodArticlePreview.innerHTML = "\""+data.goodArticle.articlePreview + "\"...";
+        } else {
+            goodArticlePreview.style.display = "none";
+        }
 
     	if (data.goodArticle.publicationName.indexOf("ABC") > -1) {
-            fromLineIcon.style.display = "block"
+            fromLineIcon.style.display = "none";
         } else {
             fromLineIcon.src = "http://logo.clearbit.com/"+data.goodArticle.publication+"?size=80";
         }

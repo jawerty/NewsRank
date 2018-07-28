@@ -232,7 +232,7 @@ function CredScorer(articleMap, trackerList) {
 		self = this;
 		const pubBiasFactData = {};
 		// Get tracker info first
-		this.fetchTrackersForPubs(false, (foundTrackerMap) => {
+		this.fetchTrackersForPubs(true, (foundTrackerMap) => {
 			async.each(Object.keys(foundTrackerMap), (publicationDomain, callback) => {
 				articleModel.findOne({publication: publicationDomain}, {publicationName: 1}, (err, foundArticle) => {
 					if (!err && foundArticle) {
@@ -406,7 +406,7 @@ function CredScorer(articleMap, trackerList) {
 		   	  			if (publicationDomain.indexOf("nytimes") > -1) {
 		   	  				siteName = $("meta[name='application-name']").attr('content');
 		   	  			} else if (publicationDomain.indexOf("reuters") > -1) {
-							siteName = $("title").text().split('|')[1].trim();
+									siteName = $("title").text().split('|')[1].trim();
 		   	  			} else if (publicationDomain.indexOf("nydailynews") > -1) {
 		   	  				siteName = $("meta[property='og:title']").attr('content').split('-')[1].trim();
 		   	  			} else if (publicationDomain.indexOf("npr") > -1) {
