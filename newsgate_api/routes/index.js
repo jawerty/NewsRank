@@ -76,10 +76,10 @@ router.get('/suggestArticle', function(req, res, next) {
 							let highestScore = 0
 							let highestScoreIndex = 0;
 							for (let i = 0; i < articles.length; i++) {
-								if ("credibility" in article
-									&& article.credibility.score > highestScore) {
-									highestScore = article.credibility.score;
-									highestScoreIndex = index;
+								if ("credibility" in articles[i]
+									&& articles[i].credibility.score > highestScore) {
+									highestScore = articles[i].credibility.score;
+									highestScoreIndex = i;
 								}
 							}
 							if (articles[highestScoreIndex]._id.equals(foundArticle._id)) {

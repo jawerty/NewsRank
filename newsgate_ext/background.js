@@ -36,8 +36,14 @@ const sites_being_scrapped = [
 	'https://breitbart.com',
 	'https://www.infowars.com/',
 	'http://bipartisanreport.com/',
-	'https://www.theblaze.com/'
-]
+	'https://www.theblaze.com/',
+	'https://www.thenation.com/',
+	'http://theweek.com/',
+	'https://www.buzzfeednews.com/',
+	'http://thefederalist.com/',
+	'https://www.redstate.com/',
+	'https://www.nationalreview.com/'
+];
 
 function extractHostname(url) {
     var hostname;
