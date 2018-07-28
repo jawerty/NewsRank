@@ -232,7 +232,7 @@ function CredScorer(articleMap, trackerList) {
 		self = this;
 		const pubBiasFactData = {};
 		// Get tracker info first
-		this.fetchTrackersForPubs(true, (foundTrackerMap) => {
+		this.fetchTrackersForPubs(false, (foundTrackerMap) => {
 			async.each(Object.keys(foundTrackerMap), (publicationDomain, callback) => {
 				articleModel.findOne({publication: publicationDomain}, {publicationName: 1}, (err, foundArticle) => {
 					if (!err && foundArticle && "publicationName" in foundArticle) {
