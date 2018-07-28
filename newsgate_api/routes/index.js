@@ -69,37 +69,46 @@ router.get('/suggestArticle', function(req, res, next) {
 				], (err, foundTopics) => {
 					if (err) console.log(err);
 					if (foundTopics.length > 0) { // should only be one
-						const topic = foundTopics[0]; 
-						const articles = topic.articles;
-
-						let highestScore = 0
-						let highestScoreIndex = 0;
-						articles.forEach((article, index) => {
-							if ("credibility" in article
-								&& article.credibility.score > highestScore) {
-
-								highestScore = article.credibility.score;
-								highestScoreIndex = index;
+						let isBest = false;
+						let suggestions = [];
+						foundTopics.forEach((topic) => {
+							let articles = topic.articles;
+							let highestScore = 0
+							let highestScoreIndex = 0;
+							for (let i = 0; i < articles.length; i++) {
+								if ("credibility" in article
+									&& article.credibility.score > highestScore) {
+									highestScore = article.credibility.score;
+									highestScoreIndex = index;
+								}
+							}
+							if (articles[highestScoreIndex]._id.equals(foundArticle._id)) {
+								isBest = true;
+							} else {
+								suggestions.push([articles[highestScoreIndex]]);
 							}
 						});
-						if (articles[highestScoreIndex]._id.equals(foundArticle._id)) {
-							console.log("Article is already the best");
-							res.send({suggestions: null});
-						} else {
+						
+						if (suggestions.length > 0) {
 							console.log("Sending down article");
-							const suggestions = [articles[highestScoreIndex]];
 							res.send({suggestions, received: foundArticle});
+						} else if (isBest) {		
+							console.log("Article is already the best");
+							res.send({suggestions: null, error: "Article is already the best"});
+						} else {
+							console.log("Found topics, had an issue");
+							res.send({suggestions: null, error: "Found topics, had an issue"});						
 						}
 					} else {
 						console.log("Couldn't get topic");
-						res.send({suggestions: null});						
+						res.send({suggestions: null, error: "Couldnt get topic"});						
 					}
 
 				})
 
 			} else {
 				console.log("Article not found");
-				res.send({suggestions: null});
+				res.send({suggestions: null, error: "Article not found"});
 			}	
 		}
 	})
