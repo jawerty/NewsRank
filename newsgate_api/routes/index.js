@@ -86,7 +86,7 @@ router.get('/suggestArticle', function(req, res, next) {
 							if (articles[highestScoreIndex]._id.equals(foundArticle._id)) {
 								isBest = true;
 							} else {
-								suggestions.push([articles[highestScoreIndex]]);
+								suggestions.push(articles[highestScoreIndex]);
 							}
 						});
 						console.log(suggestions)
