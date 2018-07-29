@@ -27,7 +27,11 @@ const getWebpage = (source, callback) => {
 		  requestObj["gzip"] = true;
 	  }
 
-    if (!source.includes("infowars")) {
+    if (!source.includes("infowars")
+      && !source.includes("thefederalist")
+      && !source.includes("bipartisanreport")
+      && !source.includes("prisonplanet")
+      && !source.includes("redstate")) {
       requestObj["headers"] = {
         'User-Agent': randUserAgent // daily beast was the first to make this necessary
       }

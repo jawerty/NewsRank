@@ -424,6 +424,8 @@ function CredScorer(articleMap, trackerList) {
 		   	  			} else if (publicationDomain.indexOf("nydailynews") > -1) {
 		   	  				// Couldnt automate this
 		   	  				siteName = "New York Daily News";
+		   	  			} else if (publicationDomain.indexOf("dailystar") > -1) {
+		   	  				siteName = "Daily Star";
 		   	  			}
 	   	  	
 		   	  			if (!siteName) {
