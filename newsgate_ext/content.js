@@ -17,10 +17,10 @@ function extractHostname(url) {
     return hostname;
 }
 
-let shownNGBanner = false;
+let shownNBBanner = false;
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-  	if (shownNGBanner) {
+  	if (shownNBBanner) {
   		sendResponse({received: true});
   		return;
   	}
@@ -38,15 +38,15 @@ chrome.runtime.onMessage.addListener(
 			const reason = request.topReason ? " because <label style='font-weight: bold; color: #fff'>"+request.topReason+"</label>" : '';
 			const container = document.createElement('div');
 			container.style.padding = "15px 25px";
-			container.style.backgroundColor = "rgba(207,70,71,.7)";
+			container.style.backgroundColor = "rgba(71,70,207,.7)";
 			container.style.fontSize = "16px";
 			container.style.fontFamily = "sans-serif";
 			container.style.color = "rgb(255,255,255)";
 			container.style.textAlign = "center";
-			container.innerHTML = "Newsgate redirected you from '<a style='color: #fff; text-decoration: underline' href='"+request.link+"'>"+title+"'</a> by "+request.publicationName+reason;
+			container.innerHTML = "NewsBlock redirected you from '<a style='color: #fff; text-decoration: underline' href='"+request.link+"'>"+title+"'</a> by "+request.publicationName+reason;
 			document.body.appendChild(container);
 			document.body.insertBefore(container, document.body.firstChild);
-			shownNGBanner = true;
+			shownNBBanner = true;
 		}
    		sendResponse({received: true});
    } 

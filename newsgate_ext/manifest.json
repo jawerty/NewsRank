@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "newsgate",
+  "name": "NewsBlock",
   "description": "Catches untrustworthy news articles you click on and suggests similar/more credible articles",
   "version": "1.0",
   "browser_action": {

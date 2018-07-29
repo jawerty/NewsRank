@@ -45,6 +45,7 @@ const sites_being_scrapped = [
 	'https://www.nationalreview.com/'
 ];
 
+let urls_hit = [];
 function extractHostname(url) {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get hostname
@@ -67,13 +68,14 @@ function extractHostname(url) {
 let lastInitiator = null;
 let lastInitiatorIgnore = false;
 
-chrome.storage.sync.get("newsgate_disable", function(data) {
-	const disable = data.newsgate_disable;
+chrome.storage.sync.get("newsblock_disable", function(data) {
+	const disable = data.newsblock_disable;
 	if (disable != "on") {
 		chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 			if (changeInfo.status === "loading") {
 				const requestedUrl = tab.url;
-				if (requestedUrl.indexOf("ng_force=true") > -1) {
+				if (requestedUrl.indexOf("nb_force=true") > -1
+					|| urls_hit.indexOf(requestedUrl) > -1) {
 					return;
 				}
 				let hostname = extractHostname(requestedUrl);
@@ -98,9 +100,13 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 					        if (!response["suggestions"]) {
 								return;
 					        }
+					        if (urls_hit.length >= 25) {
+					        	urls_hit.shift();
+					        }
+					        urls_hit.push(response["suggestions"][0].origin);
 					        chrome.storage.sync.get(null, function(items) {
-							    const isAuto = items["newsgate_auto"] || false;
-							    let showBanner = items["newsgate_banner"] || false;
+							    const isAuto = items["newsblock_auto"] || false;
+							    let showBanner = items["newsblock_banner"] || false;
 							    if (isAuto == "on") {
 							    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin }, () => {
 							    		if (showBanner == "on") {
@@ -114,7 +120,7 @@ chrome.storage.sync.get("newsgate_disable", function(data) {
 							    			chrome.tabs.sendMessage(tabId, {
 								    			showBanner,
 								    			title: response["received"].title,
-								    			link: response["received"].origin + "?ng_force=true",
+								    			link: response["received"].origin + "?nb_force=true",
 								    			publicationName: response["received"].publicationName,
 								    			topReason,
 								    			hostname: extractHostname(response["suggestions"][0].origin)

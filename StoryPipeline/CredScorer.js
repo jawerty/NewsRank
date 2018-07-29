@@ -183,6 +183,10 @@ function CredScorer(articleMap, trackerList) {
 	this.getReasons = (scoreVector) => {
 		const { bias, factRating, trackerCount, softReferences } = scoreVector;
 		let reasons = [];
+		if (softReferences == 0) {
+			reasons.push("Poorly sourced");
+		}
+		
 		if (bias == 4) {
 			reasons.push("Extreme Bias");
 		}

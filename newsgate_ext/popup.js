@@ -3,7 +3,7 @@ $(document).ready(function() {
 		console.log(items);
 		const sliders = ['auto', 'banner', 'disable'];
 		sliders.forEach((sliderName) => {
-			const storageKey = "newsgate_"+sliderName;
+			const storageKey = "newsblock_"+sliderName;
 			if (storageKey in items 
 				&& items[storageKey] == "on") {
 				$('.settingsOption[data-name='+sliderName+'] input').click()

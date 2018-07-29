@@ -29,6 +29,12 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     		}		
     	}
     	
+        if (data.goodArticle.origin.indexOf("?") > -1) {
+            data.goodArticle.origin += "&nb_force=true";
+        } else {
+            data.goodArticle.origin += "?nb_force=true";
+        }
+
     	goodArticleLink.innerHTML = data.goodArticle.title;
     	goodArticleLink.setAttribute('href', data.goodArticle.origin);
     	goodArticleImage.src = data.goodArticle.headlineImage;

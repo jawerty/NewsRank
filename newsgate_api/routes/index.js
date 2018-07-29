@@ -19,7 +19,9 @@ router.get('/suggestArticle', function(req, res, next) {
 			if (foundArticle) {
 				if (articleURL.length/foundArticle.origin.length < .50) {
 					console.log("Article is in origin BUT is not similar enough")
-					return res.send({suggestions: null});
+					return res.send({suggestions: null, error: "Article url is in found link BUT is not similar enough"});
+				} else if (foundArticle.credibility.score >= 80) {
+					return res.send({suggestions: null, error: "Article's credibility score is good"})
 				}
 				console.log("Found Article");
 				topicModel.aggregate([
