@@ -29,6 +29,7 @@ const getWebpage = (source, callback) => {
 
     if (!source.includes("infowars")
       && !source.includes("thefederalist")
+      && !source.includes("thedailybeast")
       && !source.includes("bipartisanreport")
       && !source.includes("prisonplanet")
       && !source.includes("redstate")) {
