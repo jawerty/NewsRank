@@ -26,6 +26,7 @@ function CredScorer(articleMap, trackerList) {
 
 	this.startingScore = 50;
 	this.biasRatings = {
+		"conspiracy-pseudoscience": 5,
 		"extreme": 4,
 		"left": 3,
 		"right": 3,
@@ -186,11 +187,15 @@ function CredScorer(articleMap, trackerList) {
 		if (softReferences == 0) {
 			reasons.push("Poorly sourced");
 		}
-		
+
 		if (bias == 4) {
 			reasons.push("Extreme Bias");
 		}
 		
+		if (bias == 5) {
+			reasons.push("Provides very little evidence");
+		}
+
 		if (factRating < 0) {
 			reasons.push("Poor Factual Reporting");
 		} else if (factRating == 0) {
@@ -212,6 +217,7 @@ function CredScorer(articleMap, trackerList) {
 				score += 20;
 				break;
 			case 4:
+			case 5:
 				score -= 30;
 				break;
 		}
