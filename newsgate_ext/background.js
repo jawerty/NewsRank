@@ -68,14 +68,18 @@ function extractHostname(url) {
 let lastInitiator = null;
 let lastInitiatorIgnore = false;
 
-chrome.storage.sync.get("newsblock_disable", function(data) {
-	const disable = data.newsblock_disable;
-	if (disable != "on") {
-		chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
-			if (changeInfo.status === "loading") {
+
+chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
+	if (changeInfo.status === "loading") {
+		chrome.storage.sync.get("newsblock_disable", function(data) {
+			const disable = data.newsblock_disable;
+			console.log(data);
+			if (disable != "on") {
 				const requestedUrl = tab.url;
+				console.log(urls_hit, requestedUrl)
 				if (requestedUrl.indexOf("nb_force=true") > -1
-					|| urls_hit.indexOf(requestedUrl) > -1) {
+					// || urls_hit.indexOf(requestedUrl) > -1
+					) {
 					return;
 				}
 				let hostname = extractHostname(requestedUrl);
@@ -100,15 +104,32 @@ chrome.storage.sync.get("newsblock_disable", function(data) {
 					        if (!response["suggestions"]) {
 								return;
 					        }
-					        if (urls_hit.length >= 25) {
-					        	urls_hit.shift();
-					        }
-					        urls_hit.push(response["suggestions"][0].origin);
+					        // if (urls_hit.length >= 25) {
+					        // 	urls_hit.shift();
+					        // }
+					        // urls_hit.push(response["suggestions"][0].origin);
 					        chrome.storage.sync.get(null, function(items) {
 							    const isAuto = items["newsblock_auto"] || false;
 							    let showBanner = items["newsblock_banner"] || false;
+							    let lowestDistanceIndex = 0;
+							    let lowestDistance = null;
+							    let distance;
+							    for (let i = 0; i < response["suggestions"].length; i++) {
+							    	distance = Levenshtein.get(
+							    		response["received"].title,
+							    		response["suggestions"][i].title
+							    	);
+							    	console.log(distance,response["received"].title,
+							    		response["suggestions"][i].title);
+							    	if (!lowestDistance) {
+							    		lowestDistanceIndex = i;
+							    	} else if (lowestDistance > distance ) {
+							    		lowestDistanceIndex = i;
+							    	}
+							    }
+ 							    suggestion = response["suggestions"][lowestDistanceIndex];
 							    if (isAuto == "on") {
-							    	chrome.tabs.update(tabId, { url: response["suggestions"][0].origin }, () => {
+							    	chrome.tabs.update(tabId, { url: suggestion.origin }, () => {
 							    		if (showBanner == "on") {
 							    			showBanner = true;
 							    		}
@@ -123,9 +144,10 @@ chrome.storage.sync.get("newsblock_disable", function(data) {
 								    			link: response["received"].origin + "?nb_force=true",
 								    			publicationName: response["received"].publicationName,
 								    			topReason,
-								    			hostname: extractHostname(response["suggestions"][0].origin)
+								    			hostname: extractHostname(suggestion.origin)
 								    		}, (response) => {
 												if (typeof response != 'undefined' && response.received) {
+													urls_hit.push(response.receivedUrl)
 													clearInterval(interval);
 												}
 											});
@@ -136,7 +158,7 @@ chrome.storage.sync.get("newsblock_disable", function(data) {
 						    			const interval = setInterval(() => {
 						    				chrome.tabs.sendMessage(tabId, { 
 						    					badArticle: response["received"],
-						    					goodArticle: response["suggestions"][0]
+						    					goodArticle: suggestion
 						    				}, (response) => {
 												console.log(response);
 												if (typeof response != 'undefined' && response.received) {

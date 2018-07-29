@@ -15,28 +15,31 @@ const readFileToArray = (fileLocation, callback) => {
 
 const getWebpage = (source, callback) => {
   readFileToArray('user-agents.txt', (userAgents) => {
-    let randUserAgent = "NG article fetcher";
-    randUserAgent = userAgents[Math.floor(Math.random()*userAgents.length)];      
+    randUserAgent = userAgents[Math.floor(Math.random()*userAgents.length)];
     const requestObj = {
       url: source,
       method: 'GET',
       timeout: 300000,
-      jar: true, // remember cookies in redirects (made for washington post)
-      headers: {
-      'User-Agent': randUserAgent+" iPhone" // daily beast was the first to make this necessary
-      }
+      jar: true // remember cookies in redirects (made for washington post)
     };
-    if (source.includes("thehill")) { // and to any site returning binary zip data (thehill)
-		requestObj["gzip"] = true;
-	}
 
+    if (source.includes("thehill")) { // and to any site returning binary zip data (thehill)
+		  requestObj["gzip"] = true;
+	  }
+
+    if (!source.includes("infowars")) {
+      requestObj["headers"] = {
+        'User-Agent': randUserAgent // daily beast was the first to make this necessary
+      }
+    }
     if (source == "javascript:void(0);") return callback();
     try {
 		request(requestObj, (error, response, body) => {
 			
 	      if (error) {
 	        callback(error, null);
-	      } else if (response.statusCode != 200 && response.statusCode != 302) { 
+	      } else if (response.statusCode != 200 && response.statusCode != 302) {
+          console.log(response.body); 
 	        console.log(source, response.statusCode)
 	        callback("Response wasn't successful for "+ source, null);
 	      } else {

@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     	goodArticleImage.src = data.goodArticle.headlineImage;
         console.log(data.goodArticle.articlePreview);
         if (data.goodArticle.articlePreview && data.goodArticle.articlePreview.trim().length > 0) {
-            goodArticlePreview.innerHTML = "\""+data.goodArticle.articlePreview + "\"...";
+            goodArticlePreview.innerHTML = "\""+data.goodArticle.articlePreview.substring(0,100) + "...\"";
         } else {
             goodArticlePreview.style.display = "none";
         }

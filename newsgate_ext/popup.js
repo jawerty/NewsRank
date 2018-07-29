@@ -25,4 +25,10 @@ $(document).ready(function() {
 		});
 		
 	});
+
+	$('.info-header').on('click', function(e) {
+		$(this).toggleClass('clicked');
+		$('.info-body').slideToggle(250);
+		$('.icon-circle-down').toggleClass('rotate');
+	});
 });
