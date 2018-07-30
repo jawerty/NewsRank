@@ -11,10 +11,9 @@ router.get('/suggestArticle', function(req, res, next) {
 	const articleURL = req.query.url;
 	console.log(articleURL);
 	articleModel.findOne({origin: {$regex : articleURL}}, {_id: 1, origin: 1, publicationName: 1, title: 1, credibility: 1}, (err, foundArticle) => {
-
 		if (err) {
 			console.log(err);
-			res.send({suggestions: null});
+			res.send({suggestions: null, error: "db error: " + err});
 		} else {
 			if (foundArticle) {
 				if (articleURL.length/foundArticle.origin.length < .50) {
