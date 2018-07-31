@@ -37,6 +37,27 @@ p, label, span, div {
   color: rgb(100,100,100);  
 }
 
+.settingsHint {
+  position: relative;
+  display: table;
+  text-align: center;
+  padding-top: 5px;
+  box-sizing: border-box;
+  height: 45px;
+  width: 100%;
+}
+
+.settingsHintText {
+  display: table-cell;
+  vertical-align: middle;
+  margin: center;
+  font-size: 14px;
+}
+
+.settingsHintText:not(.default) {
+  display: none;
+}
+
 .info {
   margin-top: 10px;
   padding-bottom: 20px;
@@ -62,6 +83,7 @@ p, label, span, div {
   width: 80%;
   cursor: pointer;
 }
+
 .info-header svg {
   float: right;
   width: 20%;
@@ -79,12 +101,12 @@ p, label, span, div {
   display: block;
 }
 
-.info-body a {
+a {
   text-decoration: none;
   color: #009bff;
 }
 
-.info-body a:visited {
+a:visited {
   text-decoration: none;
   color: #009bff;
   opacity: .7;
@@ -203,4 +225,8 @@ input:checked + .slider:before {
 .footer p {
   font-size: 10px;
   opacity: .5;
+}
+
+.hint {
+    display: none;
 }

@@ -71,8 +71,11 @@ let lastInitiatorIgnore = false;
 
 chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 	if (changeInfo.status === "loading") {
-		chrome.storage.sync.get("newsblock_disable", function(data) {
+		chrome.storage.sync.get(null, function(data) {
 			const disable = data.newsblock_disable;
+			const isAuto = data.newsblock_auto || false;
+			const showBanner = data.newsblock_banner || false;
+			const hasLowMode = data.newsblock_low || false;
 			console.log(data);
 			if (disable != "on") {
 				const requestedUrl = tab.url;
@@ -108,71 +111,71 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 					        // 	urls_hit.shift();
 					        // }
 					        // urls_hit.push(response["suggestions"][0].origin);
-					        chrome.storage.sync.get(null, function(items) {
-							    const isAuto = items["newsblock_auto"] || false;
-							    let showBanner = items["newsblock_banner"] || false;
-							    let lowestDistanceIndex = 0;
-							    let lowestDistance = null;
-							    let distance;
-							    for (let i = 0; i < response["suggestions"].length; i++) {
-							    	distance = Levenshtein.get(
-							    		response["received"].title,
-							    		response["suggestions"][i].title
-							    	);
-							    	console.log(distance,response["received"].title,
-							    		response["suggestions"][i].title);
-							    	if (!lowestDistance) {
-							    		lowestDistanceIndex = i;
-							    	} else if (lowestDistance > distance ) {
-							    		lowestDistanceIndex = i;
-							    	}
-							    }
- 							    suggestion = response["suggestions"][lowestDistanceIndex];
-							    if (isAuto == "on") {
-							    	chrome.tabs.update(tabId, { url: suggestion.origin }, () => {
-							    		if (showBanner == "on") {
-							    			showBanner = true;
-							    		}
-							    		let topReason = null;
-							    		if (response["received"].credibility.reasons.length > 0) {
-							    			topReason = response["received"].credibility.reasons[0];
-							    		};
-							    		const interval = setInterval(() => {
-							    			chrome.tabs.sendMessage(tabId, {
-								    			showBanner,
-								    			title: response["received"].title,
-								    			link: response["received"].origin + "?nb_force=true",
-								    			publicationName: response["received"].publicationName,
-								    			topReason,
-								    			hostname: extractHostname(suggestion.origin)
-								    		}, (response) => {
-												if (typeof response != 'undefined' && response.received) {
-													urls_hit.push(response.receivedUrl)
-													clearInterval(interval);
-												}
-											});
-							    		}, 100);
-							    	});
-							    } else {
-								    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
-						    			const interval = setInterval(() => {
-						    				chrome.tabs.sendMessage(tabId, { 
-						    					badArticle: response["received"],
-						    					goodArticle: suggestion
-						    				}, (response) => {
-												console.log(response);
-												if (typeof response != 'undefined' && response.received) {
-													clearInterval(interval);
-												}
-											});
-							    		}, 100);	
-						    		});	
-							    }
+						    let lowestDistanceIndex = 0;
+						    let lowestDistance = null;
+						    let distance;
+						    for (let i = 0; i < response["suggestions"].length; i++) {
+						    	distance = Levenshtein.get(
+						    		response["received"].title,
+						    		response["suggestions"][i].title
+						    	);
+						    	console.log(distance,response["received"].title,
+						    		response["suggestions"][i].title);
+						    	if (!lowestDistance) {
+						    		lowestDistanceIndex = i;
+						    	} else if (lowestDistance > distance ) {
+						    		lowestDistanceIndex = i;
+						    	}
+						    }
+							    suggestion = response["suggestions"][lowestDistanceIndex];
+						    if (isAuto == "on") {
+						    	chrome.tabs.update(tabId, { url: suggestion.origin }, () => {
+						    		if (showBanner == "on") {
+						    			showBanner = true;
+						    		}
+						    		let topReason = null;
+						    		if (response["received"].credibility.reasons.length > 0) {
+						    			topReason = response["received"].credibility.reasons[0];
+						    		};
+						    		const interval = setInterval(() => {
+						    			chrome.tabs.sendMessage(tabId, {
+							    			showBanner,
+							    			title: response["received"].title,
+							    			link: response["received"].origin + "?nb_force=true",
+							    			publicationName: response["received"].publicationName,
+							    			topReason,
+							    			hostname: extractHostname(suggestion.origin)
+							    		}, (response) => {
+											if (typeof response != 'undefined' && response.received) {
+												urls_hit.push(response.receivedUrl)
+												clearInterval(interval);
+											}
+										});
+						    		}, 100);
+						    	});
+						    } else {
+							    chrome.tabs.update(tabId, { url: 'fork.html' }, () => {
+					    			const interval = setInterval(() => {
+					    				chrome.tabs.sendMessage(tabId, { 
+					    					badArticle: response["received"],
+					    					goodArticle: suggestion
+					    				}, (response) => {
+											console.log(response);
+											if (typeof response != 'undefined' && response.received) {
+												clearInterval(interval);
+											}
+										});
+						    		}, 100);	
+					    		});	
+						    }
 						        
-							});
-
 						}
-						xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl, false);
+						let options = "";
+						console.log(hasLowMode);
+						if (hasLowMode == "on") {
+							options += "&lowMode=true";
+						}
+						xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl+options, false);
 						xhr.send();
 
 						const result = xhr.responseText;

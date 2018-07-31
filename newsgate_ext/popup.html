@@ -9,8 +9,15 @@
 
 	</head>
 	<body>
-		<h1>NewsBlock</h1>
+		<h1>Newsblock</h1>
 		<div id="settingsBlock">
+			<div class="settingsHint">
+				<span class="settingsHintText default">Go to <a href="newsblock.com">newsblock.com</a> for more info</span>
+				<span class="settingsHintText auto">Redirect to the recommended article automatically</span>
+				<span class="settingsHintText banner">Show an informative banner when redirected (only applies for auto)</span>
+				<span class="settingsHintText low">Only block articles with <b>low</b> credibility (when off we include <b>average</b> articles)</span>
+				<span class="settingsHintText disable">Disable Newsblock</span>
+			</div>
 			<div class="settingsOption" data-name="auto">
 				<label class="settingsText">Auto </label>
 				<label class="settingsValue switch" >
@@ -20,6 +27,13 @@
 			</div>
 			<div class="settingsOption" data-name="banner">
 				<label class="settingsText">Banner </label>
+				<label class="settingsValue switch" >
+				  <input type="checkbox">
+				  <span class="slider round"></span>
+				</label>
+			</div>
+			<div class="settingsOption" data-name="low">
+				<label class="settingsText">Low Mode </label>
 				<label class="settingsValue switch" >
 				  <input type="checkbox">
 				  <span class="slider round"></span>
@@ -60,6 +74,21 @@
 				&copy; Copyright Newsblock 2018
 			</p>
 		</div>
+
+		<div class="hint auto">
+			<div class="arrow bottom right"></div>
+			<span>Redirects you to the recommended article automatically</span>
+		</div>
+		<!-- <div class="hint banner">
+			<span>Shows Newsblock banner on redirected article (only if auto is on)</span>
+		</div>
+		<div class="hint disable">
+			<span>Disables Newsblock</span>
+		</div>
+		<div class="hint low">
+			<span>Only block articles with low credibility</span>
+		</div> -->
+
 		<svg style="position: absolute; width: 0; height: 0; overflow: hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 			<defs>
 				<symbol id="icon-circle-down" viewBox="0 0 32 32">

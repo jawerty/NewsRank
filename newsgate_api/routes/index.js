@@ -9,6 +9,7 @@ const topicModel = db.model('topic');
 /* GET home page. */
 router.get('/suggestArticle', function(req, res, next) {
 	const articleURL = req.query.url;
+	const lowMode = req.query.lowMode;
 	console.log(articleURL);
 	articleModel.findOne({origin: {$regex : articleURL}}, {_id: 1, origin: 1, publicationName: 1, title: 1, credibility: 1}, (err, foundArticle) => {
 		if (err) {
@@ -20,7 +21,9 @@ router.get('/suggestArticle', function(req, res, next) {
 					console.log("Article is in origin BUT is not similar enough")
 					return res.send({suggestions: null, error: "Article url is in found link BUT is not similar enough"});
 				} else if (foundArticle.credibility.score >= 80) {
-					return res.send({suggestions: null, error: "Article's credibility score is good"})
+					return res.send({suggestions: null, error: "Article's credibility score is good: "+foundArticle.credibility.score})
+				} else if (lowMode && foundArticle.credibility.score >= 60) {
+					return res.send({suggestions: null, error: "Score is "+foundArticle.credibility.score+" blocked by Low Mode"})
 				}
 				console.log("Found Article");
 				topicModel.aggregate([

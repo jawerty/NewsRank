@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	chrome.storage.sync.get(null, function(items) {
 		console.log(items);
-		const sliders = ['auto', 'banner', 'disable'];
+		const sliders = ['auto', 'banner', 'disable', 'low'];
 		sliders.forEach((sliderName) => {
 			const storageKey = "newsblock_"+sliderName;
 			if (storageKey in items 
@@ -24,6 +24,17 @@ $(document).ready(function() {
 			});
 		});
 		
+	});
+
+	$('.settingsOption').on('mouseover', function() {
+		const settingName = $(this).data('name');
+		$('.settingsHintText').hide();
+		$('.settingsHintText.'+settingName).css("display", "table-cell");
+	});
+
+	$('.settingsOption').on('mouseout', function() {
+		$('.settingsHintText').hide();
+		$('.settingsHintText.default').css("display", "table-cell");
 	});
 
 	$('.info-header').on('click', function(e) {
