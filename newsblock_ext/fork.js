@@ -52,8 +52,7 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     		const reasons = document.getElementById('reasons');
     		for (let i = 0; i < articleReasons.length; i++) {
     			let reasonItem = document.createElement("li");
-                reasonTag = (i == 0) ? "<b>TOP REASON: </b>" : "";
-    			reasonItem.innerHTML = reasonTag+articleReasons[i];
+    			reasonItem.innerHTML = (i == 0) ? "<b>" + articleReasons[i] + "</b>" : articleReasons[i];
     			reasons.append(reasonItem);
     			document.getElementById('reasonsBlock').style.display = "block";
     		}		

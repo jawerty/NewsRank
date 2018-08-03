@@ -29,8 +29,13 @@ body {
 
 
 #reasonsBlock {
+	padding: 0 20px;
+	text-align: left;
 	color: #fff;
 	display: none;
+}
+#reasonsBlock li {
+	font-size: 14px;
 }
 
 .content {

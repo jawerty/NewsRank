@@ -68,7 +68,7 @@ const Tokenizer = () => {
 	});
 
 	articleCursor.on('end', () => { 
-		console.log("All documents have been added");
+		console.log("All documents have been added for tokenizing");
 
 		// meh
 		const articlesCount = Object.keys(articleTokens).length;

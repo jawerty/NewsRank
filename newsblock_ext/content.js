@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener(
             container.style.fontFamily = "sans-serif";
             container.style.color = "rgb(255,255,255)";
             container.style.textAlign = "center";
-            container.innerHTML = "NewsBlock redirected you from '<a style='color: #fff; text-decoration: underline' href='"+request.link+"'>"+title+"'</a> by "+request.publicationName+reason;
+            container.innerHTML = "Newsblock redirected you from '<a style='color: #fff; text-decoration: underline' href='"+request.link+"'>"+title+"'</a> by "+request.publicationName+reason;
             document.body.appendChild(container);
             document.body.insertBefore(container, document.body.firstChild);
             shownNBBanner = true;
