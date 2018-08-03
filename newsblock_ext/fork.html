@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>NewsBlock</title>
+		<title>Newsblock Warning</title>
 		<script src="fork.js"></script>
 		<link href="fork.css" type="text/css" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	</head>
 	<body>
 		<div id="wrapper">
-			<h1>NewsBlock Warning</h1>
-			<div class="left">
-				<h3>
-					<p>You clicked on <label id="badArticleTitle"></label></p>
-					From <label id="badArticlePub"></label>
-					<p>This article is of <label id="badArticleCredGroup"></label> credibility</p>
-				</h3>
-				<div id="reasonsBlock">
-					<p>Why?:</p>
-					<ul id="reasons">
-					</ul>
-				</div>
-			</div>
-			<div class="right">
-				<h3>Read This Instead</h3>
+			<h1>Newsblock Warning</h1>
+			<div class="content">	
 				<div id="goodArticleBlock">
-					<h2><a id="goodArticleLink"><a></h2>
-					<img id="goodArticleImage"></img>
-					<div id="goodArticlePreview">
+					<h3>
+						<p>You clicked on <label id="badArticleTitle"></label></p>
+						From <label id="badArticlePub"></label><img id="clickedOnIcon"></img>
+						<p>This article is of <label id="badArticleCredGroup"></label> credibility</p>
+					</h3>
+					<div id="reasonsBlock">
+						<p>Why?:</p>
+						<ul id="reasons">
+						</ul>
 					</div>
-					<p id="fromLine">
-						<img id="fromLineIcon"></img>
-						<label id="fromLineText"></label>
-					</p>
+					<div id="goodArticleBlockContent">
+						<h2 id="goodArticleHint"><span>Read This Instead</span></h2>
+						<h2><a class="goodArticleLink include-title"><a></h2>
+						<a class="goodArticleLink">
+							<div id="goodArticleImage"></div>
+						</a>
+						<div id="goodArticlePreview">
+						</div>
+						<p id="fromLine">
+							<img id="fromLineIcon"></img>
+							<label id="fromLineText"></label>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -127,7 +127,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 						    		lowestDistanceIndex = i;
 						    	}
 						    }
-							    suggestion = response["suggestions"][lowestDistanceIndex];
+							suggestion = response["suggestions"][lowestDistanceIndex];
 						    if (isAuto == "on") {
 						    	chrome.tabs.update(tabId, { url: suggestion.origin }, () => {
 						    		if (showBanner == "on") {

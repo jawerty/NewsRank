@@ -2,16 +2,31 @@ const data = {}
 data.rendered = false;
 
 function getCredGrouping(credScore) {
+    let grouping = null;
+
     if (credScore <= 40) {
-        return "Very Poor";
+        grouping = {
+            name: "Very Poor",
+            color: "rgba(207,70,71,.7)"
+        };
     } else if (credScore <= 60) {
-        return "Poor";
+        grouping = {
+            name: "Poor",
+            color: "rgba(207,103,0,.7)"
+        };
     } else if (credScore <= 80) {
-        return "Average";
+        grouping = {
+            name: "Average",
+            color: "rgba(207,210,0,1)"
+        };
     }
+
+    return grouping;
 }
 
+let timesRequested = 0;
 chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
+    timesRequested++;
 	console.log(request);
     if ("badArticle" in request && !data.rendered) {
     	data.badArticle = request.badArticle;
@@ -20,15 +35,18 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
     	const badArticlePub = document.getElementById('badArticlePub');
         const badArticleCredGroup = document.getElementById('badArticleCredGroup');
         const goodArticleBlock = document.getElementById('goodArticleBlock');
-        const goodArticleLink = document.getElementById('goodArticleLink');
+        const goodArticleLinks = document.getElementsByClassName('goodArticleLink');
     	const goodArticleImage = document.getElementById('goodArticleImage');
     	const goodArticlePreview = document.getElementById('goodArticlePreview');
     	const fromLineText = document.getElementById('fromLineText');
-    	const fromLineIcon = document.getElementById('fromLineIcon');
+        const fromLineIcon = document.getElementById('fromLineIcon');
+        const clickedOnIcon = document.getElementById('clickedOnIcon');
 
     	badArticleTitle.innerHTML = "\""+data.badArticle.title+"\"";
     	badArticlePub.innerHTML = data.badArticle.publicationName;
-    	badArticleCredGroup.innerHTML = getCredGrouping(data.badArticle.credibility.score);
+        const credGrouping = getCredGrouping(data.badArticle.credibility.score);
+    	badArticleCredGroup.innerHTML = credGrouping.name;
+        badArticleCredGroup.style.color = credGrouping.color;
     	const articleReasons = data.badArticle.credibility.reasons;
     	if (articleReasons && articleReasons.length > 0) {
     		const reasons = document.getElementById('reasons');
@@ -47,10 +65,14 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
             data.goodArticle.origin += "?nb_force=true";
         }
 
-    	goodArticleLink.innerHTML = data.goodArticle.title;
-    	goodArticleLink.setAttribute('href', data.goodArticle.origin);
-    	goodArticleImage.src = data.goodArticle.headlineImage;
-        console.log(data.goodArticle.articlePreview);
+        for (let i = 0; i < goodArticleLinks.length; i++) {  
+            if (goodArticleLinks[i].classList.contains('include-title')) {
+                goodArticleLinks[i].innerHTML = data.goodArticle.title;
+            }         
+            goodArticleLinks[i].setAttribute('href', data.goodArticle.origin);
+        }
+
+    	goodArticleImage.style.backgroundImage = "url("+data.goodArticle.headlineImage+")";
         if (data.goodArticle.articlePreview && data.goodArticle.articlePreview.trim().length > 0) {
             goodArticlePreview.innerHTML = "\""+data.goodArticle.articlePreview.substring(0,100) + "...\"";
         } else {
@@ -62,13 +84,18 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
         } else {
             fromLineIcon.src = "http://logo.clearbit.com/"+data.goodArticle.publication+"?size=80";
         }
+
         fromLineText.innerHTML = data.goodArticle.publicationName;
 
-        goodArticleBlock.addEventListener('click', function() {
-            window.location.href = data.goodArticle.origin;
-        });
-        goodArticleBlock.style.cursor = "pointer";
+        if (data.badArticle.publicationName.indexOf("ABC") > -1) {
+            clickedOnIcon.style.display = "none";
+        } else {
+            clickedOnIcon.src = "http://logo.clearbit.com/"+data.badArticle.publication+"?size=60";
+        }
+
     	data.rendered = true;
     	sendResponse({received: true});
+    } else if (timesRequested > 20) {
+        sendResponse({received: true});
     }
 });

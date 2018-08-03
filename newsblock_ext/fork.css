@@ -33,57 +33,75 @@ body {
 	display: none;
 }
 
-.left {
-	float:left;
+.content {
+	width: 475px;
 	box-sizing: border-box;
-	width: 50%;
-} 
-
-.right {
-	float: right;
-	box-sizing: border-box;
-	width: calc(50% - 40px);
-	margin: 20px 20px; 
+	margin: 20px auto; 
 }
 
-.right #goodArticleBlock {
+.content #goodArticleBlock {
 	background-color: #fff;
 	border: 1px solid rgb(220,220,220);
 	border-radius: 3px;
 	width: 100%;
+	box-sizing: border-box;
 	padding: 10px 20px;
 }
 
-.right #goodArticleBlock * {
+
+.content #goodArticleBlock * {
 	color: rgb(50,50,50);
 }
-.right #goodArticleLink {
+
+.content #goodArticleBlockContent {
+	margin-top: 25px;
+}
+
+.content #goodArticleHint {
+	width:100%;
+	text-align: left;
+	border-bottom: 1px solid rgb(220,220,220);
+	line-height:0.1em;
+	margin:10px 0 25px;
+}
+
+
+.content #goodArticleHint span {
+	background:#fff;
+	padding-right: 10px;
+	color: rgb(150,150,150);
+	font-size: 14px;
+}
+
+.content #goodArticleLink {
 	font-size: 24px;
 	text-decoration: none;
 	font-family: Helvetica;
-
 }
 
-.right #goodArticleImage {
+.content #goodArticleImage {
 	width: 100%;
+	height: 200px;
+	background-repeat: no-repeat;
+	background-size: 100% ;
 }
 
-.right #goodArticlePreview {
+.content #goodArticlePreview {
 	margin-top: 10px;
 	font-size: 16px;
 }
 
-.right #fromLine {
+.content #fromLine {
 	line-height: 16px;
 	font-weight: bold;
 	display: inline-block;
 }
 
-.right #fromLineIcon {
+.content #fromLineIcon {
 	height: 32px;
 }
 
-.right #fromLineText {
+.content #fromLineText {
 	font-size: 24px;
 	font-family: helvetica;
 	vertical-align: top;

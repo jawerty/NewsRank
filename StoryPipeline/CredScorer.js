@@ -203,7 +203,7 @@ function CredScorer(articleMap, trackerList) {
 		}
 
 		if (trackerCount > 100) {
-			reasons.push("Too Many Trackers")
+			reasons.push("Aggressive tracking");
 		}
 		return reasons;
 	}
