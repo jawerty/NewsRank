@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "NewsBlock",
+  "description": "Catches untrustworthy news articles you click on and suggests similar/more credible articles",
+  "version": "1.0",
+  "browser_action": {
+    // "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["levenshtein.min.js", "background.js"],
+    "persistent": true
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>",
+    "storage"
+  ],
+  "content_scripts": [
+      {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+      }
+  ]
+}
