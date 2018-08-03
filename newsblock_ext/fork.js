@@ -94,6 +94,19 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
         }
 
     	data.rendered = true;
+        const storageKey = "newsblock_auto";
+        document.querySelectorAll('.settingsOption .slider')[0]
+            .addEventListener('click', function (e) {
+            const option = document.querySelectorAll('.settingsOption')[0];
+            if (option.classList.contains("on")) {
+                chrome.storage.sync.remove(storageKey);
+            } else {
+                const sliderSet = {};
+                sliderSet[storageKey] = "on";
+                chrome.storage.sync.set(sliderSet);
+            }
+            option.classList.add("on");
+        });
     	sendResponse({received: true});
     } else if (timesRequested > 20) {
         sendResponse({received: true});

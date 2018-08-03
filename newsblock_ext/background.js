@@ -74,7 +74,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 		chrome.storage.sync.get(null, function(data) {
 			const disable = data.newsblock_disable;
 			const isAuto = data.newsblock_auto || false;
-			const showBanner = data.newsblock_banner || false;
+			let showBanner = data.newsblock_banner || false;
 			const hasLowMode = data.newsblock_low || false;
 			console.log(data);
 			if (disable != "on") {
@@ -111,25 +111,29 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 					        // 	urls_hit.shift();
 					        // }
 					        // urls_hit.push(response["suggestions"][0].origin);
-						    let lowestDistanceIndex = 0;
-						    let lowestDistance = null;
-						    let distance;
-						    for (let i = 0; i < response["suggestions"].length; i++) {
-						    	distance = Levenshtein.get(
+						    const distances = response["suggestions"].map(function(tempArticle) {
+						    	console.log(
+						    		Levenshtein.get(
+							    		response["received"].title,
+							    		tempArticle.title
+						    		),
 						    		response["received"].title,
-						    		response["suggestions"][i].title
+						    		tempArticle.title
 						    	);
-						    	console.log(distance,response["received"].title,
-						    		response["suggestions"][i].title);
-						    	if (!lowestDistance) {
-						    		lowestDistanceIndex = i;
-						    	} else if (lowestDistance > distance ) {
-						    		lowestDistanceIndex = i;
-						    	}
-						    }
+						    	return Levenshtein.get(
+						    		response["received"].title,
+						    		tempArticle.title
+						    	);
+						    });
+						    const lowestDistanceIndex = distances.reduce((iMax, x, i, arr) => x < arr[iMax] ? i : iMax, 0);
 							suggestion = response["suggestions"][lowestDistanceIndex];
 						    if (isAuto == "on") {
-						    	chrome.tabs.update(tabId, { url: suggestion.origin }, () => {
+						    	let nb_force = '?nb_force=true"';
+						    	if (suggestion.origin.indexOf('?') > -1) {
+						    		nb_force = "&nb_force=true";
+						    	}
+
+						    	chrome.tabs.update(tabId, { url: suggestion.origin + nb_force  }, () => {
 						    		if (showBanner == "on") {
 						    			showBanner = true;
 						    		}

@@ -5,7 +5,7 @@ body {
 #wrapper {
 	width: 850px;
 	margin: 0 auto;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 #wrapper p, label, span, a, h2, h3 {
@@ -39,7 +39,24 @@ body {
 	margin: 20px auto; 
 }
 
+.content #badArticleHint {
+	font-weight: normal;
+}
+
+.content #badArticleHint label {
+	font-weight: bold;
+}
+
+.content #clickedOnIcon {
+	height: 25px;
+	display: inline-block;
+	margin-top: -5px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
 .content #goodArticleBlock {
+	text-align: center;
 	background-color: #fff;
 	border: 1px solid rgb(220,220,220);
 	border-radius: 3px;
@@ -54,26 +71,27 @@ body {
 }
 
 .content #goodArticleBlockContent {
+	text-align: left;
 	margin-top: 25px;
 }
 
 .content #goodArticleHint {
 	width:100%;
-	text-align: left;
-	border-bottom: 1px solid rgb(220,220,220);
+	text-align: center;
+	border-bottom: 2px solid rgb(220,220,220);
 	line-height:0.1em;
-	margin:10px 0 25px;
+	margin:20px 0;
 }
 
 
 .content #goodArticleHint span {
 	background:#fff;
-	padding-right: 10px;
+	padding: 0 10px;
 	color: rgb(150,150,150);
 	font-size: 14px;
 }
 
-.content #goodArticleLink {
+.content .goodArticleLink {
 	font-size: 24px;
 	text-decoration: none;
 	font-family: Helvetica;
@@ -81,7 +99,7 @@ body {
 
 .content #goodArticleImage {
 	width: 100%;
-	height: 200px;
+	height: 150px;
 	background-repeat: no-repeat;
 	background-size: 100% ;
 }
@@ -107,4 +125,80 @@ body {
 	vertical-align: top;
 	margin-top: 7px;
 	display: inline-block;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 25px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 21px;
+  width: 21px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #7c80d8;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #7c80d8;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.settingsOption {
+	padding-bottom: 10px;
+	border-bottom: 2px solid rgb(220,220,220);
+}
+.settingsText {
+	font-size: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.settingsValue {
+	display: inline-block;
+	vertical-align: middle;
 }
