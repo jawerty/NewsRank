@@ -19,6 +19,7 @@ const ArchiveArticles = () => {
 			articleCursor.pause();
 			i++;
 			delete article.content;
+			article.markModified('content');
 			article.save();
 			articleCursor.resume();
 		});
