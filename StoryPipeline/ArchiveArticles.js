@@ -18,7 +18,7 @@ const ArchiveArticles = () => {
 		articleCursor.on('data', (article) => {
 			articleCursor.pause();
 			i++;
-			article.content = undefined;
+			article.content = 'archived';
 			article.markModified('content');
 			article.save();
 			articleCursor.resume();
