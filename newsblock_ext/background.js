@@ -42,7 +42,11 @@ const sites_being_scrapped = [
 	'https://www.buzzfeednews.com/',
 	'http://thefederalist.com/',
 	'https://www.redstate.com/',
-	'https://www.nationalreview.com/'
+	'https://www.nationalreview.com/',
+	'http://www.activistpost.com/',
+	'http://www.dailymail.co.uk/ushome/index.html',
+	'https://www.dailystar.co.uk/news',
+	'https://www.drudgereport.com/'
 ];
 
 let urls_hit = [];

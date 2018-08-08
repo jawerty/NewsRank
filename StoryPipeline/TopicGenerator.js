@@ -212,7 +212,7 @@ const classifyAritcles = () => {
 		let date_range = 0;
 		for (let i = 0; i < dates.length; i++) {
 			if (dates[i] > date_range) {
-				date_range = dates[i] + (12*60*60*1000);
+				date_range = dates[i] + (6*60*60*1000);
 				date_groupings.push([dates[i]]);
 			} else if (dates[i] < date_range) {
 				date_groupings[date_groupings.length-1].push(dates[i]);
