@@ -24,6 +24,8 @@ router.get('/suggestArticle', function(req, res, next) {
 					return res.send({suggestions: null, error: "Article's credibility score is good: "+foundArticle.credibility.score})
 				} else if (lowMode && foundArticle.credibility && foundArticle.credibility.score >= 60) {
 					return res.send({suggestions: null, error: "Score is "+foundArticle.credibility.score+" blocked by Low Mode"})
+				} else if (!foundArticle.credibility) {
+					return res.send({suggestions: null, error: "This article does not have a credibility score"})
 				}
 				console.log("Found Article");
 				topicModel.aggregate([
