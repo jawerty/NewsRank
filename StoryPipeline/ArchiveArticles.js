@@ -5,7 +5,7 @@ const ArchiveArticles = () => {
 	let d = new Date();
 	const lastWeekTs = d.setDate(d.getDate() - 7);
 	d = new Date();
-	const twoDaysAgoTs = d.setDate(d.getDate() - 1);
+	const twoDaysAgoTs = d.setDate(d.getDate() - 2);
 	console.log("Removing articles before "+lastWeekTs);
 	articleModel.remove({date_scrapped: { $lt: lastWeekTs} }, () => {
 		console.log("Archiving articles before "+twoDaysAgoTs);
