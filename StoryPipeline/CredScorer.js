@@ -157,9 +157,16 @@ function CredScorer(articleMap, trackerList) {
 				const searchResults = $(".loop-wrap");
 				let searchIndex = 0;
 				if (publication_name == "New York Magazine"
-					|| publication_name.includes("Buzzfeed")) {
+					|| publication_name.includes("Buzzfeed")
+					|| publication_name == "ABC News"
+					|| publication_name == "NY Daily News") {
 					searchIndex = 1;
-				}
+				} else if (publication_name == "The Independent"
+					|| publication_name == "Daily Star"
+					|| publication_name == "The Federalist") {
+					searchIndex = 2
+				};
+
 				const pubLink = $(searchResults[searchIndex]).find(".loop-title a").attr("href");
 				if (pubLink) {
 					lib.getWebpage(pubLink, (err, pubPageBody) => {
@@ -332,6 +339,7 @@ function CredScorer(articleMap, trackerList) {
 	}
 
 	this.countReferences = (articleBody) => {
+		if (articleBody.length < 500) return 1; // if article wasnt fetched properly ignore soft references
 		const $ = cheerio.load(articleBody);
 
 		let references = $("p a").length // links in paragrahs
@@ -427,6 +435,8 @@ function CredScorer(articleMap, trackerList) {
 		   	  				siteName = "New York Daily News";
 		   	  			} else if (publicationDomain.indexOf("dailystar") > -1) {
 		   	  				siteName = "Daily Star";
+		   	  			} else if (publicationDomain.indexOf("dailymail") > -1) {
+		   	  				siteName = "Daily Mail";
 		   	  			}
 	   	  	
 		   	  			if (!siteName) {

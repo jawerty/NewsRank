@@ -20,9 +20,9 @@ router.get('/suggestArticle', function(req, res, next) {
 				if (articleURL.length/foundArticle.origin.length < .50) {
 					console.log("Article is in origin BUT is not similar enough")
 					return res.send({suggestions: null, error: "Article url is in found link BUT is not similar enough"});
-				} else if (foundArticle.credibility.score >= 80) {
+				} else if (foundArticle.credibility && foundArticle.credibility.score >= 80) {
 					return res.send({suggestions: null, error: "Article's credibility score is good: "+foundArticle.credibility.score})
-				} else if (lowMode && foundArticle.credibility.score >= 60) {
+				} else if (lowMode && foundArticle.credibility && foundArticle.credibility.score >= 60) {
 					return res.send({suggestions: null, error: "Score is "+foundArticle.credibility.score+" blocked by Low Mode"})
 				}
 				console.log("Found Article");
