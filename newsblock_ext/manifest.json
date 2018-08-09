@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Newsblock",
   "description": "Your recommender of credible news sources",
-  "version": "1.0",
+  "version": "1.02",
   "browser_action": {
     "default_popup": "popup.html"
   },
