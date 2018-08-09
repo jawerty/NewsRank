@@ -31,15 +31,7 @@ const Tokenizer = () => {
 		return weightedTokens
 	}
 
-	const articleModel = db.model('article');
-	const wordpos = new WordPOS({});
-
-	const TfIdf = natural.TfIdf;
-	const tfidf = new TfIdf();
-
-	let articleTokens = {};
-	let iterator = 0;
-
+	
 	// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
 	const articleCursor = articleModel.countDocuments({tokens: {$exists: false}}, (err, count) => {
 		if (count == 0) {
@@ -55,19 +47,25 @@ const Tokenizer = () => {
 		let amount = 0;
 		let x = 0;
 		async.each(iterationArray, (iteration, callback) => {
-			console.log("ok")
+			let articleTokens = {};
+			let iterator = 0;
+			let wordpos = new WordPOS({});
+			let TfIdf = natural.TfIdf;
+			let tfidf = new TfIdf();
+			console.log("ok");
+			let articleModel = db.model('article');
 			let articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip: amount, limit:500}).cursor();
 			articleCursor.on("data", (article) => {
 				x++;
 				// console.log(x);
 				articleCursor.pause() // run events as they are added to call stack
-				const $ = cheerio.load(article.content);
-				const allText = $("*").text();
+				let $ = cheerio.load(article.content);
+				let allText = $("*").text();
 
 				wordpos.getPOS(allText, (pos) => {
 					let tokens = [];
-					const nouns = pos.nouns;
-					const rest = pos.rest; // all non POS (usually real world indentifiers)
+					let nouns = pos.nouns;
+					let rest = pos.rest; // all non POS (usually real world indentifiers)
 					nouns.forEach((word) => {
 						tokens.push([word, "noun"]);
 					});
@@ -89,11 +87,11 @@ const Tokenizer = () => {
 				console.log("All documents have been added for tokenizing");
 
 				// meh
-				const articlesCount = Object.keys(articleTokens).length;
+				let articlesCount = Object.keys(articleTokens).length;
 				async.each(Object.keys(articleTokens), (index, topCallback) => {
-					const tokenWeights = {};
+					let tokenWeights = {};
 					async.each(articleTokens[index].tokens, (token, bottomCallback) => {
-						const weight = tfidf.tfidf(token[0], index);
+						let weight = tfidf.tfidf(token[0], index);
 						// if (articleTokens[index].article.title.includes("Israel"))
 						// 	console.log(
 						// 		articleTokens[index].article.title,
