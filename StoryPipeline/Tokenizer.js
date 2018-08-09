@@ -46,7 +46,7 @@ const Tokenizer = () => {
 		console.log("Iterations", iterations);
 		let amount = 0;
 		let x = 0;
-		async.series(iterationArray, (iteration, callback) => {
+		async.eachSeries(iterationArray, (iteration, callback) => {
 			let articleTokens = {};
 			let iterator = 0;
 			let wordpos = new WordPOS({});
