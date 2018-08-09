@@ -120,4 +120,7 @@ router.get('/suggestArticle', function(req, res, next) {
 	})
 });
 
+router.get('/', function (req, res, next) {
+	res.render('home', {title: "Newsblock"});
+});
 module.exports = router;
