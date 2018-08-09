@@ -1,3 +1,11 @@
+let service = analytics.getService('Newsblock');
+let tracker = service.getTracker('UA-38539483-3');
+tracker.sendAppView('MainView');
+
+let SUGGESTION = analytics.EventBuilder.builder()
+    .category('SUGGESTIONS')
+    .action('Attempt');
+
 const sites_being_scrapped = [
 	'http://nytimes.com',
 	'http://buzzfeed.com/news',
@@ -111,6 +119,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 					        if (!response["suggestions"]) {
 								return;
 					        }
+					        tracker.send(SUGGESTION.label('Made'));
 					        // if (urls_hit.length >= 25) {
 					        // 	urls_hit.shift();
 					        // }
@@ -183,9 +192,9 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 						if (hasLowMode == "on") {
 							options += "&lowMode=true";
 						}
-						xhr.open("GET", "http://206.189.206.71:8080/suggestArticle?url="+parsedUrl+options, false);
+						xhr.open("GET", "http://newsblock.co/suggestArticle?url="+parsedUrl+options, false);
 						xhr.send();
-
+						tracker.send(SUGGESTION.label('Try'));
 						const result = xhr.responseText;
 						
 						

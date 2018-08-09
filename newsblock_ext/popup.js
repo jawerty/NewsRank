@@ -1,3 +1,16 @@
+let service = analytics.getService('Newsblock');
+
+let tracker = service.getTracker('UA-38539483-3');
+tracker.sendAppView('MainView');
+
+let INFO_CLICKED = analytics.EventBuilder.builder()
+    .category('INFO')
+    .action('Clicked');
+
+let SETTINGS_CLICKED = analytics.EventBuilder.builder()
+    .category('SETTINGS')
+    .action('Clicked');
+
 $(document).ready(function() {
 	chrome.storage.sync.get(null, function(items) {
 		console.log(items);
@@ -21,6 +34,7 @@ $(document).ready(function() {
 					chrome.storage.sync.set(sliderSet);
 				}
 				option.toggleClass("on");
+				tracker.send(SETTINGS_CLICKED.label(sliderName));
 			});
 		});
 		
@@ -41,5 +55,6 @@ $(document).ready(function() {
 		$(this).toggleClass('clicked');
 		$('.info-body').slideToggle(250);
 		$('.icon-circle-down').toggleClass('rotate');
+		tracker.send(INFO_CLICKED.label('header'));
 	});
 });
