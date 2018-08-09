@@ -38,7 +38,7 @@ const Tokenizer = () => {
 			return;
 		}
 		console.log("Count", count);
-		const iterations = Math.floor(count / 500);
+		const iterations = Math.ceil(count / 500);
 		let iterationArray = [];
 		for (let i = 0; i < iterations; i++) {
 			iterationArray.push(i);
@@ -52,7 +52,6 @@ const Tokenizer = () => {
 			let wordpos = new WordPOS({});
 			let TfIdf = natural.TfIdf;
 			let tfidf = new TfIdf();
-			console.log("ok");
 			
 			let articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip: amount, limit:500}).cursor();
 			articleCursor.on("data", (article) => {
