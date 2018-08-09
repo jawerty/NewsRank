@@ -31,7 +31,7 @@ const Tokenizer = () => {
 		return weightedTokens
 	}
 
-	
+	let articleModel = db.model('article');
 	// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
 	const articleCursor = articleModel.countDocuments({tokens: {$exists: false}}, (err, count) => {
 		if (count == 0) {
@@ -53,7 +53,7 @@ const Tokenizer = () => {
 			let TfIdf = natural.TfIdf;
 			let tfidf = new TfIdf();
 			console.log("ok");
-			let articleModel = db.model('article');
+			
 			let articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip: amount, limit:500}).cursor();
 			articleCursor.on("data", (article) => {
 				x++;
