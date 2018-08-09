@@ -41,20 +41,24 @@ const Tokenizer = () => {
 	let iterator = 0;
 
 	// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
-	const articleCursor = articleModel.count({tokens: {$exists: false}}, (err, count) => {
+	const articleCursor = articleModel.countDocuments({tokens: {$exists: false}}, (err, count) => {
 		if (count == 0) {
 			return;
 		}
-
+		console.log("Count", count);
 		const iterations = Math.floor(count / 500);
 		let iterationArray = [];
 		for (let i = 0; i < iterations; i++) {
 			iterationArray.push(i);
 		}
+		console.log("Iterations", iterations);
 		let amount = 0;
+		let x = 0;
 		async.each(iterationArray, (iteration, callback) => {
 			const articleCursor = articleModel.find({tokens: {$exists: false}}).skip(amount).limit(500).cursor();
 			articleCursor.on("data", (article) => {
+				x++;
+				// console.log(x);
 				articleCursor.pause() // run events as they are added to call stack
 				const $ = cheerio.load(article.content);
 				const allText = $("*").text();
@@ -70,7 +74,7 @@ const Tokenizer = () => {
 						tokens.push([word, "rest"]);
 					});
 					tfidf.addDocument(allText.toLowerCase());
-					console.log("Adding document "+article.title);
+					// console.log("Adding document "+article.title);
 					articleTokens[iterator] = {
 						article,
 						tokens
