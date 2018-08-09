@@ -1,6 +1,5 @@
 let service = analytics.getService('Newsblock');
 let tracker = service.getTracker('UA-38539483-3');
-tracker.sendAppView('MainView');
 
 let SUGGESTION = analytics.EventBuilder.builder()
     .category('SUGGESTIONS')
