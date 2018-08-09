@@ -74,7 +74,7 @@ const Tokenizer = () => {
 						tokens.push([word, "rest"]);
 					});
 					tfidf.addDocument(allText.toLowerCase());
-					// console.log("Adding document "+article.title);
+					console.log("Adding document "+article.title);
 					articleTokens[iterator] = {
 						article,
 						tokens
