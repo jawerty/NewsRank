@@ -55,7 +55,7 @@ const Tokenizer = () => {
 		let amount = 0;
 		let x = 0;
 		async.each(iterationArray, (iteration, callback) => {
-			const articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip, limit:500}).cursor();
+			const articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip: amount, limit:500}).cursor();
 			articleCursor.on("data", (article) => {
 				x++;
 				// console.log(x);
