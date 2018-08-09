@@ -38,7 +38,7 @@ const Tokenizer = () => {
 			return;
 		}
 		console.log("Count", count);
-		const iterations = Math.floor(count / 500);
+		const iterations = Math.ceil(count / 500);
 		let iterationArray = [];
 		for (let i = 0; i < iterations; i++) {
 			iterationArray.push(i);
