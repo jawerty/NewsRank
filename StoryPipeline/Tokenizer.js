@@ -38,7 +38,8 @@ const Tokenizer = () => {
 			return;
 		}
 		console.log("Count", count);
-		const iterations = Math.ceil(count / 500);
+		const groupSize = 500;
+		const iterations = Math.ceil(count / groupSize);
 		let iterationArray = [];
 		for (let i = 0; i < iterations; i++) {
 			iterationArray.push(i);
@@ -58,7 +59,7 @@ const Tokenizer = () => {
 					{ tokens: {$size: 0} },
 					{ tokens: {$exists: false} }
 				]
-			}, {}, {skip: amount, limit:500}).cursor();
+			}, {}, {skip: amount, limit:groupSize}).cursor();
 			articleCursor.on("data", (article) => {
 				x++;
 				// console.log(x);
@@ -97,11 +98,11 @@ const Tokenizer = () => {
 					async.each(articleTokens[index].tokens, (token, bottomCallback) => {
 						let weight = tfidf.tfidf(token[0], index);
 						// if (articleTokens[index].article.title.includes("Israel"))
-						// 	console.log(
-						// 		articleTokens[index].article.title,
-						// 		token,
-						// 		weight
-						// 	);
+							console.log(
+								articleTokens[index].article.title,
+								token,
+								weight
+							);
 
 						if (weight > 70 && token[1] == "noun") tokenWeights[token[0]] = weight
 						else if (weight > 30 && token[1] == "rest") tokenWeights[token[0]] = weight
@@ -117,7 +118,7 @@ const Tokenizer = () => {
 					})
 					
 				}, (err) => {
-					amount += 500;
+					amount += groupSize;
 					if (amount > count) {
 						amount = count;
 					}
