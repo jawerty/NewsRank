@@ -120,9 +120,9 @@ const Tokenizer = () => {
 					}, (err) => {
 						let weightedTokens = genWeightedTokens(tokenWeights);
 						weightedTokens = weightedTokens.map((token) => token.toLowerCase());
-						if (articleTokens[index].article.title == "Turkish Lira Drops as Political Turmoil Takes its Toll") {
-							console.log(weightedTokens);
-						}
+						// if (articleTokens[index].article.title == "Turkish Lira Drops as Political Turmoil Takes its Toll") {
+						console.log(weightedTokens);
+						// }
 						articleTokens[index].article.tokens = weightedTokens;
 						articleTokens[index].article.markModified("tokens");
 						articleTokens[index].article.save();
