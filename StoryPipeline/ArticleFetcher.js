@@ -56,6 +56,9 @@ db.connection.on("open",function(err) {
                 console.log(err);
                 return resolve(false);
               };
+              if (articleURL.includes('thehill')) {
+                fs.writeFileSync('thehill.json', body + '\n\n\n--article--\n\n\n' + article.content)
+              }
               if (article.title && article.content) {
                 if (article.title.split(" ").length < 3) {
                   console.log("Title too short", article.title);
