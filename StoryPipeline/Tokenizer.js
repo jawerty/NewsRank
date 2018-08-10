@@ -33,6 +33,9 @@ const Tokenizer = () => {
 
 	let articleModel = db.model('article');
 	// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
+	const d = new Date();
+	d.setDate(d.getDate()-2); // two days ago
+	const yesterday = d.getTime();
 	const articleCursor = articleModel.countDocuments({
 				$and: [
 					{ 
@@ -57,10 +60,7 @@ const Tokenizer = () => {
 		console.log("Iterations", iterations);
 		let amount = 0;
 		let x = 0;
-		const d = new Date();
-		d.setDate(d.getDate()-2); // two days ago
-		const yesterday = d.getTime();
-
+		
 		async.eachSeries(iterationArray, (iteration, callback) => {
 			let articleTokens = {};
 			let iterator = 0;
