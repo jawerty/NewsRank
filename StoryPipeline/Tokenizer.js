@@ -47,6 +47,9 @@ const Tokenizer = () => {
 		console.log("Iterations", iterations);
 		let amount = 0;
 		let x = 0;
+		const d = new Date();
+		d.setDate(d.getDate()-2); // two days ago
+		const yesterday = d.getTime();
 		async.eachSeries(iterationArray, (iteration, callback) => {
 			let articleTokens = {};
 			let iterator = 0;
@@ -54,10 +57,15 @@ const Tokenizer = () => {
 			let TfIdf = natural.TfIdf;
 			let tfidf = new TfIdf();
 			
-			let articleCursor = articleModel.find({ 
-				$or: [
-					{ tokens: {$size: 0} },
-					{ tokens: {$exists: false} }
+			let articleCursor = articleModel.find({
+				$and: [
+					{ 
+						$or: [
+							{ tokens: {$size: 0} },
+							{ tokens: {$exists: false} }
+						]
+					},
+					{ date_scrapped: { $gt: yesterday} }
 				]
 			}, {}, {skip: amount, limit:groupSize}).cursor();
 			articleCursor.on("data", (article) => {
