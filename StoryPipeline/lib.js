@@ -32,7 +32,8 @@ const getWebpage = (source, callback) => {
       && !source.includes("thedailybeast")
       && !source.includes("bipartisanreport")
       && !source.includes("prisonplanet")
-      && !source.includes("redstate")) {
+      && !source.includes("redstate")
+      && !source.includes("theblaze")) {
       requestObj["headers"] = {
         'User-Agent': randUserAgent // daily beast was the first to make this necessary
       }
