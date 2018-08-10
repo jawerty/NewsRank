@@ -55,6 +55,6 @@ $(document).ready(function() {
 		$(this).toggleClass('clicked');
 		$('.info-body').slideToggle(250);
 		$('.icon-circle-down').toggleClass('rotate');
-		tracker.send(INFO_CLICKED.label('header'));
+		tracker.send(INFO_CLICKED.label('info-header'));
 	});
 });

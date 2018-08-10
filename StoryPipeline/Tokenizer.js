@@ -53,7 +53,12 @@ const Tokenizer = () => {
 			let TfIdf = natural.TfIdf;
 			let tfidf = new TfIdf();
 			
-			let articleCursor = articleModel.find({tokens: {$exists: false}}, {}, {skip: amount, limit:500}).cursor();
+			let articleCursor = articleModel.find({ 
+				$or: [
+					{ tokens: {$size: 0} },
+					{ tokens: {$exists: false} }
+				]
+			}, {}, {skip: amount, limit:500}).cursor();
 			articleCursor.on("data", (article) => {
 				x++;
 				// console.log(x);
@@ -116,7 +121,7 @@ const Tokenizer = () => {
 					if (amount > count) {
 						amount = count;
 					}
-				    console.log("Processed "+amount+" out of "+count);
+				    conso le.log("Processed "+amount+" out of "+count);
 				    callback();
 				});
 			});
