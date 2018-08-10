@@ -122,7 +122,7 @@ const Tokenizer = () => {
 					if (amount > count) {
 						amount = count;
 					}
-				    conso le.log("Processed "+amount+" out of "+count);
+				    console.log("Processed "+amount+" out of "+count);
 				    callback();
 				});
 			});
