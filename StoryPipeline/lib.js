@@ -40,7 +40,9 @@ const getWebpage = (source, callback) => {
     if (source == "javascript:void(0);") return callback();
     try {
 		request(requestObj, (error, response, body) => {
-			
+			 if (source.includes("thehill")) { 
+        console.log(body, error, response);
+       }
 	      if (error) {
 	        callback(error, null);
 	      } else if (response.statusCode != 200 && response.statusCode != 302) {
