@@ -106,11 +106,11 @@ const Tokenizer = () => {
 					async.each(articleTokens[index].tokens, (token, bottomCallback) => {
 						let weight = tfidf.tfidf(token[0], index);
 						// if (articleTokens[index].article.title.includes("Israel"))
-							console.log(
-								articleTokens[index].article.title,
-								token,
-								weight
-							);
+							// console.log(
+							// 	articleTokens[index].article.title,
+							// 	token,
+							// 	weight
+							// );
 
 						if (weight > 70 && token[1] == "noun") tokenWeights[token[0]] = weight
 						else if (weight > 30 && token[1] == "rest") tokenWeights[token[0]] = weight
