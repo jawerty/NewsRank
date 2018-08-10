@@ -33,7 +33,17 @@ const Tokenizer = () => {
 
 	let articleModel = db.model('article');
 	// group dates by day [[timestamp, timestamp], [timestamp, timestamp]];
-	const articleCursor = articleModel.countDocuments({tokens: {$exists: false}}, (err, count) => {
+	const articleCursor = articleModel.countDocuments({
+				$and: [
+					{ 
+						$or: [
+							{ tokens: {$size: 0} },
+							{ tokens: {$exists: false} }
+						]
+					},
+					{ date_scrapped: { $gt: yesterday} }
+				]
+		}, (err, count) => {
 		if (count == 0) {
 			return;
 		}
