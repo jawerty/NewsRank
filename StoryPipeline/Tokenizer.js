@@ -50,13 +50,14 @@ const Tokenizer = () => {
 		const d = new Date();
 		d.setDate(d.getDate()-2); // two days ago
 		const yesterday = d.getTime();
+
 		async.eachSeries(iterationArray, (iteration, callback) => {
 			let articleTokens = {};
 			let iterator = 0;
 			let wordpos = new WordPOS({});
 			let TfIdf = natural.TfIdf;
 			let tfidf = new TfIdf();
-			
+			console.log(yesterday);
 			let articleCursor = articleModel.find({
 				$and: [
 					{ 
