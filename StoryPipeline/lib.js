@@ -19,8 +19,7 @@ const getWebpage = (source, callback) => {
     const requestObj = {
       url: source,
       method: 'GET',
-      timeout: 300000,
-      jar: true // remember cookies in redirects (made for washington post)
+      timeout: 300000, // remember cookies in redirects (made for washington post)
     };
 
     if (source.includes("thehill")) { // and to any site returning binary zip data (thehill)
@@ -38,6 +37,11 @@ const getWebpage = (source, callback) => {
         'User-Agent': randUserAgent // daily beast was the first to make this necessary
       }
     }
+
+    if (!source.includes("theblaze")) {
+      requestObj['jar'] = true;
+    }
+    
     if (source == "javascript:void(0);") return callback();
     try {
 		request(requestObj, (error, response, body) => {
