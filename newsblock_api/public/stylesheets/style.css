@@ -4,6 +4,7 @@ html, body {
 body {
   padding: 0;
   margin: 0;
+  width: 100%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -41,7 +42,17 @@ a {
     	opacity: 1;
     }
 }
-#home {
+
+@keyframes fadehover {
+    from {
+    	opacity: 1;
+    }
+    to {
+    	opacity: .7;
+    }
+}
+
+#top-content {
 	box-sizing: border-box;
 	/* #7c80d8 */
 	background: rgb(61,66,170);
@@ -51,7 +62,7 @@ a {
     align-items: center;
 	text-align: center;
 }
-#home h1 {
+#top-content h1 {
 	color: #fff;
 	font-weight: 700;
 	font-family: 'Nunito', sans-serif;
@@ -61,26 +72,30 @@ a {
 	text-align: center;
 	margin: 0;
 	animation-name: lettercondense;
-    animation-duration: .7s;
+    animation-duration: .8s;
+    user-select: none;
 }
 
-#home p {
+#top-content p {
 	color: #fff;
 	font-weight: normal;
 	font-family: 'Work Sans', sans-serif;
 	font-size: 18px;
 	margin-top: 20px;
 	animation-name: fadeup;
-    animation-duration: .7s;
+    animation-duration: .8s;
 }
 
-#home .marketing-content {
+#top-content .marketing-content {
 	width: 600px;
 	margin: 0 auto;
-	margin-top: -10%;
+	/*margin-top: 0%;*/
 }
 
-#home .marketing-content .download-button {
+#top-content .marketing-content > a {
+	text-decoration: none; 
+}
+#top-content .marketing-content .download-button {
 	text-transform: uppercase;
 	display: block;
 	padding: 20px 20px;
@@ -100,9 +115,136 @@ a {
     background-repeat: no-repeat;
     background-size: 40px 40px;
     background-position: 14px 13px;
+	/*animation-name: fadein;*/
+    /*animation-duration: .8s;*/
+    opacity: 1;
+}
+
+#top-content .marketing-content .download-button:hover {
+	animation-name: fadehover;
+    animation-duration: .8s;
+
+}
+
+#top-content .marketing-content .how-this-works-link {
+	display: block;
+	color: #fff;
+	font-family: 'Work Sans', sans-serif;
+	font-size: 22px;
+	width: fit-content;
+	margin-top: 20%;
+	margin-left: auto;
+	margin-right: auto;
 	animation-name: fadein;
-    animation-duration: .7s;
+    animation-duration: .8s;
+    cursor: pointer;
+}
+#top-content .marketing-content .how-this-works-link * {
+	cursor: pointer;
+}
+
+#top-content .marketing-content .how-this-works-link:hover {
+	opacity: .7;
+}
+
+#top-content .marketing-content .how-this-works-arrow {
+	background-image: url(../images/down-arrow-white.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	display: block;
+	margin: 0 auto;
+	width: 50px;
+	height: 50px;
+	margin-top: 10px;
+}
+
+.info-row {
+	width: 100%;
+	display: block;
+	box-sizing: border-box;
+}
+
+.info-content {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.info-content .left, .info-content .right {
+	vertical-align: top;
+	padding-top: 60px;
+	padding-bottom: 40px;
+	display: inline-block;
+	box-sizing: border-box;
+	width: 50%;
+}
+
+.info-content .left {
+	padding-left: 70px;
+}
+
+.info-content .right {
+	padding-right: 70px;
+}
+
+.info-content .info-title {
+	color: rgb(50,50,50);
+	font-family: 'Nunito', sans-serif;
+	font-size: 32px;
+	margin:0;
+}
+
+.info-content ol {
+	padding-left: 0;
+	list-style: none;
+	counter-reset: item;
+}
+.info-content ol > li {
+	counter-increment: item;
+	margin-bottom: 5px;
+}
+.info-content ol > li:before {
+	content: counter(item)'.';
+	font-family: 'Work Sans', sans-serif;
+	width: 1.2em;
+	font-size: 22px;
+	text-align: center;
+	display: inline-block;
+}
+.info-content .info-body * {
+	color: rgb(50,50,50);
+	font-size: 16px;
+	font-family: 'Work Sans', sans-serif;
+}
+
+.info-content .info-body ol > li {
+	margin-bottom: 15px;
+} 
+.info-content .info-body li label{
+	font-size: 22px;
+}
+.info-content .info-body li ul {
+	margin-top: 10px;
+	list-style-type: square;
+}
+
+.info-content .image-container {
+	text-align: center;
+}
+.info-content .screenshot {
+	width: 400px;
+	border-radius: 5px;
 }
 #footer {
 
+}
+
+
+@media only screen and (max-width: 600px) {
+	/*#home {
+		padding: 20px;
+		box-sizing: border-box;
+	}
+	#home .marketing-content {
+		margin-top: -20px;
+	}*/
 }

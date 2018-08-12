@@ -191,7 +191,7 @@ chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 						if (hasLowMode == "on") {
 							options += "&lowMode=true";
 						}
-						xhr.open("GET", "http://newsblock.co/suggestArticle?url="+parsedUrl+options, false);
+						xhr.open("GET", "https://newsblock.co/suggestArticle?url="+parsedUrl+options, false);
 						xhr.send();
 						tracker.send(SUGGESTION.label('Try'));
 						const result = xhr.responseText;

@@ -5,11 +5,13 @@
   </head>
   <body>
     <%- include('partials/header') %>
-    <div id="home">
+    <div id="top-content">
       <div class="marketing-content">
-        <h1>
-          <%= title %>
-        </h1>
+        <a href="https://chrome.google.com/webstore/detail/pkhdmfigkmhboekijlapffdjbdhhmmbg">
+          <h1>
+            <%= title %>
+          </h1>
+        </a>
         <p>
           Your recommender of credible news sources 
           <br />
@@ -19,6 +21,40 @@
         <a href="https://chrome.google.com/webstore/detail/pkhdmfigkmhboekijlapffdjbdhhmmbg" class="download-button">
           Download on Chrome
         </a>
+        <a href="#how-this-works" class="how-this-works-link">
+          <label>How this works</label>
+          <div class="how-this-works-arrow"></div>
+        </a>
+      </div>
+    </div>
+    <div class="info-content">
+      <div class="info-row">
+        <div class="left">
+          <h2 class="info-title" id="how-this-works">How this works</h2>
+          <div class="info-body">
+            <ol>
+              <li>
+                <label>Click on a news article</label>
+                <ul>
+                  <li>As your browsing the web Newsblock checks to see if the website you click has been indexed by our credibility algorithms</li>
+                  <li><b>Note</b> - we do not store any of your search history/cookies or personal information</li>
+                </ul>
+              </li>
+              <li>
+                <label>Get recommended an article</label>
+                <ul>
+                  <li>If the article you clicked on was of low credibility you will be recommended a higher ranked article about the same topic</li>
+                  <li><b>Note</b> - if you do not want to see the recommended warning page, turn on the 'Auto' setting</li>
+                </ul>
+              </li>
+              <li>
+                <label>Support quality news</label>
+              </li>
+            </ol>
+          </div>
+        </div><div class="right image-container">
+          <img src="/images/screenshot_1.png" class="screenshot"></img>
+        </div>
       </div>
     </div>
     <%- include('partials/footer') %>

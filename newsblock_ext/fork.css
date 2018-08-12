@@ -48,7 +48,8 @@ body {
 	font-weight: normal;
 }
 
-.content #badArticleHint label {
+.content #badArticleHint a {
+	text-decoration: none;
 	font-weight: bold;
 }
 

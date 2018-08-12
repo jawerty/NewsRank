@@ -43,6 +43,12 @@ chrome.runtime.onMessage.addListener( (request, sender, sendResponse) => {
         const clickedOnIcon = document.getElementById('clickedOnIcon');
 
     	badArticleTitle.innerHTML = "\""+data.badArticle.title+"\"";
+        if (data.badArticle.origin.indexOf('?') > -1) {
+            data.badArticle.origin = data.badArticle.origin+"&nb_force=true"
+        } else {
+            data.badArticle.origin = data.badArticle.origin+"?nb_force=true"
+        }
+        badArticleTitle.setAttribute('href', data.badArticle.origin);
     	badArticlePub.innerHTML = data.badArticle.publicationName;
         const credGrouping = getCredGrouping(data.badArticle.credibility.score);
     	badArticleCredGroup.innerHTML = credGrouping.name;

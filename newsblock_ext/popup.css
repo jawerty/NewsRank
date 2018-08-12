@@ -14,6 +14,15 @@ body {
   background: #fff;
 }
 
+#logo {
+  width: 30px;
+  height: 30px;
+  display: inline;
+  vertical-align: middle;
+  margin-right: 8px;
+  margin-bottom: 4px;
+}
+
 .icon {
   display: inline-block;
   width: 1em;
@@ -29,6 +38,8 @@ h1 {
   font-family: 'Nunito', sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 p, label, span, div {
@@ -62,6 +73,15 @@ p, label, span, div {
   margin-top: 10px;
   padding-bottom: 20px;
   clear: both;
+}
+
+.info-hint {
+  color: rgb(150,150,150);
+  display: inline;
+  margin:0;
+  padding:0;
+  font-size: 12px;
+
 }
 
 .info-header {
