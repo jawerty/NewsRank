@@ -123,10 +123,10 @@ const Tokenizer = () => {
 							);
 						// }
 							
-						console.log(articlesCount);
+						// console.log(articlesCount);
 						weightThreshold = (articlesCount/12);
 						if (weight > weightThreshold && token[1] == "noun") tokenWeights[token[0]] = weight
-						else if (weight > (weightThreshold + 10) && token[1] == "rest") tokenWeights[token[0]] = weight
+						else if (weight > (weightThreshold + 5) && token[1] == "rest") tokenWeights[token[0]] = weight
 						bottomCallback();
 					}, (err) => {
 						let weightedTokens = genWeightedTokens(tokenWeights);
