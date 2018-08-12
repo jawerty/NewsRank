@@ -5,6 +5,7 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
+  min-width: 800px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -107,7 +108,9 @@ a {
 	border-radius: 5px;
 	text-decoration: none;
 	font-size: 22px;
-	width: fit-content;
+	width: intrinsic;           /* Safari/WebKit uses a non-standard name */
+	width: -moz-max-content;    /* Firefox/Gecko */
+	width: -webkit-max-content; /* Chrome */
     box-sizing: border-box;
     margin: 0 auto;
     margin-top: 30px;
@@ -247,6 +250,41 @@ a {
 }
 
 @media only screen and (max-width: 600px) {
+	body {
+		min-width: unset;
+		width: 100%;
+		min-width: 100%;
+	}
+	#top-content {
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	#top-content .marketing-content {
+		width: 60%;
+		margin: 0 auto;
+	}
+	#top-content h1 {
+		font-size: 36px;
+	}
+	#top-content p {
+		font-size: 16px;
+	}
+	#top-content .download-button {
+		background-position: 8% 50%  !important;
+		font-size: 16px !important;
+	}
+	.info-content .left,
+	.info-content .right {
+		width: 100%;
+		display: block;
+		padding: 20px 40px;
+	}
+
+	.info-content .screenshot{
+		width: 100%;
+		pad
+	}
 	/*#home {
 		padding: 20px;
 		box-sizing: border-box;
