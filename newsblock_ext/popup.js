@@ -13,6 +13,29 @@ let SETTINGS_CLICKED = analytics.EventBuilder.builder()
 
 $(document).ready(function() {
 	chrome.storage.sync.get(null, function(items) {
+		let doOnboarding = true;
+		if ('end_onboarding' in items) {
+			doOnboarding = false;
+		} else {
+			if ('onboarding_iterator' in items) {
+				items['onboarding_iterator'] = parseInt(items['onboarding_iterator']) + 1;
+				let setOnboarding = {
+					onboarding_iterator: items['onboarding_iterator']
+				};
+				if (items['onboarding_iterator'] >= 5) {	
+					setOnboarding['end_onboarding']	= true;			
+				}
+				chrome.storage.sync.set(setOnboarding);
+			} else {
+				chrome.storage.sync.set({
+					onboarding_iterator: 1
+				});
+			}	
+		}
+
+		if (doOnboarding) {
+			$('.settingsHint').after("<p>Oboarding</p>");
+		}
 		console.log(items);
 		const sliders = ['auto', 'banner', 'disable', 'low'];
 		sliders.forEach((sliderName) => {

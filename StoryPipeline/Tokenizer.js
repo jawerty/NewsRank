@@ -125,8 +125,8 @@ const Tokenizer = () => {
 						// }
 							
 
-						if (weight > 20 && token[1] == "noun") tokenWeights[token[0]] = weight
-						else if (weight > 20 && token[1] == "rest") tokenWeights[token[0]] = weight
+						if (weight > 25 && token[1] == "noun") tokenWeights[token[0]] = weight
+						else if (weight > 25 && token[1] == "rest") tokenWeights[token[0]] = weight
 						bottomCallback();
 					}, (err) => {
 						let weightedTokens = genWeightedTokens(tokenWeights);
