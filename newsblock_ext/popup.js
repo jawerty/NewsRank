@@ -34,7 +34,7 @@ $(document).ready(function() {
 		}
 
 		if (doOnboarding) {
-			$('.settingsHint').after("<p>Oboarding</p>");
+			$('.settingsHint').after("<p>Click to see Newsblock in action? <br /><a target=\"_blank\" href=\"https://www.politico.com/magazine/story/2018/08/12/charlottesville-anniversary-supremacists-protests-dc-virginia-219353\">\"What Charlottesville Changed\" From Politico</a></p>");
 		}
 		console.log(items);
 		const sliders = ['auto', 'banner', 'disable', 'low'];

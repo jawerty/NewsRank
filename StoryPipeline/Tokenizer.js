@@ -117,11 +117,11 @@ const Tokenizer = () => {
 					async.each(articleTokens[index].tokens, (token, bottomCallback) => {
 						let weight = tfidf.tfidf(token[0], index);
 						// if (articleTokens[index].article.title == "Turkish Lira Drops as Political Turmoil Takes its Toll") {
-							// console.log(
-							// 	articleTokens[index].article.title,
-							// 	token,
-							// 	weight
-							// );
+							console.log(
+								articleTokens[index].article.title,
+								token,
+								weight
+							);
 						// }
 							
 
