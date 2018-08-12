@@ -110,7 +110,6 @@ const Tokenizer = () => {
 			articleCursor.on('end', () => { 
 				console.log("All documents have been added for tokenizing");
 
-				// meh
 				let articlesCount = Object.keys(articleTokens).length;
 				async.each(Object.keys(articleTokens), (index, topCallback) => {
 					let tokenWeights = {};
@@ -123,10 +122,11 @@ const Tokenizer = () => {
 								weight
 							);
 						// }
-						
-
-						if (weight > 20 && token[1] == "noun") tokenWeights[token[0]] = weight
-						else if (weight > 25 && token[1] == "rest") tokenWeights[token[0]] = weight
+							
+						console.log(articlesCount);
+						weightThreshold = (articlesCount/12);
+						if (weight > weightThreshold && token[1] == "noun") tokenWeights[token[0]] = weight
+						else if (weight > (weightThreshold + 10) && token[1] == "rest") tokenWeights[token[0]] = weight
 						bottomCallback();
 					}, (err) => {
 						let weightedTokens = genWeightedTokens(tokenWeights);
