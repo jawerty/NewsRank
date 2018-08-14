@@ -375,8 +375,13 @@ a {
 
 	.info-content .screenshot{
 		width: 100%;
-		pad
 	}
+
+	.info-content .rating-info {
+		display: flex ;
+		flex-direction: column-reverse;
+	}
+
 	/*#home {
 		padding: 20px;
 		box-sizing: border-box;
