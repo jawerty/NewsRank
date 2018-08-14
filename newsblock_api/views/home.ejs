@@ -92,8 +92,8 @@
               <th>Rating</th>
             </tr>
             <% rankings.forEach(function(ranking) { %>
-              <tr>
-                  <td class="publication"><%= ranking['_id'] %></td>
+              <tr style="background-color: <%= ranking['color'] %>;">
+                  <td class="publication" ><%= ranking['_id'] %></td>
                   <td class="rating"><%= ranking['overallRating'] %>%</td>
               </tr>
             <% }); %>
