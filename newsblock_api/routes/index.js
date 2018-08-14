@@ -122,13 +122,14 @@ router.get('/suggestArticle', function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-	fs.readFile(path.resolve('./../config/ranking.json'), (err, data) => {
+	fs.readFile(path.resolve('./../config/rankings.json'), (err, data) => {
 		if (err) console.log(err);
-		let ratings = [];
+		let rankings = [];
 		if (data) {
-			ratings = JSON.parse(data);
+			rankings = JSON.parse(data);
 		}
-		res.render('home', {title: "Newsblock", ratings});
+		console.log(rankings);
+		res.render('home', {title: "Newsblock", rankings});
 	});
 });
 module.exports = router;

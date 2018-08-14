@@ -31,6 +31,7 @@ const getWebpage = (source, callback) => {
       && !source.includes("thedailybeast")
       && !source.includes("bipartisanreport")
       && !source.includes("prisonplanet")
+      && !source.includes("bloomberg")
       && !source.includes("redstate")
       && !source.includes("theblaze")) {
       requestObj["headers"] = {

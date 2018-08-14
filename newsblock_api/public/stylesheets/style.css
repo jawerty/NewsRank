@@ -189,6 +189,53 @@ a {
 	padding-right: 70px;
 }
 
+.info-content .right.rankings {
+	padding-left: 25px;
+}
+
+.info-content .right.rankings .info-title {
+	text-align: center;
+}
+.info-content .right.rankings table {
+	overflow-y:scroll;
+    height: 500px;
+    display: block;
+	margin: 0 auto;
+	margin-top: 25px;
+	border-collapse: collapse;
+	box-sizing: border-box;
+}
+.info-content .right.rankings tbody {
+	margin: 0 auto;
+	display: table;
+}
+.info-content .right.rankings table tr {
+}
+.info-content .right.rankings table td,
+.info-content .right.rankings table th {
+	padding: 10px;
+	border:1px solid rgb(150,150,150);
+	font-family: 'Work Sans', sans-serif;
+}
+
+.info-content .right.rankings table td {
+	font-size: 22px;
+}
+
+.info-content .right.rankings table th {
+	font-size: 22px;
+	font-weight: bolder;
+}
+
+.info-content .right.rankings .publication {
+	width: 80%;
+}
+
+.info-content .right.rankings .rating {
+	text-align: center;
+	width: 20%;
+}
+
 .info-content .info-title {
 	color: rgb(50,50,50);
 	font-family: 'Nunito', sans-serif;

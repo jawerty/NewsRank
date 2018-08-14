@@ -56,6 +56,50 @@
           <img src="/images/screenshot_1.png" class="screenshot"></img>
         </div>
       </div>
+      <div class="info-row">
+        <div class="left">
+          <h2 class="info-title">How Newsblock rates articles?</h2>
+          <div class="info-body">
+            <ol>
+              <li>
+                <label>Factual History and Bias</label>
+                <ul>
+                  <li>The publication's bias and factual record which we retrieve from <a target="_blank" href="https://mediabiasfactcheck.com/">Media Bias Fact Check</a></li>
+                  <li>History is the strongest factor taken in consideration when scoring an article</li>
+                </ul>
+              </li>
+              <li>
+                <label>Trackers</label>
+                <ul>
+                  <li>Scripts used to track your data</li>
+                  <li>We use the amount of trackers on an article page as a factor</li>
+                </ul>
+              </li>
+              <li>
+                <label>Soft references</label>
+                <ul>
+                  <li>Links and quotations found in the article</li>
+                  <li>This is a weaker factor in the scoring algorithm</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+        </div><div class="right rankings">
+          <h2 class="info-title" >Newsblock Rankings</h2>
+          <table>
+            <tr>
+              <th>Publication</th>
+              <th>Rating</th>
+            </tr>
+            <% rankings.forEach(function(ranking) { %>
+              <tr>
+                  <td class="publication"><%= ranking['_id'] %></td>
+                  <td class="rating"><%= ranking['overallRating'] %>%</td>
+              </tr>
+            <% }); %>
+          </table>
+        </div>
+      </div>
     </div>
     <script src="/javascripts/main.js"></script>
     <%- include('partials/footer') %>
