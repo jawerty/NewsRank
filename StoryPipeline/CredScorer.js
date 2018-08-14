@@ -156,6 +156,7 @@ function CredScorer(articleMap, trackerList) {
 				const $ = cheerio.load(body);
 				const searchResults = $(".loop-wrap");
 				let searchIndex = 0;
+				console.log(publication_name);
 				if (publication_name == "New York Magazine"
 					|| publication_name.includes("Buzzfeed")
 					|| publication_name == "ABC News"
