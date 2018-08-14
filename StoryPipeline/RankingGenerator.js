@@ -11,7 +11,8 @@ const pipeline = [
 	},
     {
     	'$sort': {
-    		'date_scrapped' : -1
+    		'date_scrapped': -1,
+    		'credibility.score': -1
     	}
     },
 	{
