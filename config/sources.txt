@@ -29,7 +29,7 @@ http://www.motherjones.com/
 http://time.com/
 https://www.wsj.com/
 https://www.yahoo.com/news/
-https://www.bloomberg.com/
+#https://www.bloomberg.com/
 https://www.aljazeera.com/topics/regions/us-canada.html
 http://www.nydailynews.com/
 #https://www.axios.com/
