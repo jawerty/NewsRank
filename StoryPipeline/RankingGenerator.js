@@ -29,7 +29,8 @@ articleModel.aggregate(pipeline, function(err, foundPublications) {
 
 	fs.writeFile('../config/rankings.json', JSON.stringify(foundPublications), (err) => {
 		if (err) throw err;
-		console.log('The file has been saved!');
+		console.log('Rankings have been generated');
+		process.exit(0);
 	});
 
 });
