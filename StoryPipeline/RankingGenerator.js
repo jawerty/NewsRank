@@ -12,7 +12,6 @@ const pipeline = [
     {
     	'$sort': {
     		'date_scrapped': -1,
-    		'credibility.score': -1
     	}
     },
 	{
@@ -22,7 +21,12 @@ const pipeline = [
 			'lastArticleLink': { $first: "$origin" },
 			'lastArticleTitle': { $first: "$title" }
 		}
-	}
+	},
+    {
+    	'$sort': {
+    		'overallRating': -1,
+    	}
+    }
 ];
 articleModel.aggregate(pipeline, function(err, foundPublications) {
 	foundPublications = foundPublications.filter(function(pub) {
@@ -32,6 +36,9 @@ articleModel.aggregate(pipeline, function(err, foundPublications) {
 		return true;
 	}).map(function(pub){
 		pub.overallRating = Math.ceil(pub.overallRating);
+		if (pub.overallRating < 0) {
+			pub.overallRating = 0;
+		}
 		return pub;
 	});
 
