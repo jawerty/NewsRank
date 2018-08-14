@@ -173,6 +173,9 @@ function CredScorer(articleMap, trackerList) {
 					lib.getWebpage(pubLink, (err, pubPageBody) => {
 						if (!err) {
 							const $$ = cheerio.load(pubPageBody);
+							if (publication_name.includes("Buzzfeed")) {
+								console.log(pubPageBody);
+							}
 							const biasText = $$(".content .entry-header h1").children().remove().end().text().trim();
 
 							const factRatingWrapper = $$("p:contains('Factual Reporting:')");
