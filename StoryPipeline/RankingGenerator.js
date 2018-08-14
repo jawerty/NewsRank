@@ -9,10 +9,17 @@ const pipeline = [
 			}
 		}
 	},
+    {
+    	'$sort': {
+    		'date_scrapped' : -1
+    	}
+    },
 	{
 		'$group': {
 			'_id': '$publicationName',
-			'overallRating': { '$avg': '$credibility.score' }
+			'overallRating': { '$avg': '$credibility.score' },
+			'lastArticleLink': { $first: "$origin" },
+			'lastArticleTitle': { $first: "$title" }
 		}
 	}
 ];
