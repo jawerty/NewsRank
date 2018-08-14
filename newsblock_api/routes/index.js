@@ -121,6 +121,22 @@ router.get('/suggestArticle', function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-	res.render('home', {title: "Newsblock"});
+	const pipeline = [{
+		'$match': {
+			'publicationName': {
+				'$exists': true
+			}
+		}
+	},
+	{
+		'$group': {
+			'_id': '$publicationName',
+			'overallRating': { '$avg': '$credibility.score' }
+		}
+	}]
+	articleModel.aggregate(pipeline, function(err, foundPublications) {
+		console.log(foundPublications);
+		res.render('home', {title: "Newsblock"});
+	})
 });
 module.exports = router;
