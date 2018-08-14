@@ -156,9 +156,9 @@ function CredScorer(articleMap, trackerList) {
 				let $ = cheerio.load(body);
 				let searchResults = $(".loop-wrap");
 				let searchIndex = 0;
-				console.log(publication_name);
+
 				if (publication_name == "New York Magazine"
-					|| publication_name.includes("Buzzfeed")
+					|| publication_name.includes("BuzzFeed")
 					|| publication_name == "ABC News"
 					|| publication_name == "NY Daily News") {
 					searchIndex = 1;
@@ -169,16 +169,10 @@ function CredScorer(articleMap, trackerList) {
 				};
 
 				let pubLink = $(searchResults[searchIndex]).find(".loop-title a").attr("href");
-				console.log(pubLink);
 				if (pubLink) {
 					lib.getWebpage(pubLink, (err, pubPageBody) => {
 						if (!err) {
 							const $$ = cheerio.load(pubPageBody);
-							if (publication_name.includes("Buzzfeed")) {
-								console.log(pubPageBody);
-							} else {
-								console.log(publication_name, "NO")
-							}
 							const biasText = $$(".content .entry-header h1").children().remove().end().text().trim();
 
 							const factRatingWrapper = $$("p:contains('Factual Reporting:')");
