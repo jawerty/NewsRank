@@ -382,6 +382,10 @@ a {
 		flex-direction: column-reverse;
 	}
 
+	.rankings table th,
+	.rankings table td {
+		font-size: 16px !important;
+	}
 	/*#home {
 		padding: 20px;
 		box-sizing: border-box;
