@@ -153,8 +153,8 @@ function CredScorer(articleMap, trackerList) {
 		const urlPubName = publication_name.split(" ").join("+");
 		lib.getWebpage(`https://mediabiasfactcheck.com/?s=${urlPubName}`, (err, body) => {
 			if (!err) {
-				const $ = cheerio.load(body);
-				const searchResults = $(".loop-wrap");
+				let $ = cheerio.load(body);
+				let searchResults = $(".loop-wrap");
 				let searchIndex = 0;
 				console.log(publication_name);
 				if (publication_name == "New York Magazine"
@@ -165,16 +165,19 @@ function CredScorer(articleMap, trackerList) {
 				} else if (publication_name == "The Independent"
 					|| publication_name == "Daily Star"
 					|| publication_name == "The Federalist") {
-					searchIndex = 2
+					searchIndex = 2;
 				};
 
-				const pubLink = $(searchResults[searchIndex]).find(".loop-title a").attr("href");
+				let pubLink = $(searchResults[searchIndex]).find(".loop-title a").attr("href");
+				console.log(pubLink);
 				if (pubLink) {
 					lib.getWebpage(pubLink, (err, pubPageBody) => {
 						if (!err) {
 							const $$ = cheerio.load(pubPageBody);
 							if (publication_name.includes("Buzzfeed")) {
 								console.log(pubPageBody);
+							} else {
+								console.log(publication_name, "NO")
 							}
 							const biasText = $$(".content .entry-header h1").children().remove().end().text().trim();
 
