@@ -5,7 +5,7 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
-  min-width: 800px;
+  min-width: 1000px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -51,6 +51,12 @@ a {
     to {
     	opacity: .7;
     }
+}
+.unset-table-value,
+.unset-table-value * {
+	display: block;
+	border: none !important;
+	text-align: left;
 }
 
 #top-content {
@@ -165,6 +171,9 @@ a {
 	width: 100%;
 	display: block;
 	box-sizing: border-box;
+	border-bottom: 1px solid rgb(200,200,200);
+	padding-bottom: 50px;
+	padding-top: 25px;
 }
 
 .info-content {
@@ -182,56 +191,65 @@ a {
 }
 
 .info-content .left {
-	padding-left: 70px;
+	padding-left: 100px;
+	padding-right: 50px;
 }
 
 .info-content .right {
-	padding-right: 70px;
+	padding-right: 100px;
 }
 
-.info-content .right.rankings {
-	padding-left: 25px;
+.info-content .left.rankings {
 }
 
-.info-content .right.rankings .info-title {
-	text-align: center;
+.info-content .left.rankings .info-title {
+	/*text-align: center;*/
 }
-.info-content .right.rankings table {
+.info-content .left.rankings table {
+	/*margin: 0 auto;*/
+	max-width: 480px;
 	overflow-y:scroll;
     height: 500px;
     display: block;
-	margin: 0 auto;
 	margin-top: 25px;
 	border-collapse: collapse;
 	box-sizing: border-box;
 }
-.info-content .right.rankings tbody {
-	margin: 0 auto;
+.info-content .left.rankings tbody {
+	box-sizing: border-box;
+	width:100%;
 	display: table;
 }
-.info-content .right.rankings table tr {
+.info-content .left.rankings table tr {
 }
-.info-content .right.rankings table td,
-.info-content .right.rankings table th {
+.info-content .left.rankings table td,
+.info-content .left.rankings table th {
 	padding: 10px;
-	border:1px solid rgb(150,150,150);
+	border:1px solid rgb(120,120,120);
 	font-family: 'Work Sans', sans-serif;
 }
 
-.info-content .right.rankings table td {
+.info-content .left.rankings table td {
 	font-size: 22px;
 }
 
-.info-content .right.rankings table th {
+.info-content .left.rankings table th {
+	background-color: #fff;
+	color: rgba(50,50,50,1);
+	/*background: linear-gradient(0deg, rgba(61,66,170,1) 0%, rgba(89,94,193,1) 35%, rgba(136,141,237,1) 100%);*/
 	font-size: 22px;
 	font-weight: bolder;
 }
 
-.info-content .right.rankings .publication {
+.info-content .left.rankings .ranking-row {
+
+}
+
+.info-content .left.rankings .publication {
 	width: 80%;
 }
 
-.info-content .right.rankings .rating {
+.info-content .left.rankings .rating {
 	text-align: center;
 	width: 20%;
 }
