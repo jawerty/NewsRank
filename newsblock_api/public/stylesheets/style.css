@@ -304,12 +304,11 @@ a {
 	text-align: center;
 	display: inline-block;
 }
-.info-content .info-body * {
+.info-content .info-body p, li, ul, ol, span, div {
 	color: rgb(50,50,50);
 	font-size: 16px;
 	font-family: 'Work Sans', sans-serif;
 }
-
 .info-content .info-body ol > li {
 	margin-bottom: 15px;
 } 
