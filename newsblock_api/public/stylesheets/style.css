@@ -52,6 +52,16 @@ a {
     	opacity: .7;
     }
 }
+
+@keyframes slideHeight {
+    from {
+    	height: 0px;
+    }
+    to {
+    	height: 50px;
+    }
+}
+
 .unset-table-value,
 .unset-table-value * {
 	display: block;
@@ -242,9 +252,15 @@ a {
 }
 
 .info-content .left.rankings .ranking-row {
+	cursor: pointer;
 
 }
 
+.info-content .left.rankings .ranking-row:hover {
+	animation-name: fadehover;
+    animation-duration: .4s;
+    opacity: .7
+}
 .info-content .left.rankings .publication {
 	width: 80%;
 }
@@ -252,6 +268,16 @@ a {
 .info-content .left.rankings .rating {
 	text-align: center;
 	width: 20%;
+}
+
+.info-content .left.rankings .last-article-row div {
+	padding: 10px;
+	display: none;
+}
+
+.info-content .left.rankings .last-article-row td {
+	font-size: 18px;
+	width: 100%;
 }
 
 .info-content .info-title {

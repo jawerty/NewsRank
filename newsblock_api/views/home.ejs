@@ -59,7 +59,7 @@
       <div class="info-row">
         <div class="left rankings">
           <h2 class="info-title" >Newsblock Rankings</h2>
-          <table>
+          <table >
             <tr>
               <th>Publication</th>
               <th>Rating</th>
@@ -68,6 +68,9 @@
               <tr class="ranking-row" style="background-color: <%= ranking['color'] %>;">
                   <td class="publication" ><%= ranking['_id'] %></td>
                   <td class="rating"><%= ranking['overallRating'] %>%</td>
+              </tr>
+              <tr class="last-article-row" style="padding: 0">
+                <td colspan="2" style="padding: 0"><div>Recently Rated: <a href="<%= ranking['lastArticleLink'] %>"><%= ranking['lastArticleTitle'] %></a></div></td>
               </tr>
             <% }); %>
           </table>
