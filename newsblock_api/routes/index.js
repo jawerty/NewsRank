@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const db = require(path.resolve('./../db/schema'));
 const articleModel = db.model('article');
 const topicModel = db.model('topic');
@@ -121,22 +122,13 @@ router.get('/suggestArticle', function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-	const pipeline = [{
-		'$match': {
-			'publicationName': {
-				'$exists': true
-			}
+	fs.readFile(path.resolve('./../config/ranking.json'), (err, data) => {
+		if (err) console.log(err);
+		let ratings = [];
+		if (data) {
+			ratings = JSON.parse(data);
 		}
-	},
-	{
-		'$group': {
-			'_id': '$publicationName',
-			'overallRating': { '$avg': '$credibility.score' }
-		}
-	}]
-	articleModel.aggregate(pipeline, function(err, foundPublications) {
-		console.log(foundPublications);
-		res.render('home', {title: "Newsblock"});
-	})
+		res.render('home', {title: "Newsblock", ratings});
+	});
 });
 module.exports = router;
