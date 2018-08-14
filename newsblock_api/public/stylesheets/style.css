@@ -142,6 +142,7 @@ a {
 #top-content .marketing-content .download-button:hover {
 	animation-name: fadehover;
     animation-duration: .8s;
+    opacity: .7;
 
 }
 
