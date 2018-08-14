@@ -22,6 +22,9 @@ articleModel.aggregate(pipeline, function(err, foundPublications) {
 			return false;
 		}
 		return true;
+	}).map(function(pub){
+		pub.overallRating = Math.ceil(pub.overallRating);
+		return pub;
 	});
 
 	fs.writeFile('../config/rankings.json', JSON.stringify(foundPublications), (err) => {
