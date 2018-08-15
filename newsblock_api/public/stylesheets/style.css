@@ -91,6 +91,7 @@ a {
 	animation-name: lettercondense;
     animation-duration: .8s;
     user-select: none;
+    margin-bottom: 40px;
 }
 
 #top-content p {
