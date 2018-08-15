@@ -214,7 +214,11 @@ a {
 .info-content .left.rankings {
 }
 
+.info-title {
+	margin-bottom: 10px;
+}
 .info-content .left.rankings .info-title {
+	margin-bottom: 5px;
 	/*text-align: center;*/
 }
 .info-content .left.rankings table {
