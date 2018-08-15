@@ -215,10 +215,10 @@ a {
 }
 
 .info-title {
-	margin-bottom: 10px;
+	margin-bottom: 10px !important;
 }
 .info-content .left.rankings .info-title {
-	margin-bottom: 5px;
+	margin-bottom: 5px !important;
 	/*text-align: center;*/
 }
 .info-content .left.rankings table {
