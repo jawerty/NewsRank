@@ -438,6 +438,8 @@ function CredScorer(articleMap, trackerList) {
 		   	  				siteName = "Daily Star";
 		   	  			} else if (publicationDomain.indexOf("dailymail") > -1) {
 		   	  				siteName = "Daily Mail";
+		   	  			} else if (publicationDomain.indexOf("infowars") > -1) {
+		   	  				siteName = "INFOWARS";
 		   	  			}
 	   	  	
 		   	  			if (!siteName) {
