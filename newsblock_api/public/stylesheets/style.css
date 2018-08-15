@@ -101,6 +101,7 @@ a {
 	margin-top: 20px;
 	animation-name: fadeup;
     animation-duration: .8s;
+    line-height: 1.5em;
 }
 
 #top-content .marketing-content {
@@ -309,6 +310,7 @@ a {
 	color: rgb(50,50,50);
 	font-size: 16px;
 	font-family: 'Work Sans', sans-serif;
+	line-height: 1.5em;
 }
 .info-content .info-body ol > li {
 	margin-bottom: 15px;
