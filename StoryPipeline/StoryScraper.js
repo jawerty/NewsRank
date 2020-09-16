@@ -6,8 +6,8 @@ const cheerio = require('cheerio');
 const slug = require('slug');
 const lib = require('./lib');
 
-const db = require('../db/schema');
-const articleModel = db.model('article');
+// const db = require('../db/schema');
+// const articleModel = db.model('article');
 
 const nodePath = process.env.NODE_PATH || 'node';
 require('events').EventEmitter.defaultMaxListeners = 0;
@@ -19,14 +19,8 @@ const getUniqueURLs = (urlMap, callback) => {
     console.log("Filtering unique urls for "+source);
     const urlList = [];
     async.each(urlMap[source], (articleURL, articleCallback) => {
-      articleModel.findOne({origin: articleURL}, (err, foundArticle) => {
-        if (!foundArticle) {
-          urlList.push(articleURL);
-        } else {
-          console.log("->Filtering url " + articleURL);
-        };
-        articleCallback();
-      });
+      urlList.push(articleURL);
+      articleCallback();
     }, (err) => {
       resultURLMap[source] = urlList;
       sourceCallback();
@@ -220,4 +214,4 @@ process.on('uncaughtException', (err) => {
   console.log(`Caught exception: ${err}\n`);
 });
 
-lib.readFileToArray('../config/sources.txt', FeedScraper);
+lib.readFileToArray('../config/cancel_sources.txt', FeedScraper);

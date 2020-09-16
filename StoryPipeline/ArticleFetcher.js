@@ -7,16 +7,18 @@ const cheerio = require('cheerio');
 const slug = require('slug');
 
 const lib = require('./lib');
-const db = require('../db/schema');
-const articleModel = db.model('article');
+// const db = require('../db/schema');
+// const articleModel = db.model('article');
 
 
 const urlMap = JSON.parse(fs.readFileSync('urlMap.json', 'utf8'));
-db.connection.on("open",function(err) {
+const cancelOutputObject = [];
+
+// db.connection.on("open",function(err) {
   const urlCount = urlMap[process.argv[2]].length;
   let urlIndex = 0;
   let bulkCache = [];
-  const bulk = articleModel.collection.initializeOrderedBulkOp();
+  // const bulk = articleModel.collection.initializeOrderedBulkOp();
   async function fetchArticle(articleURL) {
     return await new Promise((resolve, reject) => {
       lib.getWebpage(articleURL, (err, body) => {
@@ -25,11 +27,20 @@ db.connection.on("open",function(err) {
           let icon = null;
           try {
             const $ = cheerio.load(body);
-            if ($("meta[property='og:type']").attr('content') != "article") {
+
+            let isArticle = false;
+            if (["article", "website"].indexOf($("meta[property='og:type']").attr('content')) > -1) {
+              isArticle = true;
+            } else if ($("meta[property='article:publisher']").length > 0) {
+              isArticle = true;
+            } else if ($("meta[property='twitter:card']").attr('content') === "summary_large_image") {
+              isArticle = true;
+            }
+
+            if (!isArticle) {
               console.log("NOT AN ARTICLE: "+articleURL);
               return resolve(false);
             }
-
             const icons = $("link[rel='apple-touch-icon']");
             icon = $(icons[icons.length-1]).attr('href'); // get largest size
             if (!icon) {
@@ -66,30 +77,45 @@ db.connection.on("open",function(err) {
                 }
                 let pubSlug = slug(process.argv[2]+" "+article.title);
                 
+
                 // console.log("->Saving "+articleURL);
                 // instead of checking here check a redis map of all the article urls in generateURLList
                 urlIndex++;
-                if (bulkCache.indexOf(pubSlug) > -1) {
-                  return resolve(false);
-                }
-                
-                bulkCache.push(pubSlug); 
-                console.log("->Inserting "+articleURL, "("+urlIndex + " / " + urlCount+")");
-                const previewCheerio = cheerio.load(article.content);
-                const articlePreview = previewCheerio.text().split(' ').slice(0,50).join(' ');
 
-                bulk.insert({
-                  title: article.title,
-                  content: article.content,
-                  origin: articleURL,
-                  publication: process.argv[2],
-                  publicationSlug: pubSlug,
-                  headlineImage,
-                  date_scrapped: parseInt(process.argv[3]),
-                  trained: false,
-                  icon,
-                  articlePreview
-                });  
+                function removeCommaAndQuotes(str) {
+                  const regex = /"([^",]+),([^",]+)"/gm;
+                  while (regex.test(str)) {
+                    str = str.replace(regex, '$1$2')
+                  }
+
+                  return str;
+                }
+
+                const articleContent = cheerio.load(article.content);
+                const parsedArticleContent = removeCommaAndQuotes(articleContent.text().replace(/\s+/g,' ').trim().replace(/,/g, ''));
+                cancelOutputObject.push([article.title, 'headline', articleURL, process.argv[2], parseInt(process.argv[3])].join(','));
+                cancelOutputObject.push([parsedArticleContent, 'body', articleURL, process.argv[2], parseInt(process.argv[3])].join(','));
+                // if (bulkCache.indexOf(pubSlug) > -1) {
+                //   return resolve(false);
+                // }
+                
+                // bulkCache.push(pubSlug); 
+                // console.log("->Inserting "+articleURL, "("+urlIndex + " / " + urlCount+")");
+                // const previewCheerio = cheerio.load(article.content);
+                // const articlePreview = previewCheerio.text().split(' ').slice(0,50).join(' ');
+
+                // bulk.insert({
+                //   title: article.title,
+                //   content: article.content,
+                //   origin: articleURL,
+                //   publication: process.argv[2],
+                //   publicationSlug: pubSlug,
+                //   headlineImage,
+                //   date_scrapped: parseInt(process.argv[3]),
+                //   trained: false,
+                //   icon,
+                //   articlePreview
+                // });  
                 article.close(); 
                 resolve(true);      
               } else {
@@ -121,23 +147,30 @@ db.connection.on("open",function(err) {
       console.log("BULK INSERT ERROR:", err)
     }
     console.log("* Source processed "+process.argv[2]);
-    
-    if(bulk && bulk.s && bulk.s.currentBatch 
-      && bulk.s.currentBatch.operations 
-      && bulk.s.currentBatch.operations.length > 0){
-      bulk.execute({wtimeout: 5000}, (err, result) => {
-        if (err) console.log(err);
-        if (result) 
-          console.log("INSERTED: "+result.nInserted);
-        process.exit(0);
-      });
-    } else {
-      process.exit(0);
-    }
+    console.log(cancelOutputObject)
+    console.log(cancelOutputObject.length)
+    let file = fs.createWriteStream('cancel_output.csv', {flags:'a'});
+    file.on('error', function(err) { console.log('couldnt open file') });
+    cancelOutputObject.forEach(function(row) { 
+      file.write(row + '\r\n'); 
+    });
+    file.end();
+    // if(bulk && bulk.s && bulk.s.currentBatch 
+    //   && bulk.s.currentBatch.operations 
+    //   && bulk.s.currentBatch.operations.length > 0){
+    //   bulk.execute({wtimeout: 5000}, (err, result) => {
+    //     if (err) console.log(err);
+    //     if (result) 
+    //       console.log("INSERTED: "+result.nInserted);
+    //     process.exit(0);
+    //   });
+    // } else {
+    //   process.exit(0);
+    // }
     
   });
 
-});
+// });
 
 process.on('uncaughtException', (err) => {
   console.log(`Caught exception in ${process.argv[2]}: ${err}\n`);
